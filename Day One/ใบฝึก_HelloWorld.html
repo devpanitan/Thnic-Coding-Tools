@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | ใบฝึก Hello World</title>
+<link rel="icon" type="image/png" href="srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"TH Sarabun PSK","Sarabun","Tahoma",sans-serif;color:#1a2238;background:#e9eef7;padding:18px}
+  .sheet{max-width:800px;margin:0 auto;background:#fff;border-radius:14px;box-shadow:0 14px 40px rgba(20,30,60,.12);padding:28px 36px}
+  .top{display:flex;align-items:center;gap:13px;border-bottom:2.5px solid #2f7bf6;padding-bottom:9px;margin-bottom:6px}
+  .top img{height:48px}
+  .top h1{font-size:21pt;color:#16224a}
+  .top .s{font-size:12pt;color:#5d6b8a}
+  .info{border:1.5px solid #cdd9ef;border-radius:11px;padding:11px 16px;margin:12px 0 14px;background:#f7faff}
+  .info .r{display:flex;gap:26px;flex-wrap:wrap}
+  .info .r span{flex:1;min-width:210px;font-size:13pt;border-bottom:1px dotted #8a96b0;padding:6px 2px}
+  .info .mh{font-weight:700;font-size:13pt;margin:10px 0 4px;color:#16224a}
+  .info .mem{display:flex;flex-direction:column;gap:11px}
+  .info .mem .l{font-size:13pt;border-bottom:1px dotted #8a96b0;padding:5px 2px}
+  h2{font-size:14pt;color:#1a4f8a;margin:14px 0 5px}
+  p,li{font-size:13pt;line-height:1.4}
+  .code{font-family:"Consolas",ui-monospace,monospace;background:#11203a;color:#e8eefc;border-radius:9px;padding:10px 14px;font-size:12pt;line-height:1.45;white-space:pre;margin:5px 0}
+  .code .k{color:#ff9bd0}.code .s{color:#ffd27f}
+  .task{border:1.5px solid #cdd9ef;border-radius:11px;padding:10px 15px;margin:9px 0;background:#f7faff;break-inside:avoid}
+  .task .h{font-weight:700;color:#16224a;font-size:13.5pt;margin-bottom:3px}
+  .out{font-family:ui-monospace,monospace;background:#eef4ff;border:1px dashed #9bb4e0;border-radius:7px;padding:4px 11px;font-size:12pt;color:#244;display:inline-block;margin-top:3px}
+  .lines{margin-top:8px}
+  .lines div{border-bottom:1px solid #c4cfe2;height:26px}
+  .tip{background:#fff6dd;border:1.5px solid #ffe2a1;border-radius:9px;padding:7px 13px;font-size:12.5pt;color:#8a5e00;margin-top:7px}
+  .noprint{text-align:center;margin:14px auto;max-width:800px}
+  .noprint button{font-family:inherit;font-size:14pt;font-weight:700;background:#2f7bf6;color:#fff;border:0;border-radius:10px;padding:10px 22px;cursor:pointer}
+  @media print{ body{background:#fff;padding:0} .sheet{box-shadow:none;border-radius:0;max-width:100%;padding:0 5mm} .noprint{display:none} @page{size:A4;margin:13mm} }
+</style>
+</head>
+<body>
+  <div class="noprint"><button onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button></div>
+  <div class="sheet">
+    <div class="top">
+      <img src="srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
+      <div><h1>ใบฝึก: โปรแกรมแรก Hello World</h1>
+      <div class="s">Introduction to Programming • THNIC Academy × SRRU • วันที่ 1</div></div>
+    </div>
+    <div class="info">
+      <div class="r"><span>ชื่อทีม:</span><span>วันที่:</span></div>
+      <div class="mh">สมาชิกในทีม</div>
+      <div class="mem"><div class="l">1)</div><div class="l">2)</div><div class="l">3)</div></div>
+    </div>
+
+    <h2>โค้ดตัวอย่าง (พิมพ์ตามให้เหมือน แล้วกด Run)</h2>
+    <div class="code"><span class="k">#include</span> &lt;iostream&gt;
+<span class="k">using namespace</span> std;
+
+<span class="k">int</span> main() {
+    cout &lt;&lt; <span class="s">"Hello World!"</span>;
+    <span class="k">return</span> 0;
+}</div>
+    <p>ใช้เว็บ online compiler (เช่น OnlineGDB) — ไม่ต้องติดตั้งโปรแกรม</p>
+
+    <h2>โจทย์ฝึก</h2>
+
+    <div class="task"><div class="h">1) พิมพ์ตามโค้ดด้านบนแล้วรัน</div>
+      ผลลัพธ์ที่ควรได้: <span class="out">Hello World!</span>
+      <div class="tip">เครื่องหมาย ; ท้ายบรรทัดห้ามลืม!</div></div>
+
+    <div class="task"><div class="h">2) เปลี่ยนข้อความให้เป็นชื่อตัวเอง</div>
+      เช่น ให้พิมพ์ว่า <span class="out">สวัสดีครับ ผมชื่อ ...</span><br>
+      เขียนคำสั่งที่แก้: <div class="lines"><div></div><div></div><div></div></div></div>
+
+    <div class="task"><div class="h">3) พิมพ์ 3 บรรทัด</div>
+      บรรทัด 1 = ชื่อเล่น, บรรทัด 2 = โรงเรียน, บรรทัด 3 = สิ่งที่ชอบ
+      <p>คำใบ้: ใช้ <b>cout</b> 3 บรรทัด และเติม <b>&lt;&lt; endl;</b> เพื่อขึ้นบรรทัดใหม่</p>
+      <div class="lines"><div></div><div></div><div></div><div></div><div></div></div></div>
+
+    <div class="task"><div class="h">4) พิมพ์รูปสามเหลี่ยมดาว</div>
+      ให้ผลลัพธ์เป็น:
+      <div class="out">*<br>* *<br>* * *</div>
+      <div class="lines"><div></div><div></div><div></div><div></div><div></div></div></div>
+
+    <div class="task"><div class="h">5) ลองทำให้ “พัง” แล้วแก้</div>
+      ลบเครื่องหมาย <b>;</b> ออก 1 จุด แล้วกด Run — จดข้อความ error ที่เจอ แล้วแก้กลับให้ถูก
+      <div class="lines"><div></div><div></div><div></div></div></div>
+
+    <div class="task"><div class="h">★ โจทย์ท้าทาย</div>
+      ทำให้โปรแกรมพิมพ์ชื่อตัวเอง <b>5 ครั้ง</b> (ใครรู้เรื่อง “การวนซ้ำ” ลองใช้ for ดู — เดี๋ยวเรียนวันที่ 3!)
+      <div class="lines"><div></div><div></div><div></div><div></div><div></div></div></div>
+  </div>
+</body>
+</html>

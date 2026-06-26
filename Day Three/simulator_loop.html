@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | Loop Simulator — การวนซ้ำ (for / while)</title>
+<link rel="icon" type="image/png" href="../Day One/srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--gold:#f2a900;
+    --ink:#16224a;--muted:#5d6b8a;--line:#dbe6f7;--card:#fff;--bg1:#eaf3ff;--bg2:#fef6ff;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:"Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);height:100vh;overflow:hidden;
+    background:radial-gradient(900px 500px at 10% -10%,#d4e6ff 0%,transparent 60%),
+              radial-gradient(800px 500px at 100% 0%,#ffe6f7 0%,transparent 55%),
+              linear-gradient(160deg,var(--bg1),var(--bg2));
+    display:flex;flex-direction:column;gap:clamp(8px,1.6vh,15px);padding:clamp(10px,2vh,20px) clamp(12px,2.5vw,28px)}
+  svg.lucide{width:1em;height:1em;vertical-align:-.15em;stroke-width:2px}
+  .head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .head img{height:clamp(32px,4.5vh,46px)}
+  h1{font-size:clamp(18px,2.7vh,26px);font-weight:700;color:#16224a}
+  .head .tag{color:var(--muted);font-size:clamp(12px,1.6vh,15px);flex:1;min-width:200px}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--card);border:2px solid var(--line);
+    border-radius:14px;padding:8px 12px;box-shadow:0 8px 22px rgba(47,123,246,.08)}
+  .bar label{font-size:14px;color:var(--muted);font-weight:600}
+  input[type=text]{font-family:ui-monospace,monospace;font-size:15px;padding:7px 11px;border-radius:9px;border:2px solid var(--line);background:#f7faff;color:var(--ink);width:190px;outline:none}
+  button{font-family:inherit;font-size:14px;font-weight:700;padding:8px 13px;border:0;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+  button:disabled{opacity:.4;cursor:default}
+  .ghost{background:#eef4ff;color:#2f4a7d;border:2px solid var(--line)}
+  #play{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff}
+  input[type=range]{width:120px}
+
+  .main{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(12px,2vw,22px)}
+  .panel{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:clamp(12px,2vh,20px);box-shadow:0 8px 22px rgba(31,43,72,.07);display:flex;flex-direction:column;min-height:0}
+  .code{font-family:ui-monospace,monospace;font-size:clamp(14px,2vh,18px);line-height:1.9;background:#0f1b38;border-radius:12px;padding:14px 16px;color:#e8eefc;overflow:auto}
+  .code .ln{display:block;padding:1px 8px;border-radius:6px;white-space:pre}
+  .code .ln.on{background:#2a3a66;outline:2px solid #5aa2ff}
+  .k{color:#ff9bd0}.s{color:#ffd27f}.c{color:#7fd1ff}
+
+  .vars{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
+  .vbox{flex:1;min-width:80px;background:#f3f7ff;border:2px solid var(--line);border-radius:12px;padding:8px 12px;text-align:center}
+  .vbox .vn{font-size:13px;color:var(--muted);font-weight:600}
+  .vbox .vv{font-size:clamp(20px,3vh,28px);font-weight:700;font-family:ui-monospace,monospace;color:var(--blue)}
+  .vbox.sum .vv{color:var(--green)}
+
+  .arrwrap{display:flex;flex-direction:column;justify-content:center;flex:1;gap:10px}
+  .arr{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .cell{position:relative;min-width:clamp(46px,7vh,64px);height:clamp(46px,7vh,64px);border-radius:12px;border:2px solid var(--line);
+    background:#fff;display:flex;align-items:center;justify-content:center;font-size:clamp(18px,2.6vh,24px);font-weight:700;font-family:ui-monospace,monospace;transition:.25s}
+  .cell .ix{position:absolute;top:-20px;left:0;right:0;font-size:12px;color:var(--muted);font-weight:600}
+  .cell.done{background:#e7faf1;border-color:#aee7ce;color:#0c6b46}
+  .cell.cur{background:#fff3da;border-color:var(--gold);transform:translateY(-8px) scale(1.08);box-shadow:0 10px 20px -6px var(--gold)}
+  .pointer{text-align:center;font-size:14px;color:var(--coral);font-weight:700;min-height:1.2em}
+  .note{background:#fff6dd;border:2px solid #ffe2a1;border-radius:14px;padding:12px 16px;font-size:clamp(14px,2vh,18px);font-weight:600;color:#9a6a00;text-align:center;min-height:7vh;display:flex;align-items:center;justify-content:center}
+  .note.fin{background:#e7faf1;border-color:#aee7ce;color:#0c6b46}
+  .stepinfo{font-size:13px;color:var(--muted);text-align:right;margin-top:6px}
+</style>
+</head>
+<body>
+  <div class="head">
+    <img src="../Day One/srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
+    <h1>การวนซ้ำ (Loop) — for / while</h1>
+    <span class="tag">เดินทีละรอบ ดูตัวแปร i, สมาชิกอาเรย์ และผลรวม sum เปลี่ยนทีละขั้น — THNIC Academy</span>
+  </div>
+
+  <div class="bar">
+    <label>อาเรย์ a[] =</label>
+    <input type="text" id="arrin" value="3, 8, 1, 6, 4">
+    <button class="ghost" id="build"><i data-lucide="refresh-cw"></i> สร้างใหม่</button>
+    <button class="ghost" id="rand"><i data-lucide="dice-5"></i> สุ่ม</button>
+    <span style="flex:1"></span>
+    <button id="play"><i data-lucide="player-play"></i> เล่น</button>
+    <button class="ghost" id="prev"><i data-lucide="player-track-prev"></i></button>
+    <button class="ghost" id="next"><i data-lucide="player-track-next"></i></button>
+    <button class="ghost" id="reset"><i data-lucide="rotate-ccw"></i></button>
+    <label>ช้า/เร็ว</label><input type="range" id="speed" min="200" max="1400" value="800" step="100">
+  </div>
+
+  <div class="main">
+    <div class="panel">
+      <div class="code" id="code"></div>
+      <div class="vars">
+        <div class="vbox"><div class="vn">i</div><div class="vv" id="vi">–</div></div>
+        <div class="vbox"><div class="vn">n (ขนาด)</div><div class="vv" id="vn">5</div></div>
+        <div class="vbox sum"><div class="vn">sum (ผลรวม)</div><div class="vv" id="vsum">0</div></div>
+      </div>
+      <div class="stepinfo" id="stepinfo">ขั้นที่ 0</div>
+    </div>
+
+    <div class="panel">
+      <div class="arrwrap">
+        <div class="pointer" id="pointer"></div>
+        <div class="arr" id="arr"></div>
+      </div>
+      <div class="note" id="note">กด “เล่น” หรือ “▶︎ ถัดไป” เพื่อเริ่มเดินลูปทีละรอบ</div>
+    </div>
+  </div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+const CODE=[
+ ['1','<span class="k">int</span> sum = <span class="s">0</span>;'],
+ ['2','<span class="k">for</span>(<span class="k">int</span> i=<span class="s">0</span>; i&lt;n; i++){'],
+ ['3','    sum += a[i];'],
+ ['4','}'],
+ ['5','cout &lt;&lt; sum;'],
+];
+let arr=[3,8,1,6,4], states=[], idx=0, timer=null;
+
+const $=id=>document.getElementById(id);
+const codeEl=$("code"),arrEl=$("arr"),noteEl=$("note"),pointerEl=$("pointer");
+
+function buildStates(a){
+  const n=a.length,st=[];let sum=0,i=0;
+  st.push({line:1,i:null,sum:0,hi:null,done:0,note:`กำหนดค่าเริ่มต้น sum = 0`});
+  st.push({line:2,i:0,sum:0,hi:null,done:0,note:`เริ่มลูป: กำหนด i = 0`});
+  i=0;
+  while(true){
+    const cond=i<n;
+    st.push({line:2,i,sum,hi:null,done:i,note:`ตรวจเงื่อนไข  i < n  : ${i} < ${n} → ${cond?'จริง ✓ เข้าลูป':'เท็จ ✗ ออกจากลูป'}`});
+    if(!cond)break;
+    const prev=sum;sum+=a[i];
+    st.push({line:3,i,sum,hi:i,done:i,note:`sum = ${prev} + a[${i}](${a[i]}) = ${sum}`});
+    st.push({line:2,i:i+1,sum,hi:null,done:i+1,note:`i++  →  i = ${i+1}`});
+    i++;
+  }
+  st.push({line:5,i,sum,hi:null,done:n,fin:true,note:`จบลูป! ผลรวมทั้งหมด sum = ${sum}`});
+  return st;
+}
+function renderCode(line){
+  codeEl.innerHTML=CODE.map(([no,html])=>`<span class="ln ${(+no===line)?'on':''}">${no}  ${html}</span>`).join("");
+}
+function renderArr(s){
+  arrEl.innerHTML="";
+  arr.forEach((v,k)=>{
+    const c=document.createElement("div");c.className="cell";
+    if(s.hi===k)c.classList.add("cur");else if(k<s.done)c.classList.add("done");
+    c.innerHTML=`<span class="ix">a[${k}]</span>${v}`;arrEl.appendChild(c);
+  });
+  pointerEl.textContent=(s.hi!==null&&s.hi!==undefined)?`▲ กำลังอ่าน a[${s.hi}]`:"";
+}
+function show(){
+  const s=states[idx];
+  renderCode(s.line);renderArr(s);
+  $("vi").textContent=s.i===null?"–":s.i;
+  $("vn").textContent=arr.length;
+  $("vsum").textContent=s.sum;
+  noteEl.textContent=s.note;noteEl.className="note"+(s.fin?" fin":"");
+  $("stepinfo").textContent=`ขั้นที่ ${idx} / ${states.length-1}`;
+  $("prev").disabled=idx<=0;$("next").disabled=idx>=states.length-1;
+}
+function rebuild(){
+  const nums=$("arrin").value.split(/[, ]+/).map(x=>parseInt(x)).filter(x=>!isNaN(x)).slice(0,9);
+  arr=nums.length?nums:[3,8,1,6,4];
+  states=buildStates(arr);idx=0;stop();show();
+}
+function step(d){idx=Math.max(0,Math.min(states.length-1,idx+d));show();}
+function play(){
+  if(timer){stop();return;}
+  if(idx>=states.length-1)idx=0;
+  $("play").innerHTML='<i data-lucide="player-pause"></i> หยุด';lucide.createIcons();
+  timer=setInterval(()=>{
+    if(idx>=states.length-1){stop();return;}
+    step(1);
+  },+$("speed").value);
+}
+function stop(){if(timer){clearInterval(timer);timer=null;}$("play").innerHTML='<i data-lucide="player-play"></i> เล่น';if(window.lucide)lucide.createIcons();}
+
+$("build").onclick=rebuild;
+$("rand").onclick=()=>{const n=4+Math.floor(Math.random()*4);$("arrin").value=Array.from({length:n},()=>1+Math.floor(Math.random()*9)).join(", ");rebuild();};
+$("play").onclick=play;
+$("next").onclick=()=>{stop();step(1);};
+$("prev").onclick=()=>{stop();step(-1);};
+$("reset").onclick=()=>{stop();idx=0;show();};
+
+rebuild();
+if(window.lucide)lucide.createIcons();
+</script>
+</body>
+</html>

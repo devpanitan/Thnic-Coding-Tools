@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | เกมหา error — เติม ; ให้ถูก</title>
+<link rel="icon" type="image/png" href="srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--ink:#16224a;--muted:#5d6b8a;--line:#dbe6f7;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:"Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);height:100vh;overflow:hidden;
+    background:radial-gradient(900px 500px at 10% -10%,#d4e6ff 0,transparent 60%),radial-gradient(800px 500px at 100% 0,#ffe6f7 0,transparent 55%),linear-gradient(160deg,#eef4ff,#fdf3fb);
+    display:flex;flex-direction:column;gap:clamp(10px,2vh,16px);padding:clamp(12px,2.5vh,24px) clamp(14px,4vw,40px)}
+  svg.lucide{width:1em;height:1em;vertical-align:-.15em}
+  .head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .head img{height:clamp(34px,5vh,48px)}
+  h1{font-size:clamp(20px,3vh,28px);font-weight:700}
+  .head .tag{color:var(--muted);font-size:clamp(13px,1.7vh,16px);flex:1;min-width:200px}
+  .score{font-weight:700;font-size:clamp(15px,2.2vh,19px);background:#fff;border:2px solid var(--line);border-radius:12px;padding:7px 16px}
+  .main{flex:1;min-height:0;display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(14px,2.5vw,26px)}
+  .panel{background:#fff;border:2px solid var(--line);border-radius:18px;box-shadow:0 10px 26px rgba(31,43,72,.08);padding:clamp(14px,2.4vh,22px);display:flex;flex-direction:column;min-height:0}
+  .qno{color:var(--purple);font-weight:700;font-size:clamp(14px,1.9vh,17px);margin-bottom:8px}
+  .code{font-family:ui-monospace,monospace;font-size:clamp(15px,2.3vh,21px);line-height:1.85;background:#0f1b38;border-radius:12px;padding:14px 10px;flex:1;overflow:auto}
+  .cl{display:flex;gap:12px;padding:2px 12px;border-radius:7px;color:#e8eefc;white-space:pre;cursor:pointer;transition:.12s}
+  .cl:hover{background:#22325c}
+  .cl .n{color:#6f80ad;width:1.4em;text-align:right;flex:none;user-select:none}
+  .cl.bad{background:rgba(255,96,88,.22);outline:2px solid #ff6058}
+  .ask{font-size:clamp(16px,2.4vh,20px);font-weight:700;margin-bottom:12px}
+  .opts{display:flex;flex-wrap:wrap;gap:10px}
+  .opt{font-family:inherit;font-size:clamp(15px,2.2vh,19px);font-weight:700;padding:11px 20px;border-radius:12px;border:2px solid var(--line);background:#f7faff;color:var(--ink);cursor:pointer;transition:.12s}
+  .opt:hover{border-color:var(--coral)}
+  .opt:disabled{cursor:default;opacity:.95}
+  .opt.correct{background:#e7faf1;border-color:var(--green);color:#0c6b46}
+  .opt.wrong{background:#ffece6;border-color:var(--coral);color:#b03b1d}
+  .fb{margin-top:14px;font-size:clamp(14px,2vh,18px);font-weight:600;color:var(--muted);min-height:3.2em}
+  .fb b{color:var(--ink)}
+  .nav{margin-top:auto;display:flex;gap:12px;padding-top:14px}
+  .btn{font-family:inherit;font-size:clamp(15px,2.2vh,18px);font-weight:700;padding:12px 22px;border:0;border-radius:12px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+  .btn.go{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff}
+  .btn.ghost{background:#eef4ff;color:#2f4a7d;border:2px solid var(--line)}
+  .btn:disabled{opacity:.4;cursor:default}
+  .confetti{position:fixed;top:-10px;width:10px;height:16px;z-index:50;border-radius:2px;pointer-events:none}
+  .mascot{position:fixed;right:clamp(8px,2vw,30px);bottom:clamp(6px,2vh,20px);width:clamp(96px,13vh,140px);height:auto;z-index:4;transform-origin:center bottom;animation:dance 1.4s ease-in-out infinite}
+  @keyframes dance{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-11px) rotate(5deg)}}
+  .mascot .armL,.mascot .armR{transform-box:fill-box;transform-origin:center top}
+  .mascot .armL{animation:dL .62s ease-in-out infinite}.mascot .armR{animation:dR .62s ease-in-out infinite}
+  @keyframes dL{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(24deg)}}
+  @keyframes dR{0%,100%{transform:rotate(30deg)}50%{transform:rotate(-24deg)}}
+  .mascot.cheer{animation:mcheer .8s ease}
+  @keyframes mcheer{0%{transform:translateY(0)}30%{transform:translateY(-34px) scale(1.1)}60%{transform:translateY(0)}80%{transform:translateY(-14px)}100%{transform:translateY(0)}}
+</style>
+</head>
+<body>
+  <div class="head">
+    <img src="srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
+    <h1>หา error ในโค้ด C++</h1>
+    <span class="tag">เลือก “บรรทัดที่ผิด” — ส่วนใหญ่คือลืม ; หรือลืมเครื่องหมายคำพูด</span>
+    <span class="score" id="score">คะแนน 0</span>
+  </div>
+
+  <div class="main">
+    <div class="panel">
+      <div class="qno" id="qno">ข้อ 1</div>
+      <div class="code" id="code"></div>
+    </div>
+    <div class="panel">
+      <div class="ask">บรรทัดไหนมีข้อผิดพลาด?</div>
+      <div class="opts" id="opts"></div>
+      <div class="fb" id="fb"></div>
+      <div class="nav">
+        <button class="btn ghost" id="prev"><i data-lucide="arrow-left"></i> ย้อนกลับ</button>
+        <button class="btn go" id="next" disabled>ข้อถัดไป <i data-lucide="arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <svg class="mascot" id="mascot" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+    <line x1="110" y1="20" x2="110" y2="42" stroke="#7a5cff" stroke-width="5"/><circle cx="110" cy="15" r="9" fill="#ffd24d" stroke="#7a5cff" stroke-width="3"/>
+    <g class="armL"><rect x="24" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="34" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
+    <g class="armR"><rect x="176" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="186" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
+    <rect x="48" y="42" width="124" height="96" rx="28" fill="#eef2ff" stroke="#7a5cff" stroke-width="5"/>
+    <ellipse cx="74" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/><ellipse cx="146" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
+    <circle cx="88" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="88" cy="84" r="7" fill="#2f7bf6"/>
+    <circle cx="132" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="132" cy="84" r="7" fill="#2f7bf6"/>
+    <rect x="88" y="110" width="44" height="16" rx="8" fill="#19b877"/>
+    <rect x="64" y="148" width="92" height="58" rx="16" fill="#fff" stroke="#7a5cff" stroke-width="4"/><rect x="80" y="164" width="60" height="28" rx="8" fill="#e6f0ff"/><path d="M80 178 H140 M98 168 V188" stroke="#2f7bf6" stroke-width="3"/>
+  </svg>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+const Q=[
+ {code:['#include <iostream>','using namespace std;','int main(){','    cout << "Hello"','    return 0;','}'],bad:3,fix:'บรรทัด 4 ลืมเครื่องหมาย ; ท้ายคำสั่ง → แก้เป็น cout << "Hello";'},
+ {code:['int main(){','    int x = 5','    cout << x;','    return 0;','}'],bad:1,fix:'บรรทัด 2 ลืม ; หลังประกาศตัวแปร → แก้เป็น int x = 5;'},
+ {code:['int main(){','    cout << Hello;','    return 0;','}'],bad:1,fix:'บรรทัด 2 ลืมเครื่องหมายคำพูด “ ” ครอบข้อความ → แก้เป็น cout << "Hello";'},
+ {code:['#include <iostream>','int main(){','    cout << "A";','    cout << "B"','    return 0;','}'],bad:3,fix:'บรรทัด 4 ลืม ; ท้าย cout << "B" → แก้เป็น cout << "B";'},
+ {code:['int main(){','    cout << "Hi";','    return 0','}'],bad:2,fix:'บรรทัด 3 ลืม ; หลัง return 0 → แก้เป็น return 0;'},
+ {code:['#include <iostream>','using namespace std;','int main(){','    int a = 3, b = 4;','    cout << a + b','    return 0;','}'],bad:4,fix:'บรรทัด 5 ลืม ; ท้าย cout << a + b → แก้เป็น cout << a + b;'},
+];
+let i=0,score=0;const answers={};
+const $=id=>document.getElementById(id);
+const icons=()=>{if(window.lucide)lucide.createIcons();};
+function cheer(){const m=$("mascot");if(m){m.classList.remove("cheer");void m.offsetWidth;m.classList.add("cheer");setTimeout(()=>m.classList.remove("cheer"),800);}}
+function render(){
+  const q=Q[i],done=answers[i]!==undefined;
+  $("qno").textContent="ข้อ "+(i+1)+" / "+Q.length;
+  $("code").innerHTML=q.code.map((l,k)=>`<div class="cl" data-k="${k}"><span class="n">${k+1}</span><span>${l.replace(/</g,'&lt;')}</span></div>`).join("");
+  $("opts").innerHTML=q.code.map((l,k)=>`<button class="opt" data-k="${k}">บรรทัด ${k+1}</button>`).join("");
+  if(done){
+    const ch=answers[i];
+    $("code").querySelectorAll(".cl")[q.bad].classList.add("bad");
+    $("opts").querySelectorAll(".opt").forEach(b=>{b.disabled=true;const kk=+b.dataset.k;if(kk===q.bad)b.classList.add("correct");else if(kk===ch)b.classList.add("wrong");});
+    $("fb").innerHTML=(ch===q.bad?'<b style="color:#19b877">ถูกต้อง! </b>':'<b style="color:#ff6a3d">ยังไม่ใช่ </b>')+q.fix;
+  }else{
+    $("fb").innerHTML="";
+    const pick=k=>choose(k);
+    $("opts").querySelectorAll(".opt").forEach(b=>b.onclick=()=>pick(+b.dataset.k));
+    $("code").querySelectorAll(".cl").forEach(b=>b.onclick=()=>pick(+b.dataset.k));
+  }
+  $("prev").disabled=i<=0;
+  $("next").disabled=!done;
+  $("next").innerHTML=(i<Q.length-1?'ข้อถัดไป <i data-lucide="arrow-right"></i>':'ดูผลคะแนน <i data-lucide="flag"></i>');
+  $("score").textContent="คะแนน "+score;icons();
+}
+function choose(k){
+  if(answers[i]!==undefined)return;
+  answers[i]=k;
+  if(k===Q[i].bad){score++;cheer();}
+  render();
+}
+$("prev").onclick=()=>{if(i>0){i--;render();}};
+$("next").onclick=()=>{if(answers[i]===undefined)return;if(i<Q.length-1){i++;render();}else end();};
+function end(){
+  $("qno").textContent="";
+  document.querySelector(".main").innerHTML=`<div class="panel" style="grid-column:1/-1;align-items:center;justify-content:center;text-align:center;gap:18px">
+    <div style="font-size:clamp(22px,4vh,34px);font-weight:700">ได้ ${score} / ${Q.length} คะแนน</div>
+    <div style="display:flex;gap:12px"><button class="btn ghost" id="back"><i data-lucide="arrow-left"></i> ย้อนดูข้อ</button>
+    <button class="btn go" id="again"><i data-lucide="rotate-ccw"></i> เล่นอีกครั้ง</button></div></div>`;
+  $("again").onclick=()=>location.reload();
+  $("back").onclick=()=>location.reload();
+  icons();burst();
+}
+function burst(){const cs=["#2f7bf6","#7a5cff","#19b877","#f2a900","#ff6a3d"];
+  for(let k=0;k<80;k++){const c=document.createElement("div");c.className="confetti";c.style.left=Math.random()*100+"vw";c.style.background=cs[k%cs.length];document.body.appendChild(c);
+    const d=1600+Math.random()*1400;c.animate([{transform:"translateY(0)",opacity:1},{transform:`translateY(105vh) rotate(${Math.random()*720}deg)`,opacity:.2}],{duration:d});setTimeout(()=>c.remove(),d);}}
+render();icons();
+</script>
+</body>
+</html>

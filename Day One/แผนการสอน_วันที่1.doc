@@ -1,0 +1,148 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<meta name="ProgId" content="Word.Document">
+<title>แผนการสอนวันที่ 1</title>
+<style>
+@page { size: A4; margin: 2cm; }
+body { font-family: "TH Sarabun PSK","TH SarabunPSK","TH Sarabun New","Sarabun","Tahoma",sans-serif; font-size: 16pt; color:#1a1a1a; line-height:1.45; }
+h1 { font-size: 23pt; text-align:center; margin:0 0 2pt; }
+h2 { font-size: 18pt; color:#1a4f8a; border-bottom:2px solid #cfe0f5; padding-bottom:3pt; margin:18pt 0 8pt; }
+h3 { font-size: 16pt; color:#2f4a7d; margin:12pt 0 4pt; }
+.sub { text-align:center; font-size:14pt; color:#555; margin:0 0 14pt; }
+table { border-collapse:collapse; width:100%; margin:6pt 0; }
+td,th { border:1px solid #9aaecb; padding:7pt 9pt; vertical-align:top; }
+th { background:#1a4f8a; color:#fff; font-size:14pt; }
+.time { width:18%; white-space:nowrap; font-weight:bold; background:#eef4fb; }
+.act { width:34%; font-weight:bold; }
+ul { margin:3pt 0; padding-left:20pt; }
+li { margin:2pt 0; }
+.box { border:1px solid #cfe0f5; background:#f6faff; border-radius:8pt; padding:10pt 14pt; margin:8pt 0; }
+.goal { background:#eef9f1; border-color:#bfe6cd; }
+.script { background:#fff6dd; border:1px solid #ffe2a1; border-radius:8pt; padding:8pt 14pt; margin:6pt 0; font-size:15pt; }
+.script b{ color:#9a6a00; }
+.sim { color:#7a5cff; font-weight:bold; }
+.code { font-family:"Consolas",ui-monospace,monospace; background:#11203a; color:#e8eefc; padding:12pt 14pt; border-radius:8pt; font-size:14pt; white-space:pre; display:block; }
+.tip { font-size:14pt; color:#0c6b46; }
+.pagebreak { page-break-before: always; }
+.chk td{ border:none; padding:2pt 8pt 2pt 0; }
+</style>
+</head>
+<body>
+
+<h1>แผนการสอนวันที่ 1</h1>
+<p class="sub">THNIC Academy &nbsp;|&nbsp; 25 กรกฎาคม 2569 &nbsp;|&nbsp; ผศ.ดร.ธงชัย เจือจันทร์</p>
+
+<div class="box goal">
+<b>ธีมของวัน:</b> เปิดค่าย ทำความรู้จัก ปูพื้น “ทำไมต้องเขียนโปรแกรม” แบบสนุก ไม่เครียด<br>
+<b>เป้าหมายการเรียนรู้ (เมื่อจบวัน น้อง ๆ จะ...)</b>
+<ul>
+  <li>รู้จักเพื่อนและทีมผู้สอน กล้าถาม กล้าลองผิดลองถูก</li>
+  <li>เข้าใจภาพรวมว่าอินเทอร์เน็ต/โดเมนเนมทำงานอย่างไร (ผ่าน simulator)</li>
+  <li>เข้าใจ “การคิดเชิงคำนวณ (Computational Thinking)” แบบง่าย ๆ ด้วยกิจกรรม</li>
+  <li>เขียนโปรแกรม C++ ตัวแรก (Hello World) ได้ด้วยตัวเอง</li>
+</ul>
+</div>
+
+<h2>ภาพรวมตารางเวลา</h2>
+<table>
+<tr><th>เวลา</th><th>กิจกรรม</th><th>รายละเอียด</th></tr>
+<tr><td class="time">09:00–09:30</td><td class="act">พิธีเปิด + แนะนำตัว</td><td>เปิดค่าย แนะนำ THNIC Academy ผู้สอน และกติกาค่าย</td></tr>
+<tr><td class="time">09:30–10:15</td><td class="act">เน็ตไทย + โดเมนเนม</td><td>ประวัติอินเทอร์เน็ตไทย, โดเมน .th, THNIC <span class="sim">+ simulator DNS</span></td></tr>
+<tr><td class="time">10:15–10:45</td><td class="act">สันทนาการ / เกม</td><td>เกมละลายพฤติกรรม แบ่งทีม ตั้งชื่อทีม</td></tr>
+<tr><td class="time">10:45–11:00</td><td class="act">พักเบรก</td><td>ของว่าง เครื่องดื่ม</td></tr>
+<tr><td class="time">11:00–11:30</td><td class="act">แนะนำหัวข้อค่าย</td><td>ภาพรวมสิ่งที่จะได้เรียนตลอด 5 วัน</td></tr>
+<tr><td class="time">11:30–12:00</td><td class="act">Computational Thinking</td><td>“การคิดเชิงคำนวณ” คืออะไร ผ่านตัวอย่างใกล้ตัว</td></tr>
+<tr><td class="time">12:00–13:00</td><td class="act">พักกลางวัน</td><td>&nbsp;</td></tr>
+<tr><td class="time">13:00–14:15</td><td class="act">กิจกรรม Unplugged</td><td>เกมคิดแก้ปัญหาเป็นทีม (ไม่ใช้คอมพิวเตอร์)</td></tr>
+<tr><td class="time">14:15–14:30</td><td class="act">พักเบรก</td><td>&nbsp;</td></tr>
+<tr><td class="time">14:30–15:30</td><td class="act">รู้จัก C++ + Hello World</td><td>เขียนโปรแกรมแรก ลองพิมพ์เอง รันเอง</td></tr>
+<tr><td class="time">15:30–16:00</td><td class="act">สรุป + เกมทบทวน</td><td>ทบทวนวันแรก เกมตอบคำถาม แจกภารกิจสนุก ๆ</td></tr>
+</table>
+
+<h2 class="pagebreak">รายละเอียดแต่ละช่วง</h2>
+
+<h3>09:00–09:30 &nbsp; พิธีเปิด + แนะนำตัว</h3>
+<ul>
+  <li>กล่าวต้อนรับ เปิดค่าย แนะนำ THNIC Academy และคณะผู้สอน</li>
+  <li>กติกาค่ายแบบเป็นกันเอง: ถามได้ตลอด ผิดได้ ไม่มีคำตอบโง่</li>
+  <li>ให้น้องแต่ละคนแนะนำตัวสั้น ๆ (ชื่อเล่น + สิ่งที่ชอบ 1 อย่าง)</li>
+</ul>
+<div class="script"><b>บทเปิด:</b> “สวัสดีครับทุกคน! 5 วันนี้เราจะมาเปลี่ยนจาก ‘คนใช้คอมพิวเตอร์’ เป็น ‘คนสั่งคอมพิวเตอร์’ กัน — และไม่ต้องกลัวเลย เพราะเราจะเล่นไปเรียนไป”</div>
+
+<h3>09:30–10:15 &nbsp; อินเทอร์เน็ตไทย + โดเมนเนม <span class="sim">(ใช้ simulator)</span></h3>
+<ul>
+  <li>เล่าสั้น ๆ ว่าอินเทอร์เน็ตเข้ามาไทยอย่างไร และ THNIC ดูแลโดเมน <b>.th</b> ของประเทศไทย</li>
+  <li>อธิบายว่าเวลาเราพิมพ์ชื่อเว็บ คอมพิวเตอร์แปลงเป็น “ที่อยู่ IP” ได้อย่างไร</li>
+  <li><span class="sim">เปิดไฟล์ simulator_โดเมนเนม_DNS.html</span> ให้น้องลองพิมพ์ชื่อเว็บแล้วดูลูกบอลข้อมูลวิ่งไปถามทีละชั้น</li>
+</ul>
+<div class="tip">เคล็ดลับ: ให้น้องทายก่อนว่าเว็บที่ตัวเองชอบจะได้ IP อะไร แล้วค่อยกดดูใน simulator — สร้างการมีส่วนร่วม</div>
+
+<h3>10:15–10:45 &nbsp; สันทนาการ / เกมละลายพฤติกรรม</h3>
+<ul>
+  <li>เกม “จับกลุ่มตามคำสั่ง” หรือ “มนุษย์อัลกอริทึม” (ทำตามขั้นตอนทีละสเต็ป)</li>
+  <li>แบ่งน้องเป็นทีม 3–4 คน ให้ตั้งชื่อทีมและคำขวัญ (ใช้ทีมนี้ทั้งค่าย)</li>
+</ul>
+<div class="tip">เชื่อมโยง: “การทำตามคำสั่งทีละขั้น” = สิ่งที่เราจะสั่งคอมพิวเตอร์ให้ทำนั่นเอง</div>
+
+<h3>11:00–11:30 &nbsp; แนะนำหัวข้อตลอดค่าย</h3>
+<ul>
+  <li>ภาพรวม 5 วัน: วันนี้ปูพื้น → 2 วันถัดไปเรียน C++ → 2 วันท้ายลุยโจทย์ Computer Olympic</li>
+  <li>ย้ำว่าเรียนสนุก มีเกมและ simulator ช่วยทุกวัน ไม่ต้องเครียด</li>
+</ul>
+
+<h3>11:30–12:00 &nbsp; การคิดเชิงคำนวณ (Computational Thinking)</h3>
+<p>อธิบาย 4 เสาหลักด้วยตัวอย่างใกล้ตัว:</p>
+<ul>
+  <li><b>แตกปัญหา (Decomposition):</b> แบ่งงานใหญ่เป็นชิ้นเล็ก เช่น “ทำต้มมาม่า” = ต้มน้ำ → ใส่เส้น → ใส่เครื่องปรุง</li>
+  <li><b>หารูปแบบ (Pattern):</b> สังเกตสิ่งที่ซ้ำ ๆ เช่น ตารางสูตรคูณ</li>
+  <li><b>มองข้ามรายละเอียด (Abstraction):</b> เอาแต่สิ่งสำคัญ เช่น แผนที่รถไฟฟ้า</li>
+  <li><b>ออกแบบขั้นตอน (Algorithm):</b> ลำดับขั้นทำงาน เช่น สูตรแปรงฟัน</li>
+</ul>
+
+<h3 class="pagebreak">13:00–14:15 &nbsp; กิจกรรม Unplugged (ไม่ใช้คอม)</h3>
+<p><b>เกม “หุ่นยนต์ทำแซนด์วิช / วาดรูปตามคำสั่ง”</b></p>
+<ul>
+  <li>ครูเป็น “หุ่นยนต์” ที่ทำตามคำสั่งของน้องแบบเป๊ะ ๆ เท่านั้น</li>
+  <li>น้องต้องเขียนชุดคำสั่งให้ครูทำงานสำเร็จ (เช่น ทาแยมขนมปัง / วาดรูปบ้าน)</li>
+  <li>ถ้าคำสั่งกำกวม ครูจะทำผิดทันที — น้องจะได้เรียนรู้ว่าคอมพิวเตอร์ต้องการคำสั่งที่ชัดเจน</li>
+</ul>
+<div class="goal box"><b>สิ่งที่ได้:</b> เข้าใจว่า “โปรแกรม = ชุดคำสั่งที่ชัดเจนและเรียงลำดับถูกต้อง” โดยยังไม่ต้องแตะโค้ดเลย</div>
+
+<h3>14:30–15:30 &nbsp; รู้จัก C++ + เขียน Hello World</h3>
+<ul>
+  <li>C++ คือภาษาที่เราใช้ “คุย” กับคอมพิวเตอร์ — เขียนเสร็จต้อง compile แล้ว run</li>
+  <li>แนะนำเครื่องมือ (เช่น online compiler เพื่อไม่ต้องติดตั้ง) ให้ทุกคนเข้าได้ง่าย</li>
+  <li>ให้น้องพิมพ์โปรแกรมแรกตามทีละบรรทัด แล้วกดรันเห็นผลทันที</li>
+</ul>
+<span class="code">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    cout &lt;&lt; "Hello World!" &lt;&lt; endl;
+    cout &lt;&lt; "สวัสดีครับ ผมชื่อ ..." &lt;&lt; endl;
+    return 0;
+}</span>
+<ul>
+  <li>ชวนน้องแก้ข้อความใน <span style="font-family:monospace">cout</span> เป็นชื่อตัวเอง → เห็นว่าโค้ดเปลี่ยน ผลลัพธ์เปลี่ยน</li>
+  <li>ลองทำให้ “พัง” ดูบ้าง (ลบ <span style="font-family:monospace">;</span> ออก) เพื่อให้ชินกับ error และไม่กลัวมัน</li>
+</ul>
+<div class="tip">เคล็ดลับ: ให้รางวัลเล็ก ๆ กับคนที่พิมพ์รันผ่านคนแรกของแต่ละทีม สร้างบรรยากาศสนุก</div>
+
+<h3>15:30–16:00 &nbsp; สรุปวันแรก + เกมทบทวน</h3>
+<ul>
+  <li>เกมตอบคำถามเร็ว (เช่น Kahoot/ยกมือ): โดเมน .th ใครดูแล? โปรแกรมคืออะไร?</li>
+  <li>สรุปสิ่งที่ได้เรียนวันนี้ และเกริ่นว่าพรุ่งนี้เริ่มลุย C++ เต็มตัว</li>
+  <li>ภารกิจสนุก ๆ (ไม่บังคับ): คิดว่าอยากเขียนโปรแกรมอะไรในชีวิตประจำวัน 1 อย่าง</li>
+</ul>
+
+<h2>อุปกรณ์ที่ต้องเตรียม</h2>
+<table class="chk">
+<tr><td>☐ คอมพิวเตอร์/โน้ตบุ๊กต่อโปรเจกเตอร์</td><td>☐ ไฟล์ simulator_โดเมนเนม_DNS.html</td></tr>
+<tr><td>☐ อินเทอร์เน็ต + online C++ compiler</td><td>☐ ป้ายชื่อ / สติกเกอร์ทีม</td></tr>
+<tr><td>☐ กระดาษ + ปากกาสำหรับกิจกรรม unplugged</td><td>☐ ขนมปัง/แยม (ถ้าเล่นเกมแซนด์วิช)</td></tr>
+<tr><td>☐ ของรางวัลเล็ก ๆ</td><td>☐ สไลด์ประกอบ (ถ้ามี)</td></tr>
+</table>
+
+</body>
+</html>

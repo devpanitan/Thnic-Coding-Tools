@@ -1,0 +1,138 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<meta name="ProgId" content="Word.Document">
+<title>หลักสูตร Introduction to Programming — ฟอร์ม THNIC</title>
+<style>
+@page { size: A4; margin: 2cm; }
+body { font-family:"TH Sarabun PSK","TH SarabunPSK","Sarabun","Tahoma",sans-serif; font-size:16pt; color:#1a1a1a; line-height:1.4; }
+h1 { font-size:20pt; text-align:center; margin:0 0 2pt; }
+.sub { text-align:center; font-size:15pt; margin:0 0 4pt; }
+.sub2 { text-align:center; font-size:14pt; color:#444; margin:0 0 16pt; }
+table.info { border-collapse:collapse; width:100%; margin-bottom:6pt; }
+table.info td { border:none; padding:5pt 8pt 5pt 0; vertical-align:top; }
+table.info .label { width:30%; font-weight:bold; white-space:nowrap; }
+ul { margin:2pt 0; padding-left:20pt; }
+li { margin:1.5pt 0; }
+h2 { font-size:17pt; color:#1a4f8a; margin:16pt 0 6pt; border-bottom:1.5px solid #cfe0f5; padding-bottom:2pt; }
+table.sched { border-collapse:collapse; width:100%; }
+table.sched th,table.sched td { border:1px solid #8aa0c0; padding:6pt 8pt; vertical-align:top; }
+table.sched th { background:#1a4f8a; color:#fff; font-size:14pt; }
+.day { font-weight:bold; white-space:nowrap; width:13%; }
+.date { color:#1a4f8a; font-weight:bold; }
+.pagebreak { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<h1>หลักสูตร Introduction to Programming</h1>
+<p class="sub">สำหรับนักเรียนระดับชั้นมัธยมศึกษาตอนปลาย</p>
+<p class="sub2">ประจำปี พ.ศ. 2569 &nbsp;|&nbsp; THNIC Academy</p>
+
+<table class="info">
+  <tr><td class="label">วัตถุประสงค์ของหลักสูตร:</td>
+      <td>นำทักษะการแก้ปัญหาอย่างเป็นระบบตามแนวทางการคิดเชิงคำนวณ (Computational Thinking) มาต่อยอดเพื่อฝึกทักษะการเขียนโปรแกรมเบื้องต้น แก้ปัญหาต่าง ๆ หรือแก้โจทย์ในชีวิตประจำวันได้</td></tr>
+  <tr><td class="label">ผู้สอน:</td>
+      <td>ผศ.ดร.ธงชัย เจือจันทร์<br>สาขาวิชาวิทยาการคอมพิวเตอร์<br>คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยราชภัฏสุรินทร์</td></tr>
+  <tr><td class="label">ระหว่างวันที่:</td><td>25 – 29 กรกฎาคม 2569</td></tr>
+  <tr><td class="label">ระยะเวลา:</td><td>30 ชั่วโมง (4 หรือ 5 วัน)</td></tr>
+  <tr><td class="label">แนวทางการเรียนการสอน:</td>
+      <td>ฝึกทักษะการเขียนโปรแกรมแก้โจทย์ปัญหาที่หลากหลาย โดยใช้ภาษา C++</td></tr>
+  <tr><td class="label">สาระสำคัญของหลักสูตร:</td>
+      <td><ul>
+        <li>การเขียนโปรแกรมด้วยภาษา C++</li>
+        <li>พื้นฐานการทำงานของภาษา C++</li>
+        <li>การทำงานและ Structure code C++</li>
+        <li>พื้นฐานเกี่ยวกับ Syntax</li>
+        <li>Input และ Output</li>
+        <li>ตัวแปร (Variable), Type ของตัวแปร</li>
+        <li>Variable operators + &minus; * /</li>
+        <li>Condition, if else</li>
+        <li>Switch Case</li>
+        <li>การทำงานของ Loop while, Loop For</li>
+        <li>การทำงาน Array และการใช้งานร่วมกับ Loop</li>
+      </ul></td></tr>
+</table>
+
+<h2>ตารางการสอน 5 วัน</h2>
+<table class="sched">
+<tr><th>วัน / วันที่</th><th>เนื้อหาที่สอน</th><th>กิจกรรม / สื่อ</th></tr>
+
+<tr>
+  <td class="day">วันที่ 1<br><span class="date">25 ก.ค.</span><br>(ปูพื้น)</td>
+  <td><ul>
+    <li>ประวัติอินเทอร์เน็ตไทย และโดเมนเนม .th (THNIC)</li>
+    <li>การคิดเชิงคำนวณ (Computational Thinking) 4 เสาหลัก</li>
+    <li>โปรแกรมคืออะไร (ชุดคำสั่งที่ชัดเจน เรียงลำดับ)</li>
+    <li>รู้จัก C++ และเขียนโปรแกรมแรก Hello World</li>
+    <li>พื้นฐาน Syntax และการอ่าน error</li>
+  </ul></td>
+  <td><ul>
+    <li>Simulator โดเมน/DNS</li>
+    <li>เกมละลายพฤติกรรม + แบ่งทีม</li>
+    <li>กิจกรรม Unplugged “หุ่นยนต์ทำแซนด์วิช”</li>
+    <li>สไลด์นำเสนอวันที่ 1</li>
+  </ul></td>
+</tr>
+
+<tr>
+  <td class="day">วันที่ 2<br><span class="date">26 ก.ค.</span><br>(เน้น C++)</td>
+  <td><ul>
+    <li>โครงสร้างโปรแกรม (Structure code) และ Syntax</li>
+    <li>Input และ Output (cin / cout)</li>
+    <li>ตัวแปร (Variable) และชนิดข้อมูล (Type)</li>
+    <li>ตัวดำเนินการ + &minus; * / (Operators)</li>
+    <li>เงื่อนไข if / else</li>
+  </ul></td>
+  <td><ul>
+    <li>Simulator ตัวแปร และ if-else</li>
+    <li>เกมแข่งเขียนโค้ดสั้น ๆ เป็นทีม</li>
+    <li>ใบโจทย์ฝึก C++ เบื้องต้น</li>
+  </ul></td>
+</tr>
+
+<tr>
+  <td class="day">วันที่ 3<br><span class="date">27 ก.ค.</span><br>(เน้น C++)</td>
+  <td><ul>
+    <li>Switch Case</li>
+    <li>การวนซ้ำ Loop (while, for)</li>
+    <li>Array และการใช้ Loop ร่วมกับ Array</li>
+    <li>รวมความรู้ C++ มาใช้แก้โจทย์จริง</li>
+  </ul></td>
+  <td><ul>
+    <li>Simulator Loop และ Array</li>
+    <li>กิจกรรมปูพื้น/วอร์มอัพสมอง</li>
+    <li>Mini-project เป็นทีม</li>
+  </ul></td>
+</tr>
+
+<tr>
+  <td class="day">วันที่ 4<br><span class="date">28 ก.ค.</span><br>(โอลิมปิก)</td>
+  <td><ul>
+    <li>แนะนำแนวข้อสอบ Computer Olympic</li>
+    <li>เทคนิคถอดรหัส/วิเคราะห์โจทย์</li>
+    <li>เขียนโค้ดแก้โจทย์ระดับปานกลาง</li>
+  </ul></td>
+  <td><ul>
+    <li>ชุดโจทย์ระดับปานกลาง พร้อมเฉลย</li>
+    <li>ฝึกทำเป็นทีม / จับคู่ มีพี่เลี้ยงช่วย</li>
+  </ul></td>
+</tr>
+
+<tr>
+  <td class="day">วันที่ 5<br><span class="date">29 ก.ค.</span><br>(โอลิมปิก + ปิด)</td>
+  <td><ul>
+    <li>ถอดรหัสและเขียนโค้ดโจทย์ระดับยาก</li>
+    <li>นำเสนอผลงาน / เฉลยร่วมกัน</li>
+    <li>ทบทวนสิ่งที่ได้เรียนตลอดค่าย (Wrap up)</li>
+  </ul></td>
+  <td><ul>
+    <li>ชุดโจทย์ระดับยาก + simulator ประกอบ</li>
+    <li>มอบเกียรติบัตร / ของรางวัล</li>
+    <li>แบบประเมินผลค่าย</li>
+  </ul></td>
+</tr>
+</table>
+
+</body>
+</html>

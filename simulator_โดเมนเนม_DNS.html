@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | โดเมนเนมทำงานยังไง (DNS) — THNIC Academy</title>
+<link rel="icon" type="image/png" href="srru-logo.png">
+<link rel="shortcut icon" href="srru-logo.png">
+<link rel="apple-touch-icon" href="srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#eaf3ff; --bg2:#fef6ff; --card:#ffffff; --line:#dbe6f7;
+    --txt:#1f2b48; --muted:#5d6b8a; --accent:#2f7bf6; --accent2:#7a5cff; --green:#19b877;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    font-family:"Sarabun","Tahoma",system-ui,sans-serif;color:var(--txt);
+    background:radial-gradient(900px 500px at 10% -10%,#d4e6ff 0%,transparent 60%),
+               radial-gradient(800px 500px at 100% 0%,#ffe6f7 0%,transparent 55%),
+               linear-gradient(160deg,var(--bg1),var(--bg2));
+    height:100vh;overflow:hidden;padding:clamp(10px,2vh,22px) clamp(12px,2vw,28px);
+    display:flex;flex-direction:column;gap:clamp(8px,1.6vh,16px);
+  }
+  .head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .globe{font-size:clamp(26px,3.4vh,36px);animation:spin 14s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  h1{font-size:clamp(20px,3vh,28px);margin:0;font-weight:700;color:#16224a;white-space:nowrap}
+  .lead{color:var(--muted);margin:0;font-size:clamp(13px,1.7vh,16px);flex:1;min-width:240px}
+
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--card);
+       border:2px solid var(--line);border-radius:16px;padding:clamp(8px,1.4vh,13px);
+       box-shadow:0 10px 26px rgba(47,123,246,.10)}
+  input{flex:1;min-width:180px;font-size:clamp(15px,2vh,18px);padding:10px 15px;border-radius:11px;
+        border:2px solid var(--line);background:#f7faff;color:var(--txt);font-family:inherit;outline:none;transition:.2s}
+  input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(47,123,246,.18)}
+  button{font-size:clamp(14px,1.9vh,16px);font-weight:700;padding:10px 16px;border:0;border-radius:11px;
+         cursor:pointer;font-family:inherit;transition:transform .12s,box-shadow .2s,opacity .2s}
+  button:active{transform:scale(.95)}
+  button:disabled{opacity:.4;cursor:default}
+  #go{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 8px 18px rgba(47,123,246,.32)}
+  #go:disabled{box-shadow:none}
+  .ghost{background:#eef4ff;color:#2f4a7d;border:2px solid var(--line);font-weight:600}
+  .ghost:hover{background:#e2edff}
+  #pause{background:#fff1e6;border-color:#ffd3ad;color:#b85a1a}
+  .ex{font-size:clamp(12px,1.6vh,14px);padding:7px 13px;border-radius:20px}
+  .examples{display:flex;gap:8px;align-items:center;font-size:clamp(12px,1.6vh,15px);color:var(--muted)}
+
+  .progress{height:9px;background:#e3ecfb;border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+  .progress span{display:block;height:100%;width:0;border-radius:99px;
+                 background:linear-gradient(90deg,var(--accent),var(--accent2),var(--green));transition:width .5s ease}
+
+  .map{position:relative;flex:1;min-height:0;display:flex;align-items:center}
+  svg.links{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+  .stage{position:relative;z-index:1;display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(6px,1vw,14px);width:100%}
+
+  .node{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(8px,1.6vh,16px);
+        background:var(--card);border:2px solid var(--line);border-radius:16px;
+        padding:clamp(14px,2.6vh,26px) 10px;opacity:.5;transform:translateY(8px) scale(.98);
+        transition:.45s cubic-bezier(.2,.8,.2,1);box-shadow:0 6px 16px rgba(31,43,72,.06);
+        height:100%;min-height:clamp(170px,34vh,280px)}
+  .node.on{opacity:1;transform:none;border-color:var(--clr);box-shadow:0 12px 26px -8px var(--clr)}
+  .node.done{opacity:1;border-color:var(--clr)}
+  .ic{font-size:clamp(22px,3.6vh,32px);width:clamp(44px,7vh,62px);height:clamp(44px,7vh,62px);
+      display:flex;align-items:center;justify-content:center;background:var(--soft);border-radius:15px;transition:.4s}
+  .node.on .ic{animation:pop .5s ease, bob 1.4s ease-in-out infinite}
+  @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  .num{font-size:11px;font-weight:700;color:#fff;background:var(--clr);border-radius:99px;padding:1px 9px}
+  .node h3{margin:0;font-size:clamp(13px,1.8vh,16px);font-weight:700;color:#16224a;line-height:1.25}
+  .node p{margin:0;color:var(--muted);font-size:clamp(11px,1.45vh,13px);line-height:1.3}
+
+  .packet{position:absolute;z-index:2;width:18px;height:18px;border-radius:50%;
+          background:radial-gradient(circle at 30% 30%,#fff,var(--accent));
+          box-shadow:0 0 16px 5px rgba(47,123,246,.55);opacity:0;pointer-events:none}
+
+  .banner{min-height:clamp(54px,9vh,80px);display:flex;flex-direction:column;align-items:center;justify-content:center;
+          text-align:center;border-radius:16px;padding:10px 18px;gap:4px;
+          background:#fff6dd;border:2px solid #ffe2a1;color:#b5750a;transition:.3s}
+  .banner .bmain{font-size:clamp(14px,2vh,19px);font-weight:700}
+  .banner .bextra{font-size:clamp(12px,1.6vh,15px);font-weight:500;opacity:.92}
+  .banner.win{background:#e7faf1;border-color:#aee7ce;color:#0c6b46}
+  .banner.idle{background:#eef4ff;border-color:var(--line);color:var(--muted)}
+  .banner.idle .bmain{font-weight:600}
+  .ipchip{font-family:ui-monospace,monospace;background:#cdf3e1;padding:3px 11px;border-radius:8px;color:#0c6b46;font-weight:700;margin-left:4px}
+  code{background:#eef4ff;padding:1px 7px;border-radius:6px;color:#2f4a7d;font-family:ui-monospace,monospace;font-weight:600}
+
+  .confetti{position:fixed;top:-10px;width:10px;height:16px;z-index:50;border-radius:2px;opacity:.95;pointer-events:none}
+</style>
+</head>
+<body>
+  <div class="head">
+    <img src="srru-logo.png" alt="SRRU" class="logo" style="height:clamp(36px,5vh,54px);width:auto" onerror="this.style.display='none';document.getElementById('fallbackGlobe').style.display='inline-block'">
+    <span class="globe" id="fallbackGlobe" style="display:none">🌐</span>
+    <h1>โดเมนเนมทำงานยังไง?</h1>
+    <p class="lead">กด “ค้นหา” เล่นอัตโนมัติ หรือ “ถัดไป” เดินทีละขั้น • กด “หยุด” ค้างไว้เพื่ออธิบาย — THNIC Academy</p>
+  </div>
+
+  <div class="bar">
+    <input id="domain" value="www.thnic.co.th" spellcheck="false">
+    <button id="go">▶ ค้นหา</button>
+    <button id="step" class="ghost">⏭ ถัดไป</button>
+    <button id="pause" disabled>⏸ หยุด</button>
+    <button id="reset" class="ghost">↺ เริ่มใหม่</button>
+    <span class="examples">ตัวอย่าง:</span>
+    <button class="ghost ex">www.chula.ac.th</button>
+    <button class="ghost ex">www.google.com</button>
+  </div>
+
+  <div class="progress"><span id="pbar"></span></div>
+
+  <div class="map">
+    <svg class="links" id="links" preserveAspectRatio="none"></svg>
+    <div class="stage" id="stage"></div>
+    <div class="packet" id="packet"></div>
+  </div>
+
+  <div class="banner idle" id="banner">
+    <div class="bmain" id="bmain">💡 ชื่อเว็บอ่านจากขวาไปซ้าย: <code>.th</code> ประเทศไทย (THNIC) → <code>.co</code> องค์กร → <code>thnic</code> ชื่อหน่วยงาน → <code>www</code> เซิร์ฟเวอร์</div>
+    <div class="bextra" id="bextra"></div>
+  </div>
+
+<script>
+const steps=[
+ {ic:"💻",clr:"#7a5cff",soft:"#efebff",h:"เครื่องของเรา",p:"รู้แค่ชื่อเว็บ ยังไม่รู้ IP",
+   say:d=>`💻 เครื่อง: "ขอที่อยู่ของ ${d} หน่อย"`,
+   extra:d=>`เบราว์เซอร์จะดูใน cache ของเครื่องก่อนว่าเคยจำ IP ของ ${d} ไว้ไหม ถ้าไม่มีจึงส่งคำถามออกไป`},
+ {ic:"📒",clr:"#2f7bf6",soft:"#e6f0ff",h:"DNS Resolver",p:"ตัวช่วยค้นหา ไล่ถามทีละชั้น",
+   say:()=>`📒 Resolver: "ได้ เดี๋ยวไปไล่ถามให้"`,
+   extra:()=>`มักเป็น DNS ของผู้ให้บริการเน็ต (ISP) หรือ public DNS เช่น 8.8.8.8 ทำหน้าที่ไล่ถามแทนเราทั้งหมด`},
+ {ic:"🌍",clr:"#7a5cff",soft:"#efebff",h:"Root Server",p:"รู้ว่าใครดูแลแต่ละนามสกุล",
+   say:d=>`🌍 Root: "นามสกุล .${tld(d)} ไปถามเซิร์ฟเวอร์ของ .${tld(d)}"`,
+   extra:d=>`Root server มี 13 ชุดหลักทั่วโลก ไม่รู้ IP ของเว็บ แต่ชี้ทางว่านามสกุล .${tld(d)} ใครเป็นคนดูแล`},
+ {ic:"🏳️",clr:"#19b877",soft:"#e3f7ee",h:"TLD Server",p:".th ดูแลโดย THNIC",
+   say:d=>`🏳️ TLD: "โดเมน ${reg(d)} อยู่ที่เนมเซิร์ฟเวอร์ของเขา"`,
+   extra:()=>`นามสกุล .th ดูแลโดย THNIC — เก็บข้อมูลว่าแต่ละโดเมนใต้ .th ใช้เนมเซิร์ฟเวอร์ตัวไหน`},
+ {ic:"📍",clr:"#ff6a3d",soft:"#ffeee8",h:"Authoritative",p:"เนมเซิร์ฟเวอร์ของเว็บ รู้ IP จริง",
+   say:d=>`📍 เจ้าของโดเมน: "${d} = ${ip(d)}"`,
+   extra:()=>`เนมเซิร์ฟเวอร์ของเจ้าของโดเมนเอง เก็บ record จริง (A record = หมายเลข IP) คำตอบสุดท้ายอยู่ที่นี่`},
+ {ic:"✅",clr:"#19b877",soft:"#e3f7ee",h:"ได้ที่อยู่แล้ว!",p:"ส่ง IP กลับ เปิดเว็บได้เลย",
+   say:d=>`✅ เชื่อมต่อไป ${ip(d)} 🚀`,
+   extra:()=>`Resolver จะจำ (cache) IP ไว้ตามเวลา TTL ครั้งต่อไปจะเร็วขึ้น ไม่ต้องไล่ถามใหม่`},
+];
+const tld=d=>d.split(".").pop();
+const reg=d=>d.split(".").slice(-3).join(".");
+const ip=d=>{let h=0;for(const c of d)h=(h*31+c.charCodeAt(0))%256;return `203.${h%200+10}.${(h*7)%200+10}.${(h*13)%200+5}`;};
+
+const stage=document.getElementById("stage"),inp=document.getElementById("domain"),
+      goBtn=document.getElementById("go"),stepBtn=document.getElementById("step"),
+      pauseBtn=document.getElementById("pause"),resetBtn=document.getElementById("reset"),
+      svg=document.getElementById("links"),packet=document.getElementById("packet"),
+      pbar=document.getElementById("pbar"),map=document.querySelector(".map"),
+      banner=document.getElementById("banner"),bmain=document.getElementById("bmain"),bextra=document.getElementById("bextra");
+
+const HINT=`💡 ชื่อเว็บอ่านจากขวาไปซ้าย: <code>.th</code> ประเทศไทย (THNIC) → <code>.co</code> องค์กร → <code>thnic</code> ชื่อหน่วยงาน → <code>www</code> เซิร์ฟเวอร์`;
+
+let cur=-1, busy=false, paused=false, auto=false, dom="";
+
+function render(){
+  stage.innerHTML="";svg.innerHTML="";pbar.style.width="0";packet.style.opacity="0";
+  steps.forEach((s,i)=>{
+    const el=document.createElement("div");
+    el.className="node";el.id="n"+i;el.style.setProperty("--clr",s.clr);el.style.setProperty("--soft",s.soft);
+    el.innerHTML=`<span class="num">${i+1}</span><div class="ic">${s.ic}</div><h3>${s.h}</h3><p>${s.p}</p>`;
+    stage.appendChild(el);
+  });
+  drawLinks();
+}
+function nodeCenter(i){
+  const el=document.getElementById("n"+i),mr=map.getBoundingClientRect(),r=el.getBoundingClientRect();
+  return {x:r.left-mr.left+r.width/2, y:r.top-mr.top+r.height/2};
+}
+function drawLinks(){
+  const mr=map.getBoundingClientRect();
+  svg.setAttribute("viewBox",`0 0 ${mr.width} ${mr.height}`);
+  svg.innerHTML="";
+  for(let i=0;i<steps.length-1;i++){
+    const a=nodeCenter(i),b=nodeCenter(i+1);
+    const p=document.createElementNS("http://www.w3.org/2000/svg","path");
+    p.setAttribute("d",`M ${a.x} ${a.y} L ${b.x} ${b.y}`);
+    p.setAttribute("fill","none");p.setAttribute("stroke","#c3d4f0");
+    p.setAttribute("stroke-width","3");p.setAttribute("stroke-dasharray","6 7");
+    p.setAttribute("stroke-linecap","round");p.setAttribute("id","ln"+i);svg.appendChild(p);
+  }
+}
+window.addEventListener("resize",drawLinks);
+
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function travel(i){
+  return new Promise(res=>{
+    const path=document.getElementById("ln"+i);if(!path){res();return;}
+    const len=path.getTotalLength();const dur=560;let t0=null;
+    packet.style.opacity="1";
+    function step(ts){
+      if(!t0)t0=ts;const k=Math.min((ts-t0)/dur,1);
+      const pt=path.getPointAtLength(k*len);
+      packet.style.left=(pt.x-9)+"px";packet.style.top=(pt.y-9)+"px";
+      path.setAttribute("stroke","#2f7bf6");path.setAttribute("stroke-dashoffset",-(k*len));
+      if(k<1)requestAnimationFrame(step);else res();
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+function activate(i){
+  const el=document.getElementById("n"+i);el.classList.add("on");
+  banner.className="banner";
+  bmain.innerHTML=steps[i].say(dom);
+  bextra.innerHTML="ℹ️ "+steps[i].extra(dom);
+  pbar.style.width=((i+1)/steps.length*100)+"%";
+}
+function finish(){
+  packet.style.opacity="0";auto=false;
+  banner.className="banner win";
+  bmain.innerHTML=`🎉 เปิดเว็บ ${dom} สำเร็จ! ที่อยู่จริงคือ <span class="ipchip">${ip(dom)}</span>`;
+  bextra.innerHTML="ℹ️ Resolver จะจำ (cache) IP นี้ไว้ตาม TTL ครั้งหน้าจะเร็วขึ้น ไม่ต้องไล่ถามใหม่";
+  burst();
+}
+async function advance(){
+  if(busy||cur>=steps.length-1)return;
+  busy=true;
+  if(cur>=0){const p=document.getElementById("n"+cur);p.classList.remove("on");p.classList.add("done");}
+  cur++;
+  if(cur>0)await travel(cur-1);
+  activate(cur);
+  busy=false;
+  if(cur===steps.length-1)finish();
+  updateButtons();
+}
+function autoLoop(){
+  if(!auto||paused)return;
+  if(cur>=steps.length-1){auto=false;updateButtons();return;}
+  advance().then(()=>{
+    if(auto&&!paused&&cur<steps.length-1)setTimeout(autoLoop,1200);
+    else updateButtons();
+  });
+}
+function startAuto(){
+  if(cur>=steps.length-1)reset();
+  dom=inp.value.trim()||"www.thnic.co.th";
+  auto=true;paused=false;updateButtons();autoLoop();
+}
+function togglePause(){
+  if(!auto)return;
+  paused=!paused;updateButtons();
+  if(!paused)autoLoop();
+}
+async function manualStep(){
+  if(busy)return;
+  if(cur<0)dom=inp.value.trim()||"www.thnic.co.th";
+  if(auto)paused=true;
+  await advance();
+  updateButtons();
+}
+function reset(){
+  auto=false;paused=false;busy=false;cur=-1;
+  render();drawLinks();
+  banner.className="banner idle";bmain.innerHTML=HINT;bextra.innerHTML="";
+  updateButtons();
+}
+function updateButtons(){
+  const done=cur>=steps.length-1;
+  goBtn.disabled=auto&&!paused;
+  goBtn.textContent=done?"▶ เล่นใหม่":"▶ ค้นหา";
+  stepBtn.disabled=done||busy;
+  pauseBtn.disabled=!auto||done;
+  pauseBtn.textContent=paused?"▶ เล่นต่อ":"⏸ หยุด";
+}
+function burst(){
+  const colors=["#2f7bf6","#7a5cff","#19b877","#f2a900","#ff6a3d"];
+  for(let i=0;i<80;i++){
+    const c=document.createElement("div");c.className="confetti";
+    c.style.left=Math.random()*100+"vw";c.style.background=colors[i%colors.length];
+    document.body.appendChild(c);
+    const dur=1600+Math.random()*1400;
+    c.animate([{transform:`translateY(0) rotate(0deg)`,opacity:1},
+               {transform:`translateY(105vh) rotate(${Math.random()*720}deg)`,opacity:.2}],
+      {duration:dur,easing:"cubic-bezier(.3,.6,.4,1)"});
+    setTimeout(()=>c.remove(),dur);
+  }
+}
+
+goBtn.onclick=startAuto;
+stepBtn.onclick=manualStep;
+pauseBtn.onclick=togglePause;
+resetBtn.onclick=reset;
+document.querySelectorAll(".ex").forEach(b=>b.onclick=()=>{inp.value=b.textContent;startAuto();});
+
+render();updateButtons();window.addEventListener("load",drawLinks);setTimeout(drawLinks,200);
+</script>
+</body>
+</html>

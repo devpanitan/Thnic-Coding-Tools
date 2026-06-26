@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | เกมจับคู่ Computational Thinking</title>
+<link rel="icon" type="image/png" href="srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--gold:#f2a900;--ink:#16224a;--muted:#5d6b8a;--line:#dbe6f7;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:"Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);height:100vh;overflow:hidden;
+    background:radial-gradient(900px 500px at 10% -10%,#d4e6ff 0,transparent 60%),radial-gradient(800px 500px at 100% 0,#ffe6f7 0,transparent 55%),linear-gradient(160deg,#eef4ff,#fdf3fb);
+    display:flex;flex-direction:column;gap:clamp(10px,2vh,18px);padding:clamp(12px,2.5vh,24px) clamp(14px,4vw,40px)}
+  svg.lucide{width:1em;height:1em;vertical-align:-.15em}
+  .head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .head img{height:clamp(34px,5vh,48px)}
+  h1{font-size:clamp(20px,3vh,28px);font-weight:700}
+  .head .tag{color:var(--muted);font-size:clamp(13px,1.7vh,16px);flex:1;min-width:200px}
+  .score{font-weight:700;font-size:clamp(15px,2.2vh,19px);background:#fff;border:2px solid var(--line);border-radius:12px;padding:7px 16px}
+  .card{background:#fff;border:2px solid var(--line);border-radius:20px;box-shadow:0 12px 30px rgba(31,43,72,.1);
+    flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:clamp(16px,3vh,32px);gap:clamp(14px,2.5vh,26px)}
+  .qno{color:var(--purple);font-weight:700;font-size:clamp(14px,1.9vh,17px)}
+  .q{font-size:clamp(22px,4vh,38px);font-weight:700;line-height:1.3;max-width:18ch}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,1.8vh,16px);width:min(720px,92%)}
+  .opt{font-family:inherit;font-size:clamp(16px,2.4vh,22px);font-weight:700;padding:clamp(12px,2vh,20px);border-radius:16px;border:3px solid var(--line);background:#f7faff;color:var(--ink);cursor:pointer;transition:.15s;display:flex;flex-direction:column;gap:3px;align-items:center}
+  .opt small{font-weight:500;color:var(--muted);font-size:.7em}
+  .opt:hover{border-color:var(--purple);transform:translateY(-3px)}
+  .opt.correct{background:#e7faf1;border-color:var(--green);color:#0c6b46}
+  .opt.wrong{background:#ffece6;border-color:var(--coral);color:#b03b1d}
+  .opt:disabled{cursor:default}
+  .fb{font-size:clamp(16px,2.4vh,22px);font-weight:700;min-height:1.4em}
+  .fb.ok{color:var(--green)}.fb.no{color:var(--coral)}
+  .btn{font-family:inherit;font-size:clamp(15px,2.2vh,18px);font-weight:700;padding:12px 26px;border:0;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;display:inline-flex;gap:8px;align-items:center}
+  .btn.ghost{background:#eef4ff;color:#2f4a7d;border:2px solid var(--line)}
+  .btn:disabled{opacity:.4;cursor:default}
+  .row{display:flex;gap:12px}
+  .confetti{position:fixed;top:-10px;width:10px;height:16px;z-index:50;border-radius:2px;pointer-events:none}
+  .mascot{position:fixed;left:clamp(8px,2vw,32px);bottom:clamp(6px,2vh,22px);width:clamp(108px,16vh,168px);height:auto;z-index:4;transform-origin:center bottom;animation:dance 1.3s ease-in-out infinite}
+  @keyframes dance{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-12px) rotate(5deg)}}
+  .mascot .armL,.mascot .armR{transform-box:fill-box;transform-origin:center top}
+  .mascot .armL{animation:dL .62s ease-in-out infinite}
+  .mascot .armR{animation:dR .62s ease-in-out infinite}
+  @keyframes dL{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(24deg)}}
+  @keyframes dR{0%,100%{transform:rotate(30deg)}50%{transform:rotate(-24deg)}}
+  .mascot.cheer{animation:mcheer .8s ease}
+  @keyframes mcheer{0%{transform:translateY(0)}30%{transform:translateY(-36px) scale(1.1)}60%{transform:translateY(0)}80%{transform:translateY(-14px)}100%{transform:translateY(0)}}
+  @media (max-width:720px){.mascot{width:90px;opacity:.85}}
+</style>
+</head>
+<body>
+  <div class="head">
+    <img src="srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
+    <h1>จับคู่ Computational Thinking</h1>
+    <span class="tag">อ่านสถานการณ์ แล้วเลือกว่าใช้ “เสาหลัก” ไหน — เล่นทั้งห้องแย่งกันตอบได้</span>
+    <span class="score" id="score">คะแนน 0</span>
+  </div>
+
+  <div class="card" id="card"></div>
+
+  <svg class="mascot" id="mascot" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+    <line x1="110" y1="20" x2="110" y2="42" stroke="#7a5cff" stroke-width="5"/>
+    <circle cx="110" cy="15" r="9" fill="#ffd24d" stroke="#7a5cff" stroke-width="3"/>
+    <g class="armL"><rect x="24" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="34" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
+    <g class="armR"><rect x="176" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="186" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
+    <rect x="48" y="42" width="124" height="96" rx="28" fill="#eef2ff" stroke="#7a5cff" stroke-width="5"/>
+    <ellipse cx="74" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
+    <ellipse cx="146" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
+    <g><circle cx="88" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="88" cy="84" r="7" fill="#2f7bf6"/>
+    <circle cx="132" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="132" cy="84" r="7" fill="#2f7bf6"/></g>
+    <rect x="88" y="110" width="44" height="16" rx="8" fill="#19b877"/>
+    <rect x="64" y="148" width="92" height="58" rx="16" fill="#fff" stroke="#7a5cff" stroke-width="4"/>
+    <rect x="80" y="164" width="60" height="28" rx="8" fill="#e6f0ff"/>
+    <path d="M80 178 H140 M98 168 V188" stroke="#2f7bf6" stroke-width="3"/>
+  </svg>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+const PILLARS={
+  D:["แตกปัญหา","Decomposition"], P:["หารูปแบบ","Pattern"],
+  A:["มองข้ามรายละเอียด","Abstraction"], G:["ออกแบบขั้นตอน","Algorithm"]};
+const Q=[
+ ["แบ่งงานทำความสะอาดบ้านออกเป็นห้อง ๆ แล้วทำทีละห้อง","D"],
+ ["สังเกตว่าเลขคู่ลงท้ายด้วย 0, 2, 4, 6, 8 เสมอ","P"],
+ ["วาดแผนที่เส้นทางโดยตัดถนนซอยเล็ก ๆ ที่ไม่จำเป็นออก","A"],
+ ["เขียนขั้นตอนชงมาม่า: ต้มน้ำ → ใส่เส้น → ใส่เครื่องปรุง","G"],
+ ["แยกโจทย์เลขยาว ๆ ออกเป็นข้อย่อยที่ทำง่ายกว่า","D"],
+ ["เห็นว่าทุกเช้าวันจันทร์รถติดเวลาเดิม เลยออกบ้านเร็วขึ้น","P"],
+ ["สรุปนิทานยาว ๆ ให้เหลือแต่ใจความสำคัญ","A"],
+ ["ทำตามสูตรเค้กทีละขั้นตอน 1-2-3 ให้ครบ","G"],
+ ["เกมยากแบ่งเป็นด่านย่อย ผ่านทีละด่าน","D"],
+ ["สังเกตว่าลายกระเบื้องซ้ำกันทุก 3 ช่อง","P"],
+];
+let i=0,score=0;const answers={},optsCache={};
+const card=document.getElementById("card");
+function icons(){if(window.lucide)lucide.createIcons();}
+function shuffle(a){for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]];}return a;}
+function render(){
+  const [text,ans]=Q[i],done=answers[i]!==undefined;
+  if(!optsCache[i])optsCache[i]=shuffle(["D","P","A","G"]);
+  const keys=optsCache[i];
+  card.innerHTML=`<div class="qno">ข้อ ${i+1} / ${Q.length}</div>
+    <div class="q">“${text}”</div>
+    <div class="opts">${keys.map(k=>`<button class="opt" data-k="${k}"><span>${PILLARS[k][0]}</span><small>${PILLARS[k][1]}</small></button>`).join("")}</div>
+    <div class="fb" id="fb"></div>
+    <div class="row">
+      <button class="btn ghost" id="prev"><i data-lucide="arrow-left"></i> ย้อนกลับ</button>
+      <button class="btn" id="next" ${done?'':'disabled'}>${i<Q.length-1?'ข้อถัดไป <i data-lucide="arrow-right"></i>':'ดูผลคะแนน <i data-lucide="flag"></i>'}</button>
+    </div>`;
+  const fb=document.getElementById("fb");
+  if(done){const ch=answers[i];
+    card.querySelectorAll(".opt").forEach(b=>{b.disabled=true;if(b.dataset.k===ans)b.classList.add("correct");else if(b.dataset.k===ch)b.classList.add("wrong");});
+    if(ch===ans){fb.className="fb ok";fb.textContent="ถูกต้อง! +1";}
+    else{fb.className="fb no";fb.textContent="ยังไม่ใช่ — คำตอบคือ "+PILLARS[ans][0]+" ("+PILLARS[ans][1]+")";}
+  }else{card.querySelectorAll(".opt").forEach(b=>b.onclick=()=>choose(b.dataset.k,ans));}
+  document.getElementById("prev").disabled=i<=0;
+  document.getElementById("prev").onclick=()=>{if(i>0){i--;render();}};
+  document.getElementById("next").onclick=()=>{if(answers[i]===undefined)return;if(i<Q.length-1){i++;render();}else end();};
+  document.getElementById("score").textContent="คะแนน "+score;icons();
+}
+function choose(k,ans){
+  if(answers[i]!==undefined)return;
+  answers[i]=k;
+  if(k===ans){score++;const m=document.getElementById("mascot");if(m){m.classList.remove("cheer");void m.offsetWidth;m.classList.add("cheer");setTimeout(()=>m.classList.remove("cheer"),800);}}
+  render();
+}
+function end(){
+  card.innerHTML=`<div class="q">เก่งมาก! ได้ ${score} / ${Q.length} คะแนน</div>
+    <div class="row"><button class="btn" id="again"><i data-lucide="rotate-ccw"></i> เล่นอีกครั้ง</button></div>`;
+  document.getElementById("again").onclick=()=>{i=0;score=0;render();};
+  icons();burst();
+}
+function burst(){const cs=["#2f7bf6","#7a5cff","#19b877","#f2a900","#ff6a3d"];
+  for(let k=0;k<80;k++){const c=document.createElement("div");c.className="confetti";c.style.left=Math.random()*100+"vw";c.style.background=cs[k%cs.length];document.body.appendChild(c);
+    const d=1600+Math.random()*1400;c.animate([{transform:"translateY(0) rotate(0)",opacity:1},{transform:`translateY(105vh) rotate(${Math.random()*720}deg)`,opacity:.2}],{duration:d,easing:"cubic-bezier(.3,.6,.4,1)"});setTimeout(()=>c.remove(),d);}}
+render();icons();
+</script>
+</body>
+</html>

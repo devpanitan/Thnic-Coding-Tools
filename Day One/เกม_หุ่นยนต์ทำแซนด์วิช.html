@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | เกมหุ่นยนต์ทำแซนด์วิช — แย่งกันตอบ</title>
+<link rel="icon" type="image/png" href="srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#2f7bf6; --purple:#7a5cff; --green:#19b877; --coral:#ff6a3d; --gold:#f2a900;
+    --ink:#16224a; --muted:#5d6b8a; --line:#dbe6f7; --card:#fff; --bg1:#eaf3ff; --bg2:#fef6ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:"Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);
+    background:radial-gradient(900px 500px at 10% -10%,#d4e6ff 0%,transparent 60%),
+              radial-gradient(800px 500px at 100% 0%,#ffe6f7 0%,transparent 55%),
+              linear-gradient(160deg,var(--bg1),var(--bg2));
+    height:100vh;overflow:hidden;display:flex;flex-direction:column;padding:clamp(10px,2vh,20px) clamp(12px,2.5vw,30px);gap:clamp(8px,1.5vh,16px)}
+  .head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .head img{height:clamp(34px,5vh,50px)}
+  h1{font-size:clamp(20px,3vh,30px);color:#16224a;font-weight:700}
+  .head .tag{color:var(--muted);font-size:clamp(12px,1.7vh,16px);flex:1;min-width:200px}
+  .stepbar{display:flex;gap:8px}
+  .stepbar i{width:clamp(22px,3vh,30px);height:clamp(22px,3vh,30px);border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:clamp(11px,1.6vh,15px);font-weight:700;background:#e3ecfb;color:#8aa0c8;border:2px solid var(--line)}
+  .stepbar i.done{background:var(--green);color:#fff;border-color:var(--green)}
+  .stepbar i.cur{background:var(--blue);color:#fff;border-color:var(--blue);animation:pulse 1.2s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(47,123,246,.5)}50%{box-shadow:0 0 0 8px rgba(47,123,246,0)}}
+
+  .main{flex:1;min-height:0;display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(12px,2vw,26px)}
+  .panel{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:clamp(12px,2vh,22px);box-shadow:0 10px 28px rgba(31,43,72,.08);display:flex;flex-direction:column}
+  .stage{align-items:center;justify-content:center;gap:1.5vh}
+  .robot{width:clamp(130px,24vh,215px);height:auto;transform-origin:center bottom;animation:bob 2.6s ease-in-out infinite}
+  .robot.happy{animation:happy .85s ease}
+  .robot.bad{animation:shake .6s ease}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-7px) rotate(-2.5deg)}75%{transform:translateY(-7px) rotate(2.5deg)}}
+  @keyframes happy{0%{transform:translateY(0) scale(1) rotate(0)}25%{transform:translateY(-30px) scale(1.07) rotate(-6deg)}50%{transform:translateY(0) rotate(6deg)}70%{transform:translateY(-14px) rotate(-3deg)}100%{transform:translateY(0) rotate(0)}}
+  @keyframes shake{0%,100%{transform:translateX(0) rotate(0)}15%{transform:translateX(-13px) rotate(-7deg)}35%{transform:translateX(13px) rotate(7deg)}55%{transform:translateX(-10px) rotate(-5deg)}75%{transform:translateX(10px) rotate(5deg)}}
+  #eyes{transform-box:fill-box;transform-origin:center;animation:blink 4.2s infinite}
+  @keyframes blink{0%,93%,100%{transform:scaleY(1)}96.5%{transform:scaleY(.1)}}
+  .robot.bad #eyes{animation:googly .6s ease}
+  @keyframes googly{0%{transform:rotate(0)}25%{transform:rotate(22deg)}50%{transform:rotate(-22deg)}75%{transform:rotate(14deg)}100%{transform:rotate(0)}}
+  #ant{transform-box:fill-box;transform-origin:center;animation:antpulse 1s ease-in-out infinite}
+  @keyframes antpulse{0%,100%{transform:scale(1) translateY(0);opacity:1}50%{transform:scale(1.25) translateY(-3px);opacity:.65}}
+  #armL,#armR{transform-box:fill-box;transform-origin:center top}
+  #armL{animation:waveL 2.2s ease-in-out infinite}
+  #armR{animation:waveR 2.2s ease-in-out infinite}
+  @keyframes waveL{0%,100%{transform:rotate(0)}50%{transform:rotate(14deg)}}
+  @keyframes waveR{0%,100%{transform:rotate(0)}50%{transform:rotate(-14deg)}}
+  .robot.happy #armL{animation:cheerL .85s ease}
+  .robot.happy #armR{animation:cheerR .85s ease}
+  @keyframes cheerL{0%,100%{transform:rotate(0)}40%{transform:rotate(-125deg)}}
+  @keyframes cheerR{0%,100%{transform:rotate(0)}40%{transform:rotate(125deg)}}
+  .speech{background:#eef4ff;border:2px solid var(--line);border-radius:16px;padding:1.2vh 2vh;font-size:clamp(14px,2vh,19px);font-weight:600;text-align:center;min-height:7vh;display:flex;align-items:center;justify-content:center;width:100%}
+  .speech.ok{background:#e7faf1;border-color:#aee7ce;color:#0c6b46}
+  .speech.bad{background:#ffece6;border-color:#ffc4b3;color:#b03b1d}
+  .sand{display:flex;flex-direction:column;align-items:center;gap:2px}
+
+  .qhead{font-size:clamp(13px,1.8vh,16px);color:var(--blue);font-weight:700;margin-bottom:.6vh}
+  .q{font-size:clamp(18px,2.8vh,26px);font-weight:700;margin-bottom:1.6vh;line-height:1.3}
+  .opts{display:flex;flex-direction:column;gap:1.2vh}
+  .opt{font-family:inherit;font-size:clamp(15px,2.2vh,20px);text-align:left;padding:1.5vh 2vh;border-radius:14px;border:2px solid var(--line);
+    background:#f7faff;color:var(--ink);cursor:pointer;transition:.15s;display:flex;align-items:center;gap:14px;font-weight:500}
+  .opt:hover{border-color:var(--blue);background:#eef4ff}
+  .opt .key{flex:none;width:1.7em;height:1.7em;border-radius:10px;background:var(--blue);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.85em}
+  .opt.correct{background:#e7faf1;border-color:var(--green)}.opt.correct .key{background:var(--green)}
+  .opt.wrong{background:#ffece6;border-color:var(--coral)}.opt.wrong .key{background:var(--coral)}
+  .opt:disabled{cursor:default;opacity:.95}
+  .qfoot{margin-top:auto;display:flex;gap:1.2vh;padding-top:1.6vh;align-items:center;flex-wrap:wrap}
+  button.act{font-family:inherit;font-size:clamp(14px,2vh,17px);font-weight:700;padding:1.2vh 2.2vh;border:0;border-radius:12px;cursor:pointer}
+  #next{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;box-shadow:0 6px 16px rgba(47,123,246,.3)}
+  #reset{background:#eef4ff;color:#2f4a7d;border:2px solid var(--line)}
+  button.act:disabled{opacity:.4;cursor:default}
+  .hint{color:var(--muted);font-size:clamp(12px,1.7vh,15px)}
+
+  .teams{display:flex;gap:clamp(8px,1.5vw,16px);align-items:stretch}
+  .team{flex:1;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:1vh 1.4vh;display:flex;align-items:center;gap:10px;box-shadow:0 6px 16px rgba(31,43,72,.06)}
+  .team .dot{width:1.4em;height:1.4em;border-radius:50%;flex:none}
+  .team .nm{font-weight:700;font-size:clamp(13px,1.9vh,17px)}
+  .team .sc{margin-left:auto;font-weight:700;font-size:clamp(18px,2.6vh,24px);min-width:1.5em;text-align:center}
+  .team button{font-family:inherit;width:2em;height:2em;border-radius:10px;border:2px solid var(--line);background:#f7faff;font-size:1.1em;font-weight:700;cursor:pointer;color:#2f4a7d}
+  .team button:active{transform:scale(.92)}
+  .confetti{position:fixed;top:-10px;width:10px;height:16px;z-index:50;border-radius:2px;pointer-events:none}
+</style>
+</head>
+<body>
+  <div class="head">
+    <img src="srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
+    <h1>หุ่นยนต์ทำแซนด์วิช</h1>
+    <span class="tag">เลือกคำสั่งที่ <b>ชัดเจนและถูกลำดับ</b> ให้หุ่นยนต์ทำแซนด์วิชสำเร็จ — ใครรู้คำตอบรีบยกมือแย่งกันตอบ!</span>
+    <div class="stepbar" id="stepbar"></div>
+  </div>
+
+  <div class="main">
+    <div class="panel stage">
+      <svg class="robot" id="robot" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+        <line x1="110" y1="20" x2="110" y2="42" stroke="#7a5cff" stroke-width="5"/>
+        <circle id="ant" cx="110" cy="15" r="9" fill="#ffd24d" stroke="#7a5cff" stroke-width="3"/>
+        <g id="armL"><rect x="24" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="34" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
+        <g id="armR"><rect x="176" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="186" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
+        <rect x="48" y="42" width="124" height="96" rx="28" fill="#eef2ff" stroke="#7a5cff" stroke-width="5"/>
+        <ellipse cx="74" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
+        <ellipse cx="146" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
+        <g id="eyes">
+          <circle cx="88" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle id="e1" cx="88" cy="84" r="7" fill="#2f7bf6"/>
+          <circle cx="132" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle id="e2" cx="132" cy="84" r="7" fill="#2f7bf6"/>
+        </g>
+        <rect id="mouth" x="90" y="112" width="40" height="10" rx="5" fill="#7a5cff"/>
+        <ellipse id="tongue" cx="110" cy="126" rx="11" ry="8" fill="#ff6a8a" opacity="0"/>
+        <rect x="64" y="148" width="92" height="58" rx="16" fill="#fff" stroke="#7a5cff" stroke-width="4"/>
+        <rect x="80" y="164" width="60" height="28" rx="8" fill="#e6f0ff"/>
+        <path d="M80 178 H140 M98 168 V188" stroke="#2f7bf6" stroke-width="3"/>
+      </svg>
+      <div class="sand" id="sand"></div>
+      <div class="speech" id="speech">พร้อมเริ่มแล้ว! อ่านคำถามแล้วช่วยกันเลือกคำสั่งที่ถูก</div>
+    </div>
+
+    <div class="panel">
+      <div class="qhead" id="qhead">ข้อ 1 / 5 — ขั้นตอน: หยิบขนมปัง</div>
+      <div class="q" id="q">คำถาม...</div>
+      <div class="opts" id="opts"></div>
+      <div class="qfoot">
+        <button class="act" id="next" disabled>ข้อถัดไป ▶</button>
+        <button class="act" id="reset">↺ เริ่มใหม่</button>
+        <span class="hint" id="hint">ครู: ให้นักเรียนแย่งกันตอบ แล้วคลิกตัวเลือกที่เขาเลือก</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="teams" id="teams"></div>
+
+<script>
+const STEPS=["หยิบขนมปัง","เปิดแยม","ตักแยม","ทาแยม","ปิดแซนด์วิช"];
+const ROUNDS=[
+ {q:"จะสั่งให้หุ่นยนต์ “หยิบขนมปัง” ยังไงให้ถูก?",
+  opts:[
+   {t:'“เอาขนมปังมา”', ok:false, fail:"หุ่นยนต์ยกขนมปังมาทั้งถุง! (คำสั่งกว้างไป)"},
+   {t:'“หยิบขนมปัง 1 แผ่น วางบนจาน”', ok:true},
+   {t:'“ขนมปัง”', ok:false, fail:"หุ่นยนต์งง… ไม่รู้จะทำอะไรกับขนมปัง"}]},
+ {q:"ต่อไป จะให้หุ่นยนต์ “เปิดกระปุกแยม” สั่งว่ายังไง?",
+  opts:[
+   {t:'“เอาแยม”', ok:false, fail:"หุ่นยนต์วางกระปุกแยมทั้งกระปุกลงบนจาน!"},
+   {t:'“แยมอร่อยจัง”', ok:false, fail:"หุ่นยนต์ไม่เข้าใจ มันรอคำสั่งที่ทำได้"},
+   {t:'“หมุนเปิดฝากระปุกแยม”', ok:true}]},
+ {q:"แยมเปิดแล้ว จะ “ตักแยม” ขึ้นมา สั่งยังไงดี?",
+  opts:[
+   {t:'“ใช้มีดจุ่มลงไปตักแยมขึ้นมา”', ok:true},
+   {t:'“เอาแยมออกมา”', ok:false, fail:"หุ่นยนต์คว่ำกระปุก เทแยมหกเลอะหมด!"},
+   {t:'“ตัก”', ok:false, fail:"ตักอะไร? ตักด้วยอะไร? หุ่นยนต์ไม่รู้"}]},
+ {q:"มีแยมบนมีดแล้ว จะ “ทาแยม” ยังไงให้ถูก?",
+  opts:[
+   {t:'“ทาแยม”', ok:false, fail:"หุ่นยนต์ทาแยมลงบนโต๊ะ! (ไม่ได้บอกว่าทาตรงไหน)"},
+   {t:'“ป้ายแยมบนผิวหน้าขนมปังให้ทั่วทั้งแผ่น”', ok:true},
+   {t:'“ทาตรงไหนก็ได้”', ok:false, fail:"หุ่นยนต์ทาแยมบนหัวตัวเอง…"}]},
+ {q:"ขั้นสุดท้าย “ปิดแซนด์วิช” สั่งว่ายังไง?",
+  opts:[
+   {t:'“เสร็จแล้ว”', ok:false, fail:"ยังไม่เสร็จนะ! ยังเป็นขนมปังแผ่นเดียว"},
+   {t:'“เอาขนมปังอีกแผ่น”', ok:false, fail:"หุ่นยนต์ถือขนมปังค้างไว้ ไม่รู้จะวางตรงไหน"},
+   {t:'“วางขนมปังอีกแผ่นทับด้านที่มีแยม”', ok:true}]},
+];
+const LETTER=["ก","ข","ค","ง"];
+let cur=0, answered=false;
+
+const robot=document.getElementById("robot"),mouth=document.getElementById("mouth"),
+      tongue=document.getElementById("tongue"),
+      speech=document.getElementById("speech"),sand=document.getElementById("sand"),
+      optsEl=document.getElementById("opts"),qEl=document.getElementById("q"),
+      qhead=document.getElementById("qhead"),nextBtn=document.getElementById("next"),
+      stepbar=document.getElementById("stepbar");
+
+function drawSteps(){stepbar.innerHTML="";STEPS.forEach((s,i)=>{const e=document.createElement("i");
+  e.textContent=i+1;e.className=i<cur?"done":(i===cur?"cur":"");stepbar.appendChild(e);});}
+function drawSand(){
+  const built=cur; // number of completed steps
+  const layers=[];
+  if(built>=1)layers.push(['#e9b96b','ขนมปังล่าง']);
+  if(built>=4)layers.push(['#e0452b','แยม']);
+  if(built>=5)layers.push(['#f0c878','ขนมปังบน']);
+  sand.innerHTML='<div style="width:150px;height:10px;background:#cdd6e6;border-radius:6px;margin-bottom:2px"></div>';
+  if(!layers.length){sand.innerHTML+='<div style="color:#9aa6c8;font-size:14px">จานว่าง</div>';return;}
+  layers.forEach(([c],i)=>{
+    const h=i===1?12:22;
+    sand.innerHTML+=`<div style="width:140px;height:${h}px;background:${c};border-radius:14px;border:2px solid rgba(0,0,0,.12)"></div>`;
+  });
+}
+function face(mode){
+  if(mode==="ok"){mouth.setAttribute("x","86");mouth.setAttribute("y","106");mouth.setAttribute("width","48");mouth.setAttribute("height","22");mouth.setAttribute("rx","12");mouth.setAttribute("fill","#19b877");tongue.setAttribute("opacity","0");}
+  else if(mode==="bad"){mouth.setAttribute("x","96");mouth.setAttribute("y","108");mouth.setAttribute("width","28");mouth.setAttribute("height","20");mouth.setAttribute("rx","10");mouth.setAttribute("fill","#b03b1d");tongue.setAttribute("opacity","1");}
+  else{mouth.setAttribute("x","90");mouth.setAttribute("y","112");mouth.setAttribute("width","40");mouth.setAttribute("height","10");mouth.setAttribute("rx","5");mouth.setAttribute("fill","#7a5cff");tongue.setAttribute("opacity","0");}
+}
+function bounce(cls){robot.classList.remove("happy","bad");void robot.offsetWidth;robot.classList.add(cls);setTimeout(()=>robot.classList.remove(cls),cls==="happy"?880:620);}
+function render(){
+  answered=false;nextBtn.disabled=true;
+  drawSteps();drawSand();face("idle");
+  speech.className="speech";speech.textContent="อ่านคำถามแล้วช่วยกันเลือกคำสั่งที่ถูก";
+  const r=ROUNDS[cur];
+  qhead.textContent=`ข้อ ${cur+1} / ${ROUNDS.length} — ขั้นตอน: ${STEPS[cur]}`;
+  qEl.textContent=r.q;
+  optsEl.innerHTML="";
+  r.opts.forEach((o,i)=>{
+    const b=document.createElement("button");b.className="opt";
+    b.innerHTML=`<span class="key">${LETTER[i]}</span><span>${o.t}</span>`;
+    b.onclick=()=>choose(i,b);optsEl.appendChild(b);
+  });
+}
+function choose(i,btn){
+  if(answered)return;
+  const r=ROUNDS[cur],o=r.opts[i];
+  if(o.ok){
+    answered=true;btn.classList.add("correct");
+    [...optsEl.children].forEach(c=>c.disabled=true);
+    face("ok");bounce("happy");speech.className="speech ok";speech.textContent="ถูกต้อง! หุ่นยนต์ทำตามได้สำเร็จ";
+    cur++;drawSteps();drawSand();
+    if(cur>=ROUNDS.length){win();}else{nextBtn.disabled=false;}
+  }else{
+    btn.classList.add("wrong");btn.disabled=true;
+    face("bad");bounce("bad");speech.className="speech bad";speech.textContent="อุ๊ปส์! "+o.fail;
+    setTimeout(()=>{if(!answered){face("idle");speech.className="speech";speech.textContent="ลองใหม่ — เลือกคำสั่งที่ชัดเจนกว่านี้";}},2200);
+  }
+}
+function win(){
+  nextBtn.disabled=true;
+  face("ok");bounce("happy");
+  speech.className="speech ok";speech.textContent="แซนด์วิชเสร็จแล้ว! เก่งมาก โปรแกรม = คำสั่งที่ชัดเจนและถูกลำดับ";
+  burst();
+}
+nextBtn.onclick=()=>{if(cur<ROUNDS.length)render();};
+document.getElementById("reset").onclick=()=>{cur=0;render();};
+
+/* teams */
+const TEAMS=[["ทีมแดง","#ff6a3d"],["ทีมน้ำเงิน","#2f7bf6"],["ทีมเขียว","#19b877"]];
+const teamsEl=document.getElementById("teams");
+TEAMS.forEach((t,i)=>{
+  const d=document.createElement("div");d.className="team";
+  d.innerHTML=`<span class="dot" style="background:${t[1]}"></span><span class="nm">${t[0]}</span>
+    <button data-d="-1">−</button><span class="sc" id="sc${i}">0</span><button data-d="1">+</button>`;
+  d.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    const el=document.getElementById("sc"+i);el.textContent=Math.max(0,(+el.textContent)+(+b.dataset.d));
+  });
+  teamsEl.appendChild(d);
+});
+
+function burst(){const cs=["#2f7bf6","#7a5cff","#19b877","#f2a900","#ff6a3d"];
+  for(let i=0;i<90;i++){const c=document.createElement("div");c.className="confetti";
+    c.style.left=Math.random()*100+"vw";c.style.background=cs[i%cs.length];document.body.appendChild(c);
+    const dur=1700+Math.random()*1500;
+    c.animate([{transform:"translateY(0) rotate(0)",opacity:1},{transform:`translateY(105vh) rotate(${Math.random()*720}deg)`,opacity:.2}],{duration:dur,easing:"cubic-bezier(.3,.6,.4,1)"});
+    setTimeout(()=>c.remove(),dur);}}
+
+render();
+</script>
+</body>
+</html>

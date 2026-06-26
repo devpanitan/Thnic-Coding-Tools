@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | สไลด์นำเสนอวันที่ 1 — THNIC Academy</title>
+<link rel="icon" type="image/png" href="srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#2f7bf6; --purple:#7a5cff; --green:#19b877; --coral:#ff6a3d; --gold:#f2a900;
+    --ink:#16224a; --muted:#5d6b8a; --line:#dbe6f7; --card:#fff;
+    --bg1:#eaf3ff; --bg2:#fef6ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html,body{height:100%}
+  body{font-family:"TH Sarabun PSK","TH SarabunPSK","Sarabun","Tahoma",sans-serif;color:var(--ink);
+       background:#0d1530;overflow:hidden}
+  .deck{position:fixed;inset:0}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+         padding:6vh 7vw;
+         background:radial-gradient(1000px 600px at 12% -8%,#d4e6ff 0%,transparent 60%),
+                    radial-gradient(900px 600px at 100% 0%,#ffe6f7 0%,transparent 55%),
+                    linear-gradient(160deg,var(--bg1),var(--bg2));}
+  .slide.active{display:flex;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  svg.lucide{width:1.05em;height:1.05em;vertical-align:-0.16em;stroke-width:2px;flex:none}
+  .kicker svg.lucide{width:1.15em;height:1.15em}
+  .ic svg.lucide{width:1em;height:1em;stroke-width:1.7px}
+  .b svg.lucide{width:1em;height:1em}
+
+  .kicker{display:inline-flex;align-items:center;gap:12px;font-size:2.2vh;font-weight:700;color:var(--blue);
+          background:#e6f0ff;border:2px solid #cfe0fb;border-radius:99px;padding:.6vh 1.8vh;width:fit-content;margin-bottom:2vh}
+  h1{font-size:7.4vh;line-height:1.1;color:var(--ink)}
+  h2{font-size:5vh;line-height:1.12;margin-bottom:1.6vh}
+  .lead{font-size:3.1vh;color:var(--muted);margin-top:1.6vh;max-width:82%;display:flex;align-items:baseline;gap:10px}
+  .lead.block{display:block}
+  ul{list-style:none;display:flex;flex-direction:column;gap:1.6vh;margin-top:1vh}
+  li{font-size:3.05vh;display:flex;gap:1.5vh;align-items:flex-start;line-height:1.3}
+  li .b{flex:none;width:1.5em;height:1.5em;border-radius:12px;display:flex;align-items:center;justify-content:center;
+        font-size:.8em;font-weight:700;color:#fff;margin-top:.15em}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:2.2vh;margin-top:1vh}
+  .card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:2.6vh 2.8vh;
+        box-shadow:0 10px 30px rgba(31,43,72,.08)}
+  .card .ic{font-size:5vh;line-height:1;display:block}
+  .card h3{font-size:3.2vh;color:var(--ink);margin:.6vh 0 .3vh}
+  .card p{font-size:2.6vh;color:var(--muted);line-height:1.3}
+
+  .two{display:grid;grid-template-columns:1.06fr .94fr;gap:4vh;align-items:center;margin-top:.5vh}
+  .illus{width:100%;height:auto;max-height:60vh}
+  .photo{width:100%;max-height:60vh;object-fit:cover;border-radius:20px;box-shadow:0 16px 40px rgba(31,43,72,.22)}
+  .diagram{width:100%;max-height:62vh;object-fit:contain;border-radius:16px;background:#fff;box-shadow:0 12px 30px rgba(31,43,72,.14)}
+  .imgfull{display:block;margin:1.4vh auto 0;max-width:94%;max-height:70vh;width:auto;object-fit:contain;border-radius:16px;box-shadow:0 14px 34px rgba(31,43,72,.16)}
+  .exline{font-size:3vh;color:var(--ink);margin-top:1.4vh;line-height:1.34}
+  .exline.muted{color:var(--muted);font-size:2.8vh}
+  .kid{background:#fff7e0;border:2px solid #ffe2a1;border-radius:16px;padding:1.7vh 2.1vh;margin-top:2vh;
+       font-size:2.7vh;color:#8a5e00;display:flex;gap:12px;align-items:flex-start;line-height:1.32}
+  .kid b{color:#6e4a00}
+  .kid svg{width:1.25em;height:1.25em;flex:none;color:var(--gold);margin-top:.1em}
+
+  .codewrap{display:grid;grid-template-columns:1.15fr .85fr;gap:3vh;align-items:start;margin-top:1vh}
+  .code{font-family:"Consolas",ui-monospace,monospace;background:#11203a;color:#e8eefc;
+        border-radius:18px;padding:3vh 3.2vh;font-size:2.7vh;line-height:1.55;white-space:pre;
+        box-shadow:0 14px 36px rgba(13,21,48,.4)}
+  .code .c{color:#7fd1ff}.code .s{color:#ffd27f}.code .k{color:#ff9bd0}
+  .explist{display:flex;flex-direction:column;gap:1.3vh}
+  .exp{background:#fff;border:2px solid var(--line);border-radius:14px;padding:1.4vh 1.8vh}
+  .exp code{font-family:ui-monospace,monospace;color:#185fa5;font-weight:700;font-size:2.5vh}
+  .exp p{font-size:2.4vh;color:var(--muted);margin-top:.3vh;line-height:1.28}
+
+  .title-slide{background:linear-gradient(160deg,#16224a,#2a1f5e 60%,#3a2c6e);justify-content:center}
+  .title-slide .kicker{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:#d6e2ff}
+  .title-slide h1{color:#fff;font-size:8.2vh}
+  .title-slide .lead{color:#b9c6ee;max-width:90%;display:block}
+  .title-slide .by{margin-top:3.5vh;font-size:3vh;color:#aebbe6;line-height:1.5}
+  .title-slide .by b{color:#fff}
+  .title-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:5vh;align-items:center;width:100%}
+  .codewin{background:#0f1b38;border:1px solid #33457a;border-radius:18px;box-shadow:0 26px 60px rgba(0,0,0,.45);overflow:hidden}
+  .codewin .tb{display:flex;gap:9px;align-items:center;padding:1.5vh 2vh;background:#172653;border-bottom:1px solid #33457a}
+  .codewin .dot{width:1.7vh;height:1.7vh;border-radius:50%;display:block}
+  .codewin .fn{margin-left:8px;color:#8ea3d6;font-family:Consolas,monospace;font-size:1.9vh}
+  .codewin pre{margin:0;padding:2.8vh 3vh;font-family:Consolas,ui-monospace,monospace;font-size:2.5vh;line-height:1.7;color:#e8eefc;white-space:pre}
+  .codewin .k{color:#ff9bd0}.codewin .s{color:#ffd27f}.codewin .c{color:#7fd1ff}.codewin .m{color:#9ad27f}
+
+  .logo{height:11vh;width:auto;align-self:flex-start;object-fit:contain;margin-bottom:3vh}
+  .logoSmall{position:fixed;top:3vh;right:4vw;height:6vh;width:auto;z-index:5;opacity:.95}
+
+  .bar{position:fixed;left:0;right:0;bottom:0;height:.8vh;background:rgba(255,255,255,.25);z-index:10}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--purple),var(--green));transition:width .3s}
+  .nav{position:fixed;bottom:2.4vh;right:3vw;display:flex;gap:1.2vh;z-index:10;align-items:center}
+  .nav button{font-family:inherit;border:0;border-radius:12px;padding:1vh 1.6vh;cursor:pointer;
+              background:#fff;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.18);display:flex;align-items:center}
+  .nav button:active{transform:scale(.95)}
+  .nav button svg{width:3vh;height:3vh}
+  .count{position:fixed;bottom:2.8vh;left:3vw;font-size:2.6vh;color:var(--muted);z-index:10;font-weight:700}
+  .hintbar{position:fixed;top:2.4vh;left:3vw;font-size:2.1vh;color:var(--muted);z-index:5;display:flex;align-items:center;gap:8px}
+  .hintbar svg{width:1em;height:1em}
+  @media print{
+    @page{size:landscape;margin:0}
+    html,body{height:auto;overflow:visible;background:#fff}
+    .deck{position:static}
+    .logoSmall,.nav,.hintbar,.count,.bar{display:none!important}
+    .slide{display:flex!important;position:relative;inset:auto;width:100vw;height:100vh;overflow:hidden;
+           page-break-after:always;break-after:page;animation:none}
+    .slide:last-child{page-break-after:auto}
+  }
+</style>
+</head>
+<body>
+<img src="srru-logo.png" alt="SRRU" class="logoSmall" onerror="this.style.display='none'">
+<div class="deck" id="deck">
+
+  <section class="slide title-slide">
+    <div class="title-grid">
+      <div>
+        <img src="srru-logo.png" alt="SRRU" class="logo" onerror="this.style.display='none'">
+        <div class="kicker"><i data-lucide="graduation-cap"></i> THNIC Academy • หลักสูตรอบรม</div>
+        <h1 style="font-size:7.2vh">Introduction to<br>Programming</h1>
+        <p class="lead">สำหรับนักเรียนระดับชั้นมัธยมศึกษาตอนปลาย • ประจำปี พ.ศ. 2569</p>
+        <div class="by">25 – 29 กรกฎาคม 2569<br><b>ผศ.ดร.ธงชัย เจือจันทร์</b> — สาขาวิชาวิทยาการคอมพิวเตอร์<br>คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยราชภัฏสุรินทร์</div>
+      </div>
+      <div class="codewin">
+        <div class="tb"><span class="dot" style="background:#ff6058"></span><span class="dot" style="background:#ffbd2e"></span><span class="dot" style="background:#28c940"></span><span class="fn">hello.cpp</span></div>
+        <pre><span class="k">#include</span> <span class="c">&lt;iostream&gt;</span>
+<span class="k">using namespace</span> std;
+
+<span class="k">int</span> main() {
+    cout &lt;&lt; <span class="s">"Hello World!"</span>;
+    <span class="k">return</span> <span class="m">0</span>;
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="info"></i> เกี่ยวกับหลักสูตร</div>
+    <h2 style="margin-bottom:1.4vh">Introduction to Programming</h2>
+    <div class="grid" style="grid-template-columns:1.05fr 1fr;gap:3vh;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:1.6vh">
+        <div class="card"><h3 style="font-size:2.9vh;color:var(--blue);display:flex;align-items:center;gap:10px"><i data-lucide="target"></i> วัตถุประสงค์</h3>
+          <p style="font-size:2.45vh;color:var(--ink);line-height:1.32">นำทักษะการแก้ปัญหาอย่างเป็นระบบตามแนวคิดเชิงคำนวณ (Computational Thinking) มาต่อยอดสู่การเขียนโปรแกรมเบื้องต้น เพื่อแก้โจทย์ปัญหาในชีวิตประจำวัน</p></div>
+        <div class="card"><h3 style="font-size:2.9vh;color:var(--purple);display:flex;align-items:center;gap:10px"><i data-lucide="compass"></i> แนวทางการเรียน</h3>
+          <p style="font-size:2.45vh;color:var(--ink);line-height:1.32">ฝึกเขียนโปรแกรมแก้โจทย์ที่หลากหลายด้วยภาษา <b>C++</b> เรียนสนุก ลงมือทำจริง มีเกมและ simulator ช่วย</p></div>
+      </div>
+      <div class="card" style="align-self:stretch">
+        <h3 style="font-size:2.9vh;color:var(--green);margin-bottom:.8vh;display:flex;align-items:center;gap:10px"><i data-lucide="book-open"></i> สาระสำคัญของหลักสูตร</h3>
+        <div style="display:flex;flex-direction:column;gap:.7vh;font-size:2.2vh;color:var(--ink)">
+          <span>• การเขียนโปรแกรมด้วยภาษา C++</span>
+          <span>• พื้นฐานการทำงานของภาษา C++</span>
+          <span>• การทำงานและ Structure code C++</span>
+          <span>• พื้นฐานเกี่ยวกับ Syntax</span>
+          <span>• Input และ Output</span>
+          <span>• ตัวแปร (Variable), Type ของตัวแปร</span>
+          <span>• Variable operators + − * /</span>
+          <span>• Condition, if else</span>
+          <span>• Switch Case</span>
+          <span>• การทำงานของ Loop while, Loop For</span>
+          <span>• การทำงาน Array และการใช้งานร่วมกับ Loop</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="target"></i> เป้าหมายวันนี้</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">วันนี้เราจะได้เรียนอะไรบ้าง?</h2>
+        <ul style="margin-top:.5vh">
+          <li><span class="b" style="background:var(--blue)"><i data-lucide="globe"></i></span><span>อินเทอร์เน็ตและโดเมนเนม <b>.th</b> ทำงานอย่างไร</span></li>
+          <li><span class="b" style="background:var(--purple)"><i data-lucide="brain"></i></span><span><b>การคิดเชิงคำนวณ</b> — วิธีคิดแก้ปัญหาอย่างเป็นระบบ 4 เสาหลัก</span></li>
+          <li><span class="b" style="background:var(--coral)"><i data-lucide="bot"></i></span><span>โปรแกรมคืออะไร และทำไมคำสั่งต้องชัดเจนและเรียงลำดับ</span></li>
+          <li><span class="b" style="background:var(--green)"><i data-lucide="rocket"></i></span><span>เขียนโปรแกรมภาษา <b>C++</b> ตัวแรก (Hello World)</span></li>
+        </ul>
+      </div>
+      <img class="photo" src="slide02.JPG" alt="บรรยากาศนักเรียนในค่าย" onerror="this.style.display='none'">
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="globe"></i> อินเทอร์เน็ตไทย & โดเมนเนม</div>
+    <h2 style="font-size:4.4vh;margin-bottom:.4vh">โครงสร้างของชื่อโดเมน</h2>
+    <p class="exline" style="margin-top:0">ชื่อเว็บอ่านจากขวาไปซ้าย — <b>.th</b> คือโดเมนระดับบนสุดของประเทศไทย ดูแลโดย <b>THNIC</b></p>
+    <img class="imgfull" src="slide04.png" alt="โครงสร้างชื่อโดเมน .th" onerror="this.style.display='none'">
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="brain"></i> การคิดเชิงคำนวณ</div>
+    <h2 style="margin-bottom:.4vh">การคิดเชิงคำนวณ — 4 องค์ประกอบสำคัญ</h2>
+    <img class="imgfull" src="slide05.jpg" alt="4 องค์ประกอบของการคิดเชิงคำนวณ" onerror="this.style.display='none'">
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="puzzle"></i> เสาที่ 1 — Decomposition</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">แตกปัญหาใหญ่ ให้เป็นชิ้นเล็ก ๆ</h2>
+        <p class="exline">ปัญหาที่ดูยาก ถ้าซอยเป็นขั้นตอนเล็ก ๆ เราจะแก้ทีละชิ้นได้ง่ายขึ้นมาก</p>
+        <p class="exline muted"><b>ตัวอย่าง: ทำต้มมาม่า</b> → ต้มน้ำ → ใส่เส้น → ใส่เครื่องปรุง → รอ 3 นาที</p>
+        <p class="exline">คิดง่าย ๆ เหมือนการต่อเลโก้ เราไม่ได้สร้างทั้งหลังในทีเดียว แต่ต่อทีละก้อนจนเป็นรูป พอแยกปัญหาเป็นชิ้นเล็ก แต่ละชิ้นก็แก้ง่ายและตรวจหาจุดผิดได้สะดวกขึ้น</p>
+      </div>
+      <img class="diagram" src="slide06.png" alt="การแยกย่อยปัญหา Decomposition" onerror="this.style.display='none'">
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="repeat"></i> เสาที่ 2 — Pattern</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">มองหาสิ่งที่ “ซ้ำ ๆ”</h2>
+        <p class="exline">ถ้าเห็นรูปแบบที่ซ้ำเดิม เราจะทำนายตัวถัดไป และสั่งให้คอมทำซ้ำอัตโนมัติได้</p>
+        <p class="exline muted"><b>ตัวอย่าง: สูตรคูณ</b> → 2, 4, 6, 8, … เพิ่มทีละ 2 เสมอ</p>
+        <p class="exline">พอเราเจอสิ่งที่ทำซ้ำเดิม ๆ นั่นแหละคือจุดที่จะใช้ “การวนซ้ำ (Loop)” ในโปรแกรม สั่งเพียงครั้งเดียวให้คอมพิวเตอร์ทำซ้ำให้เอง ไม่ต้องเขียนคำสั่งเดิมหลายรอบ</p>
+      </div>
+      <img class="diagram" src="slide07.png" alt="การหารูปแบบ Pattern Recognition" onerror="this.style.display='none'">
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="target"></i> เสาที่ 3 — Abstraction</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">เก็บแต่สิ่งสำคัญ ตัดส่วนที่ไม่จำเป็นทิ้ง</h2>
+        <p class="exline">ไม่ต้องสนใจทุกรายละเอียด เอาเฉพาะที่จำเป็นต่อการแก้ปัญหา</p>
+        <p class="exline muted"><b>ตัวอย่าง: แผนที่รถไฟฟ้า</b> → ไม่วาดถนนจริงทุกเส้น แสดงแค่สถานีกับเส้นทาง</p>
+        <p class="exline">เหมือนการวาดการ์ตูนรูปคน ขีดไม่กี่เส้นก็รู้ว่าเป็นคน ไม่ต้องวาดเส้นผมทุกเส้น เราเลือกเก็บเฉพาะข้อมูลที่จำเป็นต่อการแก้ปัญหา แล้วตัดรายละเอียดที่ไม่เกี่ยวออกไป</p>
+      </div>
+      <img class="diagram" src="slide08.png" alt="ความคิดเชิงนามธรรม Abstraction" onerror="this.style.display='none'">
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="list-ordered"></i> เสาที่ 4 — Algorithm</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">ออกแบบ “ลำดับขั้นตอน” ให้ชัดเจน</h2>
+        <p class="exline">ทำอะไรก่อน-หลัง ต้องเรียงให้ถูก ไม่งั้นผลลัพธ์จะผิด</p>
+        <p class="exline muted"><b>ตัวอย่าง: แปรงฟัน</b> → บีบยาสีฟัน → แปรง → บ้วนปาก → ล้างแปรง</p>
+        <p class="exline">ลำดับสำคัญมาก ถ้าบ้วนปากก่อนแปรงฟันก็ไม่สะอาด โปรแกรมก็เช่นกัน — สลับบรรทัดคำสั่งผิดที่ ผลลัพธ์จะเปลี่ยนทันที เราจึงต้องวางขั้นตอนให้ถูกก่อนเขียนโค้ด</p>
+      </div>
+      <img class="diagram" src="slide09.png" alt="การออกแบบขั้นตอน Algorithm Design" onerror="this.style.display='none'">
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="bot"></i> โปรแกรมคืออะไร</div>
+    <img class="imgfull" src="slide10.png" alt="โปรแกรมคืออะไร — ชุดคำสั่งที่คอมทำตามตามลำดับ" onerror="this.style.display='none'">
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="laptop"></i> รู้จัก C++</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">โปรแกรม = ภาษาที่เราใช้สั่งคอมพิวเตอร์</h2>
+        <ul style="margin-top:.5vh">
+          <li><span class="b" style="background:var(--blue)"><i data-lucide="pencil"></i></span><span><b>เขียน</b> โค้ด C++ เป็นคำสั่ง</span></li>
+          <li><span class="b" style="background:var(--purple)"><i data-lucide="settings"></i></span><span><b>Compile</b> = แปลภาษาให้คอมเข้าใจ</span></li>
+          <li><span class="b" style="background:var(--green)"><i data-lucide="play"></i></span><span><b>Run</b> = สั่งทำงาน เห็นผลลัพธ์</span></li>
+        </ul>
+        <p class="exline">วันนี้เราใช้ online compiler ไม่ต้องลงโปรแกรม เปิดเว็บก็เขียนโค้ดและรันดูผลได้เลย</p>
+      </div>
+      <img class="diagram" src="slide11.png" alt="ตัวอย่างเขียนและรันโค้ด C++ บน online compiler" onerror="this.style.display='none'">
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="rocket"></i> โปรแกรมแรกของเรา — Hello World</div>
+    <div class="codewrap">
+      <div class="code"><span class="k">#include</span> <span class="c">&lt;iostream&gt;</span>
+<span class="k">using namespace</span> std;
+
+<span class="k">int</span> main() {
+    cout &lt;&lt; <span class="s">"Hello World!"</span>;
+    <span class="k">return</span> 0;
+}</div>
+      <div class="explist">
+        <div class="exp"><code>#include &lt;iostream&gt;</code><p>ขอเครื่องมือสำหรับ “พิมพ์/รับ” ข้อความ</p></div>
+        <div class="exp"><code>int main()</code><p>จุดเริ่มต้นของโปรแกรม คอมเริ่มทำงานตรงนี้</p></div>
+        <div class="exp"><code>cout &lt;&lt; "..."</code><p>สั่งให้ “พิมพ์ข้อความ” ออกหน้าจอ</p></div>
+        <div class="exp"><code>return 0;</code><p>บอกว่าโปรแกรมจบเรียบร้อยดี</p></div>
+      </div>
+    </div>
+    <p class="exline" style="margin-top:2vh">ให้น้องพิมพ์ตามทีละบรรทัดแล้วกด Run จากนั้นลองเปลี่ยนข้อความในเครื่องหมาย <b>" "</b> เป็นชื่อตัวเอง จะเห็นชัดว่าแก้โค้ดตรงไหน ผลลัพธ์บนหน้าจอก็เปลี่ยนตามทันที</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="code"></i> Syntax และข้อผิดพลาด</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">เขียนให้ถูกไวยากรณ์ (Syntax)</h2>
+        <ul style="margin-top:.5vh">
+          <li><span class="b" style="background:var(--blue)"><i data-lucide="terminal"></i></span><span>ทุกคำสั่งต้องเขียนตาม <b>กฎไวยากรณ์</b> ของภาษา C++</span></li>
+          <li><span class="b" style="background:var(--coral)"><i data-lucide="x"></i></span><span>ลืมเครื่องหมาย <b>;</b> ท้ายคำสั่ง = เกิด <b>error</b></span></li>
+          <li><span class="b" style="background:var(--green)"><i data-lucide="search-check"></i></span><span><b>error ไม่น่ากลัว</b> — มันบอกว่าพิมพ์ผิดตรงไหน เพื่อให้แก้ได้</span></li>
+        </ul>
+        <p class="exline">การอ่าน error ให้เข้าใจ คือทักษะสำคัญของโปรแกรมเมอร์ — เจอแล้วแก้ แล้วรันใหม่ได้เสมอ</p>
+      </div>
+      <img class="diagram" src="slide13.png" alt="ตัวอย่าง error: ลืมเครื่องหมาย ; ใน C++" onerror="this.style.display='none'">
+    </div>
+  </section>
+
+  <section class="slide title-slide">
+    <div class="title-grid">
+      <div>
+        <div class="kicker"><i data-lucide="sunrise"></i> พรุ่งนี้เจอกัน</div>
+        <h1>พรุ่งนี้…<br>ลุย C++ เต็มตัว!</h1>
+        <p class="lead">ตัวแปร, เงื่อนไข if-else, การวนซ้ำ และเกมแข่งเขียนโค้ด รอเราอยู่</p>
+        <div class="by">ขอบคุณทุกคน — แล้วเจอกันวันที่ 2<br><b>THNIC Academy × มหาวิทยาลัยราชภัฏสุรินทร์</b></div>
+      </div>
+      <svg viewBox="0 0 280 360" class="illus" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#9fb2e0"><circle cx="40" cy="60" r="3"/><circle cx="240" cy="95" r="3"/><circle cx="55" cy="285" r="3"/><circle cx="232" cy="250" r="3"/><circle cx="205" cy="45" r="2.5"/><circle cx="30" cy="175" r="2.5"/></g>
+        <path d="M140 28 C182 70,188 152,170 212 H110 C92 152,98 70,140 28 Z" fill="#eef2ff" stroke="#7a5cff" stroke-width="4"/>
+        <circle cx="140" cy="108" r="23" fill="#2f7bf6" stroke="#16224a" stroke-width="3"/>
+        <path d="M110 172 L76 218 L110 206 Z" fill="#ff6a3d"/>
+        <path d="M170 172 L204 218 L170 206 Z" fill="#ff6a3d"/>
+        <path d="M124 214 H156 C151 252,140 274,140 274 C140 274,129 252,124 214 Z" fill="#ffd24d"/>
+        <path d="M131 216 H149 C147 242,140 258,140 258 C140 258,133 242,131 216 Z" fill="#ff6a3d"/>
+      </svg>
+    </div>
+  </section>
+
+</div>
+
+<div class="hintbar"><i data-lucide="keyboard"></i> ← → เลื่อนสไลด์ • กด F เต็มจอ • Ctrl+P เซฟ PDF</div>
+<div class="count" id="count">1 / 14</div>
+<div class="nav">
+  <button id="prev"><i data-lucide="arrow-left"></i></button>
+  <button id="next"><i data-lucide="arrow-right"></i></button>
+</div>
+<div class="bar"><i id="prog"></i></div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+if(window.lucide)lucide.createIcons();
+const slides=[...document.querySelectorAll(".slide")];
+let i=0;
+function show(n){
+  i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,k)=>s.classList.toggle("active",k===i));
+  document.getElementById("count").textContent=(i+1)+" / "+slides.length;
+  document.getElementById("prog").style.width=((i+1)/slides.length*100)+"%";
+}
+function nextS(){show(i+1)} function prevS(){show(i-1)}
+document.getElementById("next").onclick=nextS;
+document.getElementById("prev").onclick=prevS;
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"){e.preventDefault();nextS();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();prevS();}
+  else if(e.key==="Home")show(0); else if(e.key==="End")show(slides.length-1);
+  else if(e.key==="f"||e.key==="F"){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+document.querySelector(".deck").addEventListener("click",e=>{
+  if(e.target.closest(".nav"))return;
+  const x=e.clientX/window.innerWidth; if(x>0.35)nextS();else prevS();
+});
+show(0);
+</script>
+</body>
+</html>

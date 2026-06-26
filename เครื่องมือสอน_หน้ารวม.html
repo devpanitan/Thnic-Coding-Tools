@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | ชุดเครื่องมือสอน Introduction to Programming</title>
+<link rel="icon" type="image/png" href="Day One/srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--gold:#f2a900;
+    --ink:#16224a;--muted:#5d6b8a;--line:#e4ebf8;--card:#fff;--bg1:#eef4ff;--bg2:#fdf3fb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{min-height:100%;
+    background:radial-gradient(1100px 640px at 6% -10%,#d7e7ff 0%,transparent 58%),
+              radial-gradient(1000px 640px at 104% -6%,#ffe3f4 0%,transparent 55%),
+              linear-gradient(165deg,var(--bg1),var(--bg2));background-attachment:fixed}
+  body{font-family:"Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);min-height:100vh;
+    max-width:1240px;margin:0 auto;background:transparent;padding:34px clamp(16px,4vw,40px) 70px}
+  svg.lucide{width:1em;height:1em;vertical-align:-.15em;stroke-width:2px}
+
+  /* hero */
+  .hero{background:linear-gradient(120deg,#16224a,#2a1f5e 58%,#3a2c6e);border-radius:24px;
+    padding:clamp(20px,3vw,34px) clamp(22px,4vw,44px);color:#fff;position:relative;overflow:hidden;
+    box-shadow:0 22px 50px rgba(22,34,74,.28);margin-bottom:26px}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;
+    background:radial-gradient(circle,rgba(122,92,255,.55),transparent 70%)}
+  .hero .row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;position:relative;z-index:1}
+  .hero img{height:62px;background:#fff;border-radius:14px;padding:6px}
+  .hero h1{font-size:clamp(22px,3.4vw,34px);font-weight:700;line-height:1.12}
+  .hero .sub{color:#c3d0f5;font-size:clamp(13px,1.8vw,17px);margin-top:3px}
+  .hero .lead{color:#b9c6ee;font-size:clamp(13px,1.6vw,16px);margin-top:14px;max-width:760px;position:relative;z-index:1;line-height:1.55}
+  .stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;position:relative;z-index:1}
+  .stat{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:99px;
+    padding:6px 16px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:7px}
+  .stat b{font-size:16px}
+  .stat .d{width:9px;height:9px;border-radius:50%}
+
+  /* day section */
+  .daysec{margin-bottom:30px}
+  .dayhead{display:flex;align-items:center;gap:12px;margin:0 0 16px}
+  .daybadge{font-size:13px;font-weight:700;color:#fff;border-radius:10px;padding:5px 14px;box-shadow:0 6px 14px -4px currentColor}
+  .dayhead h2{font-size:clamp(17px,2.4vw,22px);font-weight:700;color:#16224a}
+  .dayhead .cnt{color:var(--muted);font-size:13px;background:#fff;border:1.5px solid var(--line);border-radius:99px;padding:2px 12px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+  .card{background:var(--card);border:1.5px solid var(--line);border-radius:20px;overflow:hidden;
+    text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s,border-color .18s;
+    box-shadow:0 10px 26px rgba(31,43,72,.08)}
+  a.card:hover{transform:translateY(-6px);box-shadow:0 22px 42px rgba(31,43,72,.18);border-color:var(--clr)}
+  .thumb{height:132px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,var(--clr),color-mix(in srgb,var(--clr) 62%,#000 8%))}
+  .thumb::before{content:"";position:absolute;inset:0;opacity:.18;
+    background-image:radial-gradient(circle at 18% 26%,#fff 2px,transparent 2.5px),radial-gradient(circle at 70% 64%,#fff 2px,transparent 2.5px),radial-gradient(circle at 42% 80%,#fff 1.5px,transparent 2px);
+    background-size:60px 60px}
+  .thumb .ic{width:60px;height:60px;color:#fff;stroke-width:1.7px;position:relative;z-index:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,.25))}
+  .pill{position:absolute;top:12px;right:12px;font-size:12px;font-weight:700;border-radius:99px;padding:4px 11px;display:flex;align-items:center;gap:5px;z-index:1}
+  .step{position:absolute;top:12px;left:12px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.92);color:#16224a;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;z-index:1;box-shadow:0 3px 8px rgba(0,0,0,.22)}
+  .pill svg{width:13px;height:13px}
+  .ready{background:#e7faf1;color:#0c6b46}
+  .soon{background:#fff3da;color:#8a5e00}
+  .ext{background:#ede9ff;color:#4b3fb0}
+  .cbody{padding:15px 17px 8px;flex:1}
+  .cbody h3{font-size:18px;font-weight:700;color:#16224a;margin-bottom:5px}
+  .cbody p{font-size:14px;color:var(--muted);line-height:1.4}
+  .cfoot{padding:10px 17px 15px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;color:var(--clr)}
+  .cfoot.muted{color:var(--muted);font-weight:600}
+  .card.disabled{opacity:.92;cursor:default}
+  .card.disabled .thumb{filter:grayscale(.25)}
+  .foot{margin-top:34px;color:var(--muted);font-size:13px;text-align:center}
+</style>
+</head>
+<body>
+  <div class="hero">
+    <div class="row">
+      <img src="Day One/srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
+      <div>
+        <h1>ชุดเครื่องมือสอน — Introduction to Programming</h1>
+        <div class="sub">THNIC Academy × มหาวิทยาลัยราชภัฏสุรินทร์ • 25–29 กรกฎาคม 2569</div>
+      </div>
+    </div>
+    <p class="lead">ศูนย์รวมสื่อการสอนทั้ง 5 วันในที่เดียว — คลิกการ์ดเพื่อเปิดใช้งานบนเบราว์เซอร์ ฉายหน้าห้องได้ทันที</p>
+    <div class="stats">
+      <span class="stat"><span class="d" style="background:#3ee08f"></span>พร้อมใช้ <b>8</b></span>
+      <span class="stat"><span class="d" style="background:#ffd24d"></span>กำลังพัฒนา <b>5</b></span>
+      <span class="stat"><span class="d" style="background:#b8a6ff"></span>เครื่องมือภายนอก <b>3</b></span>
+    </div>
+  </div>
+
+  <div class="daysec">
+    <div class="dayhead"><span class="daybadge" style="background:var(--green);color:var(--green)"><span style="color:#fff">วันที่ 1</span></span><h2>เปิดค่าย + ปูพื้น</h2><span class="cnt">7 รายการ</span></div>
+    <div class="grid">
+      <a class="card" style="--clr:var(--blue)" href="Day One/สไลด์นำเสนอ_วันที่1.html">
+        <div class="thumb"><span class="step">1</span><i class="ic" data-lucide="presentation"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>สไลด์นำเสนอวันที่ 1</h3><p>แกนหลักทั้งวัน 14 หน้า — เปิดตามนี้ก่อน แล้วแทรกเครื่องมืออื่นตามสไลด์</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--purple)" href="Day One/simulator_โดเมนเนม_DNS.html">
+        <div class="thumb"><span class="step">2</span><i class="ic" data-lucide="world"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>โดเมนเนม &amp; DNS</h3><p>ใช้คู่สไลด์ 4 — จำลองการแปลงชื่อเว็บเป็น IP ทีละชั้น</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--blue)" href="Day One/เกม_ทายโดเมน.html">
+        <div class="thumb"><span class="step">3</span><i class="ic" data-lucide="search"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>ทายนามสกุลโดเมน .th</h3><p>เสริมต่อจากโดเมน — จับคู่องค์กรกับ .ac.th / .co.th / .go.th</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--purple)" href="Day One/เกม_จับคู่_ComputationalThinking.html">
+        <div class="thumb"><span class="step">4</span><i class="ic" data-lucide="puzzle"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>จับคู่ Computational Thinking</h3><p>ใช้คู่สไลด์ 5–9 — จับคู่สถานการณ์กับ 4 เสาหลัก</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--coral)" href="Day One/เกม_หุ่นยนต์ทำแซนด์วิช.html">
+        <div class="thumb"><span class="step">5</span><i class="ic" data-lucide="robot"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>เกมหุ่นยนต์ทำแซนด์วิช</h3><p>ใช้คู่สไลด์ 10 — กิจกรรมหลักช่วงบ่าย สอนแนวคิด Algorithm</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--green)" href="Day One/ใบฝึก_HelloWorld.html">
+        <div class="thumb"><span class="step">6</span><i class="ic" data-lucide="clipboard-list"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>ใบฝึก Hello World</h3><p>ใช้คู่สไลด์ 11–12 — พิมพ์ตาม + โจทย์ย่อย (พิมพ์แจกได้)</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--coral)" href="Day One/เกม_หา_error.html">
+        <div class="thumb"><span class="step">7</span><i class="ic" data-lucide="bug"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>เกมหา error ในโค้ด</h3><p>ใช้คู่สไลด์ 13 — หาบรรทัดที่ผิด (ลืม ; / ลืม quote)</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="daysec">
+    <div class="dayhead"><span class="daybadge" style="background:var(--blue)"><span style="color:#fff">วันที่ 2</span></span><h2>เน้น C++ #1 — พื้นฐาน &amp; เงื่อนไข</h2><span class="cnt">2 รายการ</span></div>
+    <div class="grid">
+      <div class="card disabled" style="--clr:var(--blue)">
+        <div class="thumb"><i class="ic" data-lucide="variable"></i><span class="pill soon"><i data-lucide="clock"></i>เร็วๆ นี้</span></div>
+        <div class="cbody"><h3>ตัวแปร &amp; ชนิดข้อมูล</h3><p>เห็นกล่องเก็บค่า ค่าตัวแปรเปลี่ยนเมื่อกำหนดค่าใหม่</p></div>
+        <div class="cfoot muted">กำลังพัฒนา</div>
+      </div>
+      <div class="card disabled" style="--clr:var(--purple)">
+        <div class="thumb"><i class="ic" data-lucide="git-branch"></i><span class="pill soon"><i data-lucide="clock"></i>เร็วๆ นี้</span></div>
+        <div class="cbody"><h3>เงื่อนไข if / else</h3><p>เห็นเส้นทาง true/false แยกตามเงื่อนไข</p></div>
+        <div class="cfoot muted">กำลังพัฒนา</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="daysec">
+    <div class="dayhead"><span class="daybadge" style="background:var(--green)"><span style="color:#fff">วันที่ 3</span></span><h2>เน้น C++ #2 — วนซ้ำ &amp; ข้อมูลชุด</h2><span class="cnt">2 รายการ</span></div>
+    <div class="grid">
+      <a class="card" style="--clr:var(--green)" href="Day Three/simulator_loop.html">
+        <div class="thumb"><i class="ic" data-lucide="repeat"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>การวนซ้ำ Loop</h3><p>เดินทีละรอบ เห็นตัวแปร i, อาเรย์ และผลรวมเปลี่ยนแบบ step-by-step</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <div class="card disabled" style="--clr:var(--gold)">
+        <div class="thumb"><i class="ic" data-lucide="layout-grid"></i><span class="pill soon"><i data-lucide="clock"></i>เร็วๆ นี้</span></div>
+        <div class="cbody"><h3>Array + Loop</h3><p>เห็นการเข้าถึงสมาชิกอาเรย์ด้วย index ร่วมกับลูป</p></div>
+        <div class="cfoot muted">กำลังพัฒนา</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="daysec">
+    <div class="dayhead"><span class="daybadge" style="background:var(--coral)"><span style="color:#fff">วันที่ 4–5</span></span><h2>โจทย์ Computer Olympic</h2><span class="cnt">2 รายการ</span></div>
+    <div class="grid">
+      <div class="card disabled" style="--clr:var(--coral)">
+        <div class="thumb"><i class="ic" data-lucide="chart-bar"></i><span class="pill soon"><i data-lucide="clock"></i>เร็วๆ นี้</span></div>
+        <div class="cbody"><h3>Sorting visualizer</h3><p>เห็นการเรียงลำดับ (bubble/selection) ทีละขั้น</p></div>
+        <div class="cfoot muted">กำลังพัฒนา</div>
+      </div>
+      <div class="card disabled" style="--clr:var(--gold)">
+        <div class="thumb"><i class="ic" data-lucide="trophy"></i><span class="pill soon"><i data-lucide="clock"></i>เร็วๆ นี้</span></div>
+        <div class="cbody"><h3>ชุดโจทย์โอลิมปิก</h3><p>โจทย์ระดับปานกลาง/ยาก พร้อมเฉลยและคำอธิบาย</p></div>
+        <div class="cfoot muted">กำลังพัฒนา</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="daysec">
+    <div class="dayhead"><span class="daybadge" style="background:var(--purple)"><span style="color:#fff">ภายนอก</span></span><h2>เครื่องมือฟรี ใช้เสริมการสอน</h2><span class="cnt">3 รายการ</span></div>
+    <div class="grid">
+      <a class="card" style="--clr:var(--purple)" href="https://pythontutor.com/cpp.html" target="_blank" rel="noopener">
+        <div class="thumb"><i class="ic" data-lucide="step-into"></i><span class="pill ext"><i data-lucide="external-link"></i>ภายนอก</span></div>
+        <div class="cbody"><h3>Python Tutor (C++)</h3><p>รันโค้ด C++ จริง เดินทีละบรรทัด เห็นตัวแปร/ลูป/อาเรย์</p></div>
+        <div class="cfoot">เปิดเว็บ <i data-lucide="arrow-up-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--blue)" href="https://visualgo.net/en" target="_blank" rel="noopener">
+        <div class="thumb"><i class="ic" data-lucide="binary-tree"></i><span class="pill ext"><i data-lucide="external-link"></i>ภายนอก</span></div>
+        <div class="cbody"><h3>VisuAlgo</h3><p>ภาพเคลื่อนไหวอัลกอริทึม (เรียง/ค้นหา/กราฟ) สำหรับวันโอลิมปิก</p></div>
+        <div class="cfoot">เปิดเว็บ <i data-lucide="arrow-up-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--green)" href="https://www.onlinegdb.com/online_c++_compiler" target="_blank" rel="noopener">
+        <div class="thumb"><i class="ic" data-lucide="terminal-2"></i><span class="pill ext"><i data-lucide="external-link"></i>ภายนอก</span></div>
+        <div class="cbody"><h3>OnlineGDB</h3><p>เขียนและรัน C++ จริงในเบราว์เซอร์ ไม่ต้องติดตั้ง</p></div>
+        <div class="cfoot">เปิดเว็บ <i data-lucide="arrow-up-right"></i></div>
+      </a>
+    </div>
+  </div>
+
+  <p class="foot">SRRU × THNIC Academy • ชุดเครื่องมือสอน Introduction to Programming • พ.ศ. 2569</p>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>if(window.lucide)lucide.createIcons();</script>
+</body>
+</html>
