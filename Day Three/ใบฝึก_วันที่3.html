@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | ใบฝึก วันที่ 3 (Loop &amp; Array)</title>
+<link rel="icon" type="image/png" href="../Day One/srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"TH Sarabun PSK","Sarabun","Tahoma",sans-serif;color:#1a2238;background:#e9eef7;padding:18px}
+  .sheet{max-width:800px;margin:0 auto 16px;background:#fff;border-radius:14px;box-shadow:0 14px 40px rgba(20,30,60,.12);padding:28px 36px}
+  .top{display:flex;align-items:center;gap:13px;border-bottom:2.5px solid #19b877;padding-bottom:9px;margin-bottom:6px}
+  .top img{height:48px}
+  .top h1{font-size:21pt;color:#16224a}
+  .top .s{font-size:12pt;color:#5d6b8a}
+  .info{border:1.5px solid #cdd9ef;border-radius:11px;padding:11px 16px;margin:12px 0 14px;background:#f7faff}
+  .info .r{display:flex;gap:26px;flex-wrap:wrap}
+  .info .r span{flex:1;min-width:210px;font-size:13pt;border-bottom:1px dotted #8a96b0;padding:6px 2px}
+  .info .mh{font-weight:700;font-size:13pt;margin:10px 0 4px;color:#16224a}
+  .info .mem{display:flex;flex-direction:column;gap:11px}
+  .info .mem .l{font-size:13pt;border-bottom:1px dotted #8a96b0;padding:5px 2px}
+  h2{font-size:14pt;color:#0d7a4f;margin:14px 0 5px;display:flex;align-items:center;gap:8px}
+  h2 .num{background:#19b877;color:#fff;width:1.5em;height:1.5em;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:.85em}
+  p,li{font-size:13pt;line-height:1.5}
+  .code{font-family:"Consolas",ui-monospace,monospace;background:#11203a;color:#e8eefc;border-radius:9px;padding:10px 14px;font-size:12pt;line-height:1.5;white-space:pre;margin:5px 0}
+  .code .k{color:#ff9bd0}.code .s{color:#ffd27f}.code .m{color:#9ad27f}.code .c{color:#7fd1ff}
+  .task{border:1.5px solid #cdd9ef;border-radius:11px;padding:10px 15px;margin:9px 0;background:#f7faff;break-inside:avoid}
+  .task .h{font-weight:700;color:#16224a;font-size:13.5pt;margin-bottom:4px}
+  .blank{display:inline-block;min-width:70px;border-bottom:2px solid #16224a;height:1.3em;margin:0 4px}
+  .ansline{display:inline-block;min-width:160px;border-bottom:1.5px dotted #8a96b0;height:1.3em;margin-left:6px}
+  .opt{display:inline-block;border:1.5px solid #b9c6e6;border-radius:8px;padding:3px 14px;margin:4px 6px 0 0;font-family:ui-monospace,monospace;font-size:12pt;font-weight:700}
+  .out{font-family:ui-monospace,monospace;background:#eef4ff;border:1px dashed #9bb4e0;border-radius:7px;padding:3px 11px;font-size:12pt;color:#244;display:inline-block}
+  .lines{margin-top:8px}
+  .lines div{border-bottom:1px solid #c4cfe2;height:26px}
+  .tip{background:#fff6dd;border:1.5px solid #ffe2a1;border-radius:9px;padding:7px 13px;font-size:12.5pt;color:#8a5e00;margin-top:7px}
+  .glink{color:#0d7a4f;font-weight:700}
+  .keyhead{background:#0d7a4f;color:#fff;border-radius:9px;padding:6px 14px;font-size:13pt;font-weight:700;display:inline-block;margin-bottom:8px}
+  .key .task{background:#eafaf2;border-color:#a9e7c9}
+  .key b{color:#0d7a4f}
+  .noprint{text-align:center;margin:14px auto;max-width:800px}
+  .noprint button{font-family:inherit;font-size:14pt;font-weight:700;background:#19b877;color:#fff;border:0;border-radius:10px;padding:10px 22px;cursor:pointer;margin:0 5px}
+  @media print{ body{background:#fff;padding:0} .sheet{box-shadow:none;border-radius:0;max-width:100%;padding:0 5mm;margin:0} .noprint{display:none} .pagebreak{page-break-before:always} @page{size:A4;margin:13mm} }
+</style>
+</head>
+<body>
+  <div class="noprint">
+    <button onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button>
+    <button onclick="document.body.classList.toggle('hidekey')" style="background:#5d6b8a">ซ่อน/แสดง เฉลย</button>
+  </div>
+
+  <!-- ===== ใบงานนักเรียน ===== -->
+  <div class="sheet">
+    <div class="top">
+      <img src="../Day One/srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
+      <div><h1>ใบฝึก วันที่ 3 — การวนซ้ำ (Loop) &amp; อาเรย์ (Array)</h1>
+      <div class="s">Introduction to Programming • THNIC Academy × SRRU</div></div>
+    </div>
+    <div class="info">
+      <div class="r"><span>ชื่อทีม:</span><span>วันที่:</span></div>
+      <div class="mh">สมาชิกในทีม</div>
+      <div class="mem"><div class="l">1)</div><div class="l">2)</div><div class="l">3)</div></div>
+    </div>
+
+    <h2>ทบทวนคำสั่งที่ใช้</h2>
+    <div class="code"><span class="k">for</span> (<span class="k">int</span> i = <span class="m">0</span>; i &lt; n; i++) { ... }   <span class="s">// วนตามจำนวนรอบ</span>
+<span class="k">while</span> (เงื่อนไข) { ... }              <span class="s">// วนจนเงื่อนไขเท็จ</span>
+<span class="k">int</span> a[<span class="m">5</span>] = {<span class="m">80</span>,<span class="m">95</span>,<span class="m">70</span>,<span class="m">60</span>,<span class="m">100</span>};  <span class="s">// อาเรย์ index เริ่ม 0</span></div>
+
+    <h2><span class="num">1</span> เติมคำในช่องว่าง</h2>
+    <div class="task"><div class="h">1.1) วนพิมพ์ i = 1 ถึง 5 (รวม 5 ด้วย)</div>
+      <p style="font-family:ui-monospace,monospace">for (int i = 1; i <span class="blank"></span> 5; i++)</p></div>
+    <div class="task"><div class="h">1.2) อาเรย์ <code>int a[5]</code> ช่องแรกสุดคือ</div>
+      <p style="font-family:ui-monospace,monospace">a[ <span class="blank"></span> ]</p></div>
+    <div class="task"><div class="h">1.3) วนให้ครบ 5 รอบ (index 0 ถึง 4)</div>
+      <p style="font-family:ui-monospace,monospace">for (int i = 0; i <span class="blank"></span> 5; i++)</p></div>
+
+    <h2><span class="num">2</span> ทำนายผลลัพธ์ (เขียนสิ่งที่พิมพ์ออกจอ)</h2>
+    <div class="task"><div class="h">2.1)</div>
+      <div class="code"><span class="k">for</span> (<span class="k">int</span> i = <span class="m">1</span>; i &lt;= <span class="m">3</span>; i++) cout &lt;&lt; i &lt;&lt; <span class="s">" "</span>;</div>
+      <p>ผลลัพธ์: <span class="ansline"></span></p></div>
+    <div class="task"><div class="h">2.2)</div>
+      <div class="code"><span class="k">for</span> (<span class="k">int</span> i = <span class="m">0</span>; i &lt; <span class="m">3</span>; i++) cout &lt;&lt; <span class="s">"*"</span>;</div>
+      <p>ผลลัพธ์: <span class="ansline"></span></p></div>
+    <div class="task"><div class="h">2.3)</div>
+      <div class="code"><span class="k">int</span> s = <span class="m">0</span>;
+<span class="k">for</span> (<span class="k">int</span> i = <span class="m">1</span>; i &lt;= <span class="m">4</span>; i++) s = s + i;
+cout &lt;&lt; s;</div>
+      <p>ผลลัพธ์: <span class="ansline"></span></p></div>
+    <div class="task"><div class="h">2.4)</div>
+      <div class="code"><span class="k">int</span> a[<span class="m">3</span>] = {<span class="m">5</span>, <span class="m">6</span>, <span class="m">7</span>};
+cout &lt;&lt; a[<span class="m">1</span>];</div>
+      <p>ผลลัพธ์: <span class="ansline"></span></p></div>
+
+    <h2><span class="num">3</span> เลือกตอบ &amp; หา error</h2>
+    <div class="task"><div class="h">3.1) index ของอาเรย์เริ่มที่เลขใด? (วงกลม)</div>
+      <span class="opt">0</span><span class="opt">1</span><span class="opt">-1</span></div>
+    <div class="task"><div class="h">3.2) โค้ดนี้จะ error (อ่านเกินขอบเขต) ผิดตรงไหน เขียนวิธีแก้</div>
+      <div class="code"><span class="k">int</span> a[<span class="m">3</span>] = {<span class="m">5</span>, <span class="m">6</span>, <span class="m">7</span>};
+<span class="k">for</span> (<span class="k">int</span> i = <span class="m">0</span>; i &lt;= <span class="m">3</span>; i++) cout &lt;&lt; a[i];</div>
+      <p>ผิดตรง: <span class="ansline"></span> แก้เป็น: <span class="ansline"></span></p></div>
+
+    <h2><span class="num">★</span> โจทย์ท้าทาย — เขียนจริงในเว็บ</h2>
+    <div class="task"><div class="h">เขียน for พิมพ์เลขคู่ตั้งแต่ 2 ถึง 10 (2 4 6 8 10)</div>
+      <p>ทำใน <span class="glink">OneCompiler</span> (onecompiler.com/cpp) กด Run แล้วจดผลลัพธ์ที่ได้</p>
+      <div class="tip">คำใบ้: for (int i = 2; i &lt;= 10; i += 2) cout &lt;&lt; i &lt;&lt; " ";</div>
+      <div class="lines"><div></div><div></div><div></div></div></div>
+  </div>
+
+  <!-- ===== เฉลย (สำหรับครู) ===== -->
+  <div class="sheet key pagebreak" id="keysheet">
+    <span class="keyhead">เฉลย (สำหรับครู) — ใบฝึกวันที่ 3</span>
+    <div class="task"><div class="h">1. เติมคำ</div>
+      <p>1.1) <b>&lt;=</b> (i &lt;= 5 วน i = 1,2,3,4,5) &nbsp;|&nbsp; 1.2) <b>0</b> (index เริ่มที่ 0) &nbsp;|&nbsp; 1.3) <b>&lt;</b> (i &lt; 5 วน 0–4 = 5 รอบ)</p></div>
+    <div class="task"><div class="h">2. ทำนายผลลัพธ์</div>
+      <p>2.1) <b>1 2 3</b> &nbsp;|&nbsp; 2.2) <b>***</b> (วน 3 รอบ พิมพ์ดาวติดกัน) &nbsp;|&nbsp; 2.3) <b>10</b> (1+2+3+4) &nbsp;|&nbsp; 2.4) <b>6</b> (a[1] คือช่องที่สอง)</p></div>
+    <div class="task"><div class="h">3. เลือกตอบ &amp; หา error</div>
+      <p>3.1) <b>0</b></p>
+      <p>3.2) ผิดตรง <b>i &lt;= 3</b> ทำให้ i ไปถึง 3 แต่อาเรย์ 3 ช่องมี index แค่ 0,1,2 → แก้เป็น <b>i &lt; 3</b></p></div>
+    <div class="task"><div class="h">★ โจทย์ท้าทาย</div>
+      <p>ผลลัพธ์: <b>2 4 6 8 10</b> &nbsp; (โค้ด: for (int i = 2; i &lt;= 10; i += 2) cout &lt;&lt; i &lt;&lt; " ";)</p></div>
+  </div>
+
+<script>
+// ปุ่มซ่อนเฉลย
+const style=document.createElement("style");
+style.textContent=".hidekey #keysheet{display:none}";
+document.head.appendChild(style);
+</script>
+</body>
+</html>

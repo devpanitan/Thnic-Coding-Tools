@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | Simulator ตัวแปร &amp; ชนิดข้อมูล</title>
+<link rel="icon" type="image/png" href="../Day One/srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
+<style>
+  :root{--blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--gold:#f2a900;--ink:#16224a;--muted:#5d6b8a;--line:#dbe6f7;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);height:100vh;overflow:hidden;
+    background:radial-gradient(900px 500px at 10% -10%,#d4e6ff 0,transparent 60%),radial-gradient(800px 500px at 100% 0,#ffe6f7 0,transparent 55%),linear-gradient(160deg,#eef4ff,#fdf3fb);
+    display:flex;flex-direction:column;gap:clamp(8px,1.4vh,13px);padding:clamp(10px,1.8vh,18px) clamp(12px,2.5vw,28px)}
+  svg.lucide{width:1em;height:1em;vertical-align:-.15em}
+  .head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .head img{height:clamp(30px,4.2vh,42px)}
+  h1{font-size:clamp(18px,2.6vh,25px);font-weight:700}
+  .head .tag{color:var(--muted);font-size:clamp(12px,1.5vh,15px);flex:1;min-width:200px}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:#fff;border:2px solid var(--line);border-radius:14px;padding:9px 13px;box-shadow:0 8px 22px rgba(47,123,246,.08)}
+  .bar label{font-size:14px;color:var(--muted);font-weight:600}
+  select,input[type=text]{font-family:inherit;font-size:15px;padding:7px 11px;border-radius:9px;border:2px solid var(--line);background:#f7faff;color:var(--ink);outline:none}
+  input.val{width:150px}
+  input.name{width:88px;font-family:ui-monospace,monospace}
+  .chk{display:inline-flex;align-items:center;gap:5px;font-size:14px;font-weight:700;color:#2f4a7d;background:#eef4ff;border:2px solid var(--line);border-radius:9px;padding:6px 10px;cursor:pointer}
+  .chk input{width:16px;height:16px}
+  button{font-family:inherit;font-size:14px;font-weight:700;padding:8px 13px;border:0;border-radius:10px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+  .go{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff}
+  .ct{background:#e3f7ee;color:#0c6b46;border:2px solid #aee7ce}
+  .ghost{background:#eef4ff;color:#2f4a7d;border:2px solid var(--line)}
+  .note{display:flex;align-items:center;gap:8px;background:#eef4ff;border:2px solid var(--line);border-radius:12px;padding:9px 15px;font-size:clamp(13px,1.8vh,16px);color:#3a4a6e;font-weight:600;min-height:2.4em}
+  .note svg{width:1.2em;height:1.2em;flex:none}
+  .note.warn{background:#ffece6;border-color:#ffc4b3;color:#b03b1d}
+  .note.ok{background:#e7faf1;border-color:#aee7ce;color:#0c6b46}
+  .note.tip{background:#fff6dd;border-color:#ffe2a1;color:#8a5e00}
+  .main{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1.18fr;gap:clamp(12px,2vw,22px)}
+  .panel{background:#fff;border:2px solid var(--line);border-radius:16px;padding:clamp(10px,1.8vh,16px);box-shadow:0 8px 22px rgba(31,43,72,.07);display:flex;flex-direction:column;min-height:0}
+  .ph{font-weight:700;font-size:clamp(13px,1.8vh,16px);margin-bottom:6px;color:var(--ink);display:flex;align-items:center;gap:8px}
+  .code{font-family:ui-monospace,monospace;font-size:clamp(13px,1.85vh,17px);line-height:1.6;background:#0f1b38;border-radius:12px;padding:12px 14px;flex:1;overflow:auto;color:#cdd9f3}
+  .code .ln{padding:1px 6px;border-radius:5px}.code .ln.new{background:#23365f;color:#e8eefc}
+  .code .ln.fr{color:#7184b0}.code .ln.body{padding-left:24px}
+  .code .k{color:#ff9bd0}.code .s{color:#ffd27f}.code .m{color:#9ad27f}.code .o{color:#ffb86b}
+  .out{font-family:ui-monospace,monospace;font-size:clamp(13px,1.9vh,17px);background:#0b1020;border-radius:10px;padding:9px 13px;color:#7CFC9E;margin-top:8px;min-height:6.5vh;max-height:16vh;overflow:auto}
+  .out .omuted{color:#5a6b8a}
+  .mem{display:flex;flex-wrap:wrap;gap:12px;align-content:flex-start;overflow:auto;padding:3px;max-height:42%}
+  .box{border:2px solid var(--clr,#cdd9ef);border-radius:14px;background:#f7faff;padding:8px 13px;min-width:120px;transition:.25s}
+  .box.flash{animation:flash .6s ease}
+  @keyframes flash{0%{transform:scale(1)}40%{transform:scale(1.1);box-shadow:0 0 0 4px rgba(47,123,246,.2)}100%{transform:scale(1)}}
+  .box .bh{display:flex;align-items:center;gap:6px}
+  .box .ty{font-family:ui-monospace,monospace;font-size:12px;font-weight:700;color:#fff;background:var(--clr,#888);border-radius:6px;padding:1px 8px}
+  .box .lock{font-size:11px;font-weight:700;color:#8a5e00;background:#fff3da;border:1px solid #ffe2a1;border-radius:6px;padding:0 6px;display:inline-flex;align-items:center;gap:3px}
+  .box .lock svg{width:11px;height:11px}
+  .box .nm{font-family:ui-monospace,monospace;font-weight:700;font-size:17px;margin:5px 0 1px}
+  .box .vl{font-family:ui-monospace,monospace;font-size:21px;font-weight:700;color:var(--ink);word-break:break-all}
+  .box .sz{font-size:11px;color:#8aa0c8;margin-top:3px}
+  .empty{color:#9aa6c8;font-size:14px;margin:auto}
+  .tips{flex:1;margin-top:12px;background:#f3f7ff;border:2px solid var(--line);border-radius:14px;padding:10px 15px;overflow:auto;font-size:clamp(12px,1.6vh,14px)}
+  .tips .th{font-weight:700;color:#16224a;font-size:clamp(13px,1.8vh,16px);display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .tips .th svg{width:1.1em;height:1.1em;color:var(--gold)}
+  .tips ul{margin:0 0 0 2px;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
+  .tips li b{font-family:ui-monospace,monospace;color:#185fa5}
+  .tips .try{margin-top:8px;background:#fff6dd;border:1.5px solid #ffe2a1;border-radius:10px;padding:7px 11px;color:#8a5e00;display:flex;gap:8px;align-items:flex-start}
+  .tips .try svg{width:1.1em;height:1.1em;flex:none;margin-top:.1em;color:#b85a1a}
+</style>
+</head>
+<body>
+  <div class="head">
+    <img src="../Day One/srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
+    <h1>ตัวแปร &amp; ชนิดข้อมูล</h1>
+    <span class="tag">ประกาศตัวแปร เก็บค่า คำนวณ และแสดงผล — ลองใช้ค่าหรือนิพจน์ เช่น a + b</span>
+  </div>
+
+  <div class="bar">
+    <label>ชนิด</label>
+    <select id="type">
+      <option value="int">int (จำนวนเต็ม)</option>
+      <option value="double">double (ทศนิยม)</option>
+      <option value="char">char (อักขระ)</option>
+      <option value="string">string (ข้อความ)</option>
+      <option value="bool">bool (จริง/เท็จ)</option>
+    </select>
+    <label class="chk"><input type="checkbox" id="isconst"> const</label>
+    <label>ชื่อ</label><input type="text" class="name" id="name" value="age" spellcheck="false">
+    <label>=</label><input type="text" class="val" id="value" value="15" spellcheck="false" placeholder="ค่า หรือ a + b">
+    <button class="go" id="set"><i data-lucide="box"></i> กำหนดค่า</button>
+    <button class="ct" id="cout"><i data-lucide="monitor"></i> cout แสดงผล</button>
+    <button class="ghost" id="clear"><i data-lucide="trash-2"></i> ล้าง</button>
+  </div>
+
+  <div class="note" id="note"><i data-lucide="info"></i> เลือกชนิด ตั้งชื่อ ใส่ค่า แล้วกด “กำหนดค่า”</div>
+
+  <div class="main">
+    <div class="panel">
+      <div class="ph"><i data-lucide="code"></i> โค้ดที่เขียน (โปรแกรมเต็ม)</div>
+      <div class="code" id="code"></div>
+      <div class="ph" style="margin-top:8px"><i data-lucide="terminal"></i> ผลลัพธ์ที่จอ (Output)</div>
+      <div class="out" id="out"><span class="omuted">— ยังไม่มีผลลัพธ์ (กด “cout แสดงผล”) —</span></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><i data-lucide="cpu"></i> หน่วยความจำ (Memory)</div>
+      <div class="mem" id="mem"><div class="empty">ยังไม่มีตัวแปร</div></div>
+      <div class="tips">
+        <div class="th"><i data-lucide="lightbulb"></i> ตัวแปรแต่ละชนิดเอาไปใช้ทำอะไร?</div>
+        <ul>
+          <li><b>int</b> — อายุ, คะแนน, จำนวนสิ่งของ (4 bytes)</li>
+          <li><b>double</b> — ราคา, ส่วนสูง, อุณหภูมิ (8 bytes)</li>
+          <li><b>char</b> — เกรด (A,B,C) (1 byte) &nbsp; <b>bool</b> — จริง/เท็จ (1 byte)</li>
+          <li><b>string</b> — ชื่อ, ข้อความ &nbsp; <b>const</b> — ค่าที่ห้ามเปลี่ยน</li>
+        </ul>
+        <div class="try"><i data-lucide="target"></i> <span>ลองทำดู: สร้าง <b>a</b>=10, <b>b</b>=3 แล้วสร้าง <b>sum</b> = a + b → กด cout ดูผลลัพธ์</span></div>
+      </div>
+    </div>
+  </div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+const COLORS={int:"#2f7bf6",double:"#7a5cff",char:"#ff6a3d",string:"#19b877",bool:"#f2a900"};
+const SIZE={int:4,double:8,char:1,bool:1};
+const vars={}; const codeLines=[]; let didCout=false;
+const $=id=>document.getElementById(id);
+const icons=()=>{if(window.lucide)lucide.createIcons();};
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function note(msg,cls){const ic=cls==="warn"?"alert-triangle":cls==="ok"?"circle-check":"info";$("note").className="note"+(cls?" "+cls:"");$("note").innerHTML=`<i data-lucide="${ic}"></i> ${msg}`;icons();}
+
+function evalNum(expr){
+  let e=expr.replace(/[A-Za-z_]\w*/g,m=>{
+    const v=vars[m];
+    if(v&&(v.type==="int"||v.type==="double"))return "("+v.num+")";
+    throw {msg:`ใช้ตัวแปร “${m}” ไม่ได้ — ยังไม่ประกาศ หรือไม่ใช่ตัวเลข`};
+  });
+  if(!/^[-+*/%(). 0-9]+$/.test(e))throw{msg:`นิพจน์มีอักขระที่ใช้ไม่ได้`};
+  let r;try{r=Function('"use strict";return ('+e+')')();}catch(_){throw{msg:`นิพจน์ไม่ถูกต้อง`};}
+  if(typeof r!=="number"||!isFinite(r))throw{msg:`คำนวณไม่ได้ (อาจหารด้วย 0)`};
+  return r;
+}
+function fmtNum(type,raw){
+  const s=raw.trim();
+  if(/^-?\d+(\.\d+)?$/.test(s)){
+    let n=parseFloat(s);
+    if(type==="int"){if(s.includes(".")){const t=Math.trunc(n);return{num:t,note:`int เก็บจำนวนเต็ม — ตัดทศนิยมเหลือ ${t}`};}return{num:parseInt(s)};}
+    return{num:n};
+  }
+  let n;try{n=evalNum(s);}catch(e){return{err:e.msg};}
+  if(type==="int"){const t=Math.trunc(n);return{num:t,expr:true,note:(n!==t?`int ตัดทศนิยมเหลือ ${t}`:null)};}
+  return{num:n,expr:true};
+}
+function fmtOther(type,raw){
+  const s=String(raw).trim();
+  if(type==="char"){const c=s.replace(/^['"]|['"]$/g,"");if(!c.length)return{err:`char ต้องมี 1 ตัวอักษร เช่น 'A'`};if(c.length>1)return{err:`char เก็บได้แค่ 1 ตัวอักษร — “${c}” ยาวเกินไป (ใช้ string)`};return{v:"'"+c+"'"};}
+  if(type==="string"){if(raw==="")return{err:`string ว่างเปล่า — ลองใส่ข้อความ`};return{v:'"'+raw+'"'};}
+  if(type==="bool"){const t=s.toLowerCase();if(["true","1","จริง"].includes(t))return{v:"true"};if(["false","0","เท็จ"].includes(t))return{v:"false"};return{err:`bool รับได้แค่ true หรือ false`};}
+  return{v:s};
+}
+function rhsHtml(type,raw,r){
+  if(type==="string")return `<span class="s">"${esc(raw)}"</span>`;
+  if(type==="char")return `<span class="s">${r.v}</span>`;
+  if(type==="bool")return `<span class="m">${r.v}</span>`;
+  return `<span class="m">${esc(raw.trim())}</span>`;  // numeric: แสดงนิพจน์ตามที่พิมพ์
+}
+function set(){
+  const selType=$("type").value, name=$("name").value.trim(), raw=$("value").value, wantConst=$("isconst").checked;
+  if(!name){note("กรุณาตั้งชื่อตัวแปร","warn");return;}
+  if(!/^[A-Za-z_]\w*$/.test(name)){note(`ชื่อ “${name}” ไม่ถูกต้อง — ใช้ตัวอักษร/ตัวเลข/_ และห้ามขึ้นต้นด้วยตัวเลข`,"warn");return;}
+  const exists=vars[name];
+  if(exists&&exists.isConst){note(`${name} เป็นค่าคงที่ (const) เปลี่ยนค่าไม่ได้`,"warn");return;}
+  const type=exists?exists.type:selType;
+  const numeric=(type==="int"||type==="double");
+  const r=numeric?fmtNum(type,raw):fmtOther(type,raw);
+  if(r.err){note(r.err,"warn");return;}
+  const oldVal=exists?exists.val:null;
+  const val=numeric?String(r.num):r.v;
+  const isConst=exists?exists.isConst:wantConst;
+  vars[name]={type,val,num:numeric?r.num:null,isConst};
+  const rhs=rhsHtml(type,raw,r);
+  codeLines.push(exists?`${name} = ${rhs};`:`${isConst?'<span class="k">const</span> ':''}<span class="k">${type}</span> ${name} = ${rhs};`);
+  if(exists&&selType!==type)note(`${name} เป็นชนิด ${type} อยู่แล้ว เปลี่ยนชนิดไม่ได้ (อยากได้ชนิดอื่นให้ตั้งชื่อใหม่)`,"warn");
+  else if(r.note)note(r.note,"warn");
+  else if(exists&&val===oldVal)note(`ค่ายังเท่าเดิม (${val}) — เขียนซ้ำได้แต่ไม่จำเป็น`,"tip");
+  else if(r.expr)note(`คำนวณ ${name} = ${val}`,"ok");
+  else note(exists?`เปลี่ยนค่า ${name} เป็น ${val}`:`สร้างตัวแปร ${name}${isConst?' (const)':''} ชนิด ${type}`,"ok");
+  render(name);
+}
+function printed(v){
+  if(v.type==="string")return v.val.replace(/^"|"$/g,"");
+  if(v.type==="char")return v.val.replace(/'/g,"");
+  if(v.type==="bool")return v.val==="true"?"1":"0";   // C++ cout พิมพ์ bool เป็น 1/0
+  return v.val;
+}
+function doCout(){
+  const keys=Object.keys(vars);
+  if(!keys.length){note("ยังไม่มีตัวแปรให้แสดงผล","warn");return;}
+  keys.forEach(n=>codeLines.push(`cout &lt;&lt; ${n} &lt;&lt; endl;`));
+  didCout=true;note("เพิ่มคำสั่ง cout แสดงค่าตัวแปรทั้งหมด (bool พิมพ์เป็น 1/0)","ok");
+  render();
+}
+function render(flashName){
+  const prog=[
+    {h:'<span class="k">#include</span> <span class="c">&lt;iostream&gt;</span>',c:"fr"},
+    {h:'<span class="k">using namespace</span> std;',c:"fr"},
+    {h:'<span class="k">int</span> main() {',c:"fr"},
+    ...codeLines.map((l,k)=>({h:l,c:"body"+(k===codeLines.length-1?" new":"")})),
+    {h:'<span class="k">return</span> <span class="m">0</span>;',c:"body fr"},
+    {h:'}',c:"fr"},
+  ];
+  $("code").innerHTML=prog.map(o=>`<div class="ln ${o.c}">${o.h}</div>`).join("");
+  $("code").scrollTop=$("code").scrollHeight;
+  const keys=Object.keys(vars);
+  $("mem").innerHTML=keys.length?keys.map(n=>{const v=vars[n];
+    const sz=SIZE[v.type]?SIZE[v.type]+" bytes":"ตามข้อความ";
+    const lock=v.isConst?`<span class="lock"><i data-lucide="lock"></i>const</span>`:"";
+    return `<div class="box ${n===flashName?'flash':''}" style="--clr:${COLORS[v.type]}"><div class="bh"><span class="ty">${v.type}</span>${lock}</div><div class="nm">${n}</div><div class="vl">${v.val}</div><div class="sz">${sz}</div></div>`;
+  }).join(""):'<div class="empty">ยังไม่มีตัวแปร</div>';
+  if(didCout&&keys.length)$("out").innerHTML=keys.map(n=>esc(printed(vars[n]))).join("<br>");
+  else $("out").innerHTML='<span class="omuted">— ยังไม่มีผลลัพธ์ (กด “cout แสดงผล”) —</span>';
+  icons();
+}
+$("set").onclick=set;
+$("cout").onclick=doCout;
+$("clear").onclick=()=>{for(const k in vars)delete vars[k];codeLines.length=0;didCout=false;render();note("ล้างหน่วยความจำแล้ว");};
+$("value").addEventListener("keydown",e=>{if(e.key==="Enter")set();});
+$("type").addEventListener("change",()=>{const map={int:["age","15"],double:["price","3.14"],char:["grade","A"],string:["name","แนน"],bool:["isPass","true"]};const m=map[$("type").value];$("name").value=m[0];$("value").value=m[1];});
+render();icons();
+</script>
+</body>
+</html>

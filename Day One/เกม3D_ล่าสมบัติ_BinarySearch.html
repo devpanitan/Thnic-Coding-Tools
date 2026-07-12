@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | เกม 3D ล่าสมบัติ — คิดแบบ Binary Search</title>
+<link rel="icon" type="image/png" href="srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
+<style>
+  :root{--blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--gold:#f2a900;--ink:#16224a;--muted:#5d6b8a;--line:#dbe6f7;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden}
+  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);
+    background:linear-gradient(160deg,#0d1530,#241a52 60%,#3a2c6e)}
+  #c{position:fixed;inset:0;display:block}
+  svg.lucide{width:1em;height:1em;vertical-align:-.15em}
+  /* HUD */
+  .hud{position:fixed;inset:0;pointer-events:none;z-index:5;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(12px,2.2vh,22px) clamp(16px,4vw,44px)}
+  .top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;pointer-events:auto}
+  .top img{height:clamp(30px,4.4vh,44px)}
+  h1{font-size:clamp(19px,2.9vh,30px);font-weight:700;color:#fff;text-shadow:0 2px 12px rgba(122,92,255,.6)}
+  .top .tag{color:#c3d0f5;font-size:clamp(12px,1.6vh,15px);flex:1;min-width:200px}
+  .setup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:9px 15px;font-size:14px;color:#e6ecff;backdrop-filter:blur(8px)}
+  .setup label{font-weight:700;color:#c3d0f5}
+  .rg{font-family:inherit;font-size:14px;font-weight:700;padding:8px 15px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;cursor:pointer}
+  .rg.on{background:linear-gradient(135deg,var(--gold),#ff8a3d);border-color:transparent}
+  .btn{font-family:inherit;font-size:14px;font-weight:700;padding:8px 16px;border-radius:10px;border:0;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--blue),var(--purple));display:inline-flex;align-items:center;gap:7px}
+  .center{position:absolute;top:clamp(76px,12vh,110px);left:50%;transform:translateX(-50%);text-align:center;width:min(92vw,760px)}
+  .fb{display:inline-flex;align-items:center;gap:12px;font-size:clamp(20px,3.4vh,36px);font-weight:700;color:#fff;background:rgba(13,21,48,.55);border:2px solid rgba(255,255,255,.25);border-radius:18px;padding:clamp(10px,1.8vh,18px) clamp(20px,3vw,36px);backdrop-filter:blur(6px);transition:.2s}
+  .fb.lo{border-color:#7fb0ff;color:#bcd6ff}.fb.hi{border-color:#ffb08f;color:#ffd0bd}
+  .fb.win{border-color:#8ff0c4;color:#c8ffe6;animation:pop .5s}
+  @keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
+  .fb .big{font-size:1.15em;margin:0 4px}
+  .hintwrap{margin-top:12px}
+  .hintbtn{pointer-events:auto;font-size:clamp(13px,1.9vh,16px);color:#fff;background:rgba(122,92,255,.5);border:1px solid rgba(255,255,255,.3);border-radius:11px;padding:9px 18px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:7px;backdrop-filter:blur(6px)}
+  .bottom{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;pointer-events:auto}
+  .cbox{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:8px 18px;text-align:center;color:#fff;backdrop-filter:blur(8px);min-width:120px}
+  .cbox .n{font-size:12px;color:#c3d0f5;font-weight:700}
+  .cbox .v{font-size:clamp(22px,3.4vh,34px);font-weight:700;font-family:ui-monospace,monospace;line-height:1.05}
+  .cbox.opt .v{color:#8ff0c4}.cbox.rem .v{color:#ffd24d}
+  .team{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:6px 14px;text-align:center;color:#fff;backdrop-filter:blur(8px)}
+  .team .nm{font-size:13px;font-weight:700}
+  .team .best{font-family:ui-monospace,monospace;font-size:clamp(20px,3vh,30px);font-weight:700}
+  .team.A .best{color:#9dc2ff}.team.B .best{color:#ffb59d}
+  .team button{margin-top:2px;font-family:inherit;font-size:11px;font-weight:700;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;border-radius:7px;padding:3px 9px;cursor:pointer}
+  .hintB{color:#ffe08a}
+</style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <div class="hud">
+    <div>
+      <div class="top">
+        <img src="srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
+        <h1>💎 เกม 3D ล่าสมบัติ</h1>
+        <span class="tag">คลิกหีบที่คิดว่ามีสมบัติ! เกมบอกทางซ้าย/ขวา แล้ว<b>ครึ่งที่ไม่ใช่จะร่วงหาย</b> — หาให้เจอด้วยจำนวนคลิกน้อยที่สุด (Binary Search • TOI: find)</span>
+      </div>
+      <div class="top" style="margin-top:10px">
+        <div class="setup">
+          <label>จำนวนหีบ</label>
+          <button class="rg on" data-n="15">15</button>
+          <button class="rg" data-n="31">31</button>
+          <button class="rg" data-n="63">63</button>
+          <button class="btn" onclick="newGame()"><i data-lucide="rotate-ccw"></i> เริ่มใหม่ (ซ่อนสมบัติ)</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="center">
+      <div class="fb" id="fb"><i data-lucide="sparkles"></i> ซ่อนสมบัติไว้ในหีบแล้ว! คลิกเลือกหีบดูสิ</div>
+      <div class="hintwrap"><button class="hintbtn" onclick="showHint()"><i data-lucide="lightbulb"></i> คำใบ้ (ควรคลิกหีบไหน?)</button></div>
+    </div>
+
+    <div class="bottom">
+      <div class="cbox"><div class="n">คลิกไปแล้ว</div><div class="v" id="cnt">0</div></div>
+      <div class="cbox rem"><div class="n">หีบที่ยังเป็นไปได้</div><div class="v" id="rem">15</div></div>
+      <div class="cbox opt"><div class="n">คิดแบบแบ่งครึ่ง ควรไม่เกิน</div><div class="v" id="opt">4</div></div>
+      <div class="team A"><div class="nm">👥 ทีม A</div><div class="best" id="bestA">–</div><button onclick="saveTeam('A')">บันทึกรอบนี้</button></div>
+      <div class="team B"><div class="nm">👥 ทีม B</div><div class="best" id="bestB">–</div><button onclick="saveTeam('B')">บันทึกรอบนี้</button></div>
+    </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+let scene,camera,renderer,raycaster,pointer;
+let boxes=[],parts=[],N=15,target=0,lo=1,hi=15,guesses=0,done=false;
+let bestA=null,bestB=null,lastCount=null;
+const SP=1.7; // spacing
+
+function optimal(n){return Math.ceil(Math.log2(n));}
+
+function makeLabel(num){
+  const c=document.createElement('canvas');c.width=c.height=128;
+  const x=c.getContext('2d');
+  x.fillStyle='rgba(255,255,255,0.95)';x.beginPath();x.arc(64,64,58,0,7);x.fill();
+  x.fillStyle='#16224a';x.font='bold 74px Sarabun,Arial';x.textAlign='center';x.textBaseline='middle';
+  x.fillText(num,64,68);
+  const t=new THREE.CanvasTexture(c);
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthTest:false}));
+  s.scale.set(0.95,0.95,1);return s;
+}
+function chestMat(){return new THREE.MeshStandardMaterial({color:0xe0a53a,roughness:.5,metalness:.35,emissive:0x3a2a00,emissiveIntensity:.25});}
+
+function init(){
+  scene=new THREE.Scene();
+  scene.fog=new THREE.Fog(0x1a1440,18,55);
+  camera=new THREE.PerspectiveCamera(50,innerWidth/innerHeight,.1,200);
+  renderer=new THREE.WebGLRenderer({canvas:$("c"),antialias:true});
+  renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const amb=new THREE.AmbientLight(0xffffff,.65);scene.add(amb);
+  const d1=new THREE.DirectionalLight(0xffffff,.9);d1.position.set(6,12,8);scene.add(d1);
+  const d2=new THREE.DirectionalLight(0x9a7bff,.5);d2.position.set(-8,4,6);scene.add(d2);
+  // floor
+  const fl=new THREE.Mesh(new THREE.PlaneGeometry(300,60),new THREE.MeshStandardMaterial({color:0x151033,roughness:1}));
+  fl.rotation.x=-Math.PI/2;fl.position.y=-1.1;scene.add(fl);
+  raycaster=new THREE.Raycaster();pointer=new THREE.Vector2();
+  renderer.domElement.addEventListener('pointerdown',onClick);
+  addEventListener('resize',onResize);
+  animate();
+}
+function buildBoxes(){
+  boxes.forEach(b=>{scene.remove(b.mesh);scene.remove(b.label);});
+  boxes=[];
+  const w=N*SP, boxW=Math.min(1.25,10/N*1.6);
+  for(let i=1;i<=N;i++){
+    const g=new THREE.BoxGeometry(boxW,boxW,boxW);
+    const m=new THREE.Mesh(g,chestMat());
+    m.position.set((i-(N+1)/2)*SP,0,0);
+    m.userData.idx=i;
+    scene.add(m);
+    const lab=makeLabel(i);
+    lab.position.set(m.position.x,boxW/2+0.7,0);lab.scale.set(boxW*.8,boxW*.8,1);
+    scene.add(lab);
+    boxes.push({mesh:m,label:lab,idx:i,active:true,targetY:0,fall:false,rot:0});
+  }
+  // camera fit
+  const dist=w*0.62+6;
+  camera.position.set(0,w*0.28+3,dist);
+  camera.lookAt(0,0,0);
+}
+function newGame(){
+  target=1+Math.floor(Math.random()*N);
+  lo=1;hi=N;guesses=0;done=false;
+  buildBoxes();
+  $("cnt").textContent="0";$("rem").textContent=N;$("opt").textContent=optimal(N);
+  $("fb").className="fb";$("fb").innerHTML='<i data-lucide="sparkles"></i> ซ่อนสมบัติไว้ในหีบแล้ว! คลิกเลือกหีบดูสิ';
+  clearParts();refreshGlow();icons();
+}
+function refreshGlow(){
+  const mid=Math.floor((lo+hi)/2);
+  boxes.forEach(b=>{
+    if(!b.active)return;
+    b.mesh.material.emissive.setHex(0x3a2a00);b.mesh.material.emissiveIntensity=.25;
+  });
+}
+function pulseHint(){
+  const mid=Math.floor((lo+hi)/2);
+  const b=boxes.find(x=>x.idx===mid&&x.active);
+  if(b){b.mesh.material.emissive.setHex(0x2f7bf6);b.mesh.material.emissiveIntensity=.9;}
+}
+function showHint(){
+  if(done)return;
+  const mid=Math.floor((lo+hi)/2);
+  $("fb").className="fb";$("fb").innerHTML='<i data-lucide="lightbulb" class="hintB"></i> คลิกหีบ<span class="big" style="color:#ffe08a">'+mid+'</span>(ตรงกลางช่วง) จะตัดทิ้งได้ครึ่งหนึ่ง!';
+  refreshGlow();pulseHint();icons();
+}
+function onClick(e){
+  if(done)return;
+  const r=renderer.domElement.getBoundingClientRect();
+  pointer.x=((e.clientX-r.left)/r.width)*2-1;
+  pointer.y=-((e.clientY-r.top)/r.height)*2+1;
+  raycaster.setFromCamera(pointer,camera);
+  const meshes=boxes.filter(b=>b.active).map(b=>b.mesh);
+  const hit=raycaster.intersectObjects(meshes);
+  if(hit.length)guess(hit[0].object.userData.idx);
+}
+function eliminate(cond){
+  boxes.forEach(b=>{ if(b.active&&cond(b.idx)){ b.active=false;b.fall=true;b.targetY=-14;b.vr=(Math.random()-.5)*.4; } });
+}
+function guess(p){
+  if(done)return;
+  guesses++;$("cnt").textContent=guesses;
+  if(p===target){
+    done=true;
+    // eliminate everything except target
+    eliminate(i=>i!==p);
+    const win=boxes.find(b=>b.idx===p);win.active=true;win.fall=false;win.targetY=0;win.win=true;
+    burst(win.mesh.position);
+    const op=optimal(N);
+    $("fb").className="fb win";
+    $("fb").innerHTML='<i data-lucide="party-popper"></i> เจอสมบัติ! หีบ<span class="big">'+p+'</span>ใช้ <span class="big">'+guesses+'</span> คลิก '+(guesses<=op?'— เยี่ยมมาก! 👏':'(ลองแบ่งครึ่งให้ ≤ '+op+')');
+    lastCount=guesses;icons();return;
+  }
+  if(target>p){ eliminate(i=>i<=p); lo=p+1;
+    $("fb").className="fb lo";$("fb").innerHTML='<i data-lucide="arrow-right"></i> สมบัติอยู่ทาง<span class="big">ขวา →</span> (มากกว่า '+p+')';
+  }else{ eliminate(i=>i>=p); hi=p-1;
+    $("fb").className="fb hi";$("fb").innerHTML='<i data-lucide="arrow-left"></i> สมบัติอยู่ทาง<span class="big">← ซ้าย</span> (น้อยกว่า '+p+')';
+  }
+  $("rem").textContent=Math.max(hi-lo+1,0);
+  refreshGlow();icons();
+}
+function burst(pos){
+  for(let i=0;i<26;i++){
+    const g=new THREE.SphereGeometry(0.12,6,6);
+    const col=[0xffd24d,0x19b877,0x2f7bf6,0xff6a3d][i%4];
+    const m=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:col}));
+    m.position.copy(pos);
+    m.userData.v=new THREE.Vector3((Math.random()-.5)*.5,Math.random()*.6+.2,(Math.random()-.5)*.5);
+    scene.add(m);parts.push(m);
+  }
+}
+function clearParts(){parts.forEach(p=>scene.remove(p));parts=[];}
+function saveTeam(t){
+  if(lastCount===null){$("fb").className="fb hi";$("fb").innerHTML='<i data-lucide="alert-triangle"></i> เล่นให้เจอสมบัติก่อน แล้วค่อยบันทึก';icons();return;}
+  if(t==='A'){if(bestA===null||lastCount<bestA)bestA=lastCount;$("bestA").textContent=bestA;}
+  else{if(bestB===null||lastCount<bestB)bestB=lastCount;$("bestB").textContent=bestB;}
+  lastCount=null;
+  $("fb").className="fb win";$("fb").innerHTML='<i data-lucide="check-circle-2"></i> บันทึกให้ทีม '+t+' แล้ว! เริ่มใหม่ให้อีกทีมบ้าง';icons();
+}
+function onResize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);}
+let tphase=0;
+function animate(){
+  requestAnimationFrame(animate);
+  tphase+=0.02;
+  boxes.forEach(b=>{
+    // fall animation
+    b.mesh.position.y+=(b.targetY-b.mesh.position.y)*0.12;
+    b.label.position.y=b.mesh.position.y+ (b.mesh.geometry.parameters.height/2+0.7);
+    if(b.fall){b.mesh.rotation.z+=b.vr||0.2;b.mesh.material.opacity;}
+    if(b.win){b.mesh.rotation.y+=0.05;b.mesh.position.y=Math.sin(tphase*2)*0.25;b.mesh.material.emissive.setHex(0x19b877);b.mesh.material.emissiveIntensity=.6;}
+    else if(b.active){ b.mesh.rotation.y=Math.sin(tphase+b.idx)*0.05; }
+    b.label.material.opacity=b.mesh.position.y<-6?0:1;
+    b.label.visible=b.mesh.position.y>-6;
+  });
+  parts.forEach(p=>{p.position.add(p.userData.v);p.userData.v.y-=0.02;p.scale.multiplyScalar(0.97);});
+  parts=parts.filter(p=>{if(p.scale.x<0.15){scene.remove(p);return false;}return true;});
+  renderer.render(scene,camera);
+}
+document.querySelectorAll(".rg").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".rg").forEach(x=>x.classList.toggle("on",x===b));
+  N=+b.dataset.n;newGame();
+});
+const icons=()=>{if(window.lucide)lucide.createIcons();};
+init();newGame();icons();
+</script>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | สไลด์นำเสนอวันที่ 3 — การวนซ้ำ &amp; อาเรย์</title>
+<link rel="icon" type="image/png" href="../Day One/srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--gold:#f2a900;
+    --ink:#16224a;--muted:#5d6b8a;--line:#dbe6f7;--card:#fff;--bg1:#eaf3ff;--bg2:#fef6ff;}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html,body{height:100%}
+  body{font-family:"TH Sarabun PSK","TH SarabunPSK","Sarabun","Tahoma",sans-serif;color:var(--ink);background:#0d1530;overflow:hidden}
+  .deck{position:fixed;inset:0}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:6vh 7vw;
+    background:radial-gradient(1000px 600px at 12% -8%,#d4e6ff 0%,transparent 60%),radial-gradient(900px 600px at 100% 0%,#ffe6f7 0%,transparent 55%),linear-gradient(160deg,var(--bg1),var(--bg2));}
+  .slide.active{display:flex;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  svg.lucide{width:1.05em;height:1.05em;vertical-align:-0.16em;stroke-width:2px;flex:none}
+  .kicker svg.lucide{width:1.15em;height:1.15em}
+  .ic svg.lucide{width:1em;height:1em;stroke-width:1.7px}
+  .b svg.lucide{width:1em;height:1em}
+  .kicker{display:inline-flex;align-items:center;gap:12px;font-size:2.2vh;font-weight:700;color:var(--blue);background:#e6f0ff;border:2px solid #cfe0fb;border-radius:99px;padding:.6vh 1.8vh;width:fit-content;margin-bottom:2vh}
+  h1{font-size:7.4vh;line-height:1.1;color:var(--ink)}
+  h2{font-size:5vh;line-height:1.12;margin-bottom:1.6vh}
+  .lead{font-size:3.1vh;color:var(--muted);margin-top:1.6vh;max-width:84%;display:block}
+  ul{list-style:none;display:flex;flex-direction:column;gap:1.6vh;margin-top:1vh}
+  li{font-size:3.05vh;display:flex;gap:1.5vh;align-items:flex-start;line-height:1.3}
+  li .b{flex:none;width:1.5em;height:1.5em;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.8em;font-weight:700;color:#fff;margin-top:.15em}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:2.2vh;margin-top:1vh}
+  .card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:2.4vh 2.8vh;box-shadow:0 10px 30px rgba(31,43,72,.08)}
+  .card h3{font-size:3vh;color:var(--ink);margin-bottom:.3vh;display:flex;align-items:center;gap:10px}
+  .card code{font-family:ui-monospace,monospace;color:#185fa5;font-weight:700}
+  .card p{font-size:2.5vh;color:var(--muted);line-height:1.3}
+  .two{display:grid;grid-template-columns:1.06fr .94fr;gap:4vh;align-items:center;margin-top:.5vh}
+  .exline{font-size:3vh;color:var(--ink);margin-top:1.4vh;line-height:1.34}
+  .exline.muted{color:var(--muted);font-size:2.8vh}
+  .codewrap{display:grid;grid-template-columns:1.1fr .9fr;gap:3vh;align-items:start;margin-top:1vh}
+  .code{font-family:"Consolas",ui-monospace,monospace;background:#11203a;color:#e8eefc;border-radius:18px;padding:3vh 3.2vh;font-size:2.7vh;line-height:1.55;white-space:pre;box-shadow:0 14px 36px rgba(13,21,48,.4)}
+  .code.big{font-size:3vh}
+  .code .c{color:#7fd1ff}.code .s{color:#ffd27f}.code .k{color:#ff9bd0}.code .m{color:#9ad27f}.code .o{color:#ffb86b}
+  .code .hl{background:#33405e;border-radius:5px;padding:0 4px}
+  .explist{display:flex;flex-direction:column;gap:1.3vh}
+  .exp{background:#fff;border:2px solid var(--line);border-radius:14px;padding:1.4vh 1.8vh}
+  .exp code{font-family:ui-monospace,monospace;color:#185fa5;font-weight:700;font-size:2.5vh}
+  .exp p{font-size:2.4vh;color:var(--muted);margin-top:.3vh;line-height:1.28}
+  .out{display:inline-block;font-family:ui-monospace,monospace;background:#e7faf1;border:2px dashed #aee7ce;border-radius:12px;padding:1vh 2vh;font-size:2.7vh;color:#0c6b46;margin-top:1.5vh}
+  .arr{display:flex;gap:1.2vh;margin-top:2vh;flex-wrap:wrap}
+  .cell{display:flex;flex-direction:column;align-items:center;gap:.6vh}
+  .cell .box{width:9vh;height:9vh;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:3.4vh;font-weight:700;background:#fff;border:3px solid var(--blue);border-radius:14px;color:var(--ink);box-shadow:0 8px 18px rgba(47,123,246,.15)}
+  .cell .idx{font-family:ui-monospace,monospace;font-size:2.3vh;color:var(--purple);font-weight:700}
+  .cell .idx b{color:var(--muted);font-weight:400;font-size:.8em}
+  .title-slide{background:linear-gradient(160deg,#16224a,#2a1f5e 60%,#3a2c6e);justify-content:center}
+  .title-slide .kicker{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:#d6e2ff}
+  .title-slide h1{color:#fff;font-size:8vh}
+  .title-slide .lead{color:#b9c6ee;max-width:90%}
+  .title-slide .by{margin-top:4vh;font-size:3vh;color:#aebbe6;line-height:1.5}
+  .title-slide .by b{color:#fff}
+  .title-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:5vh;align-items:center;width:100%}
+  .codewin{background:#0f1b38;border:1px solid #33457a;border-radius:18px;box-shadow:0 26px 60px rgba(0,0,0,.45);overflow:hidden}
+  .codewin .tb{display:flex;gap:9px;align-items:center;padding:1.5vh 2vh;background:#172653;border-bottom:1px solid #33457a}
+  .codewin .dot{width:1.7vh;height:1.7vh;border-radius:50%;display:block}
+  .codewin .fn{margin-left:8px;color:#8ea3d6;font-family:Consolas,monospace;font-size:1.9vh}
+  .codewin pre{margin:0;padding:2.6vh 3vh;font-family:Consolas,ui-monospace,monospace;font-size:2.35vh;line-height:1.65;color:#e8eefc;white-space:pre}
+  .codewin .k{color:#ff9bd0}.codewin .s{color:#ffd27f}.codewin .c{color:#7fd1ff}.codewin .m{color:#9ad27f}.codewin .o{color:#ffb86b}
+  .logoSmall{position:fixed;top:3vh;right:4vw;height:6vh;width:auto;z-index:5;opacity:.95}
+  .bar{position:fixed;left:0;right:0;bottom:0;height:.8vh;background:rgba(255,255,255,.25);z-index:10}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--purple),var(--green));transition:width .3s}
+  .nav{position:fixed;bottom:2.4vh;right:3vw;display:flex;gap:1.2vh;z-index:10;align-items:center}
+  .nav button{font-family:inherit;border:0;border-radius:12px;padding:1vh 1.6vh;cursor:pointer;background:#fff;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.18);display:flex;align-items:center}
+  .nav button:active{transform:scale(.95)}
+  .nav button svg{width:3vh;height:3vh}
+  .count{position:fixed;bottom:2.8vh;left:3vw;font-size:2.6vh;color:var(--muted);z-index:10;font-weight:700}
+  .hintbar{position:fixed;top:2.4vh;left:3vw;font-size:2.1vh;color:var(--muted);z-index:5;display:flex;align-items:center;gap:8px}
+  .hintbar svg{width:1em;height:1em}
+  @media print{
+    @page{size:landscape;margin:0}
+    html,body{height:auto;overflow:visible;background:#fff}
+    .deck{position:static}
+    .logoSmall,.nav,.hintbar,.count,.bar{display:none!important}
+    .slide{display:flex!important;position:relative;inset:auto;width:100vw;height:100vh;overflow:hidden;page-break-after:always;break-after:page;animation:none}
+    .slide:last-child{page-break-after:auto}
+  }
+</style>
+</head>
+<body>
+<img src="../Day One/srru-logo.png" alt="SRRU" class="logoSmall" onerror="this.style.display='none'">
+<div class="deck" id="deck">
+
+  <!-- 1 ปก -->
+  <section class="slide title-slide">
+    <div class="title-grid">
+      <div>
+        <div class="kicker"><i data-lucide="graduation-cap"></i> THNIC Academy • วันที่ 3</div>
+        <h1>การวนซ้ำ<br>&amp; อาเรย์</h1>
+        <p class="lead">ให้คอมพิวเตอร์ทำงานซ้ำ ๆ แทนเรา ด้วย for / while และเก็บข้อมูลเป็นชุดด้วย array</p>
+        <div class="by">27 กรกฎาคม 2569<br><b>Introduction to Programming</b> — THNIC × SRRU</div>
+      </div>
+      <div class="codewin">
+        <div class="tb"><span class="dot" style="background:#ff6058"></span><span class="dot" style="background:#ffbd2e"></span><span class="dot" style="background:#28c940"></span><span class="fn">day3.cpp</span></div>
+        <pre><span class="k">for</span> (<span class="k">int</span> i = <span class="m">1</span>; i &lt;= <span class="m">5</span>; i++) {
+    cout &lt;&lt; i &lt;&lt; <span class="s">" "</span>;
+}
+<span class="c">// ผลลัพธ์:  1 2 3 4 5</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 เป้าหมาย -->
+  <section class="slide">
+    <div class="kicker"><i data-lucide="target"></i> เป้าหมายวันนี้</div>
+    <h2>วันนี้เราจะได้เรียนอะไรบ้าง?</h2>
+    <ul>
+      <li><span class="b" style="background:#8aa0c8"><i data-lucide="rotate-ccw"></i></span><span><b>ทบทวน:</b> เมื่อวานเขียนตัวแปร ตัวดำเนินการ และ if / else เป็นแล้ว</span></li>
+      <li><span class="b" style="background:var(--blue)"><i data-lucide="repeat"></i></span><span><b>การวนซ้ำ (Loop)</b> — ให้คอมทำงานซ้ำ ๆ ด้วย <b>for</b></span></li>
+      <li><span class="b" style="background:var(--purple)"><i data-lucide="repeat-2"></i></span><span>วนซ้ำอีกแบบด้วย <b>while</b> และรู้ว่าเมื่อไรใช้แบบไหน</span></li>
+      <li><span class="b" style="background:var(--coral)"><i data-lucide="boxes"></i></span><span><b>อาเรย์ (Array)</b> — เก็บข้อมูลหลายค่าในตัวแปรเดียว</span></li>
+      <li><span class="b" style="background:var(--gold)"><i data-lucide="combine"></i></span><span>ใช้ <b>Loop + Array</b> ด้วยกัน — วนอ่านข้อมูลทั้งชุด</span></li>
+    </ul>
+  </section>
+
+  <!-- 3 ทำไมต้องวนซ้ำ -->
+  <section class="slide">
+    <div class="kicker"><i data-lucide="help-circle"></i> ทำไมต้องมีการวนซ้ำ?</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">อยากพิมพ์เลข 1 ถึง 5...</h2>
+        <p class="exline">ถ้าเขียนทีละบรรทัด — ก็พอไหว</p>
+        <p class="exline muted">แต่ถ้าให้พิมพ์ <b>1 ถึง 1000</b> ล่ะ? เขียน cout พันบรรทัด คงไม่ไหว</p>
+        <p class="exline"><b>การวนซ้ำ (Loop)</b> คือบอกคอมว่า “ทำซ้ำแบบนี้ N รอบ” — เขียนครั้งเดียว ทำงานกี่รอบก็ได้</p>
+      </div>
+      <div>
+        <div class="code" style="font-size:2.3vh"><span class="c">// แบบเขียนเอง (เหนื่อย)</span>
+cout &lt;&lt; <span class="m">1</span> &lt;&lt; <span class="s">" "</span>;
+cout &lt;&lt; <span class="m">2</span> &lt;&lt; <span class="s">" "</span>;
+cout &lt;&lt; <span class="m">3</span> &lt;&lt; <span class="s">" "</span>;
+cout &lt;&lt; <span class="m">4</span> &lt;&lt; <span class="s">" "</span>;
+cout &lt;&lt; <span class="m">5</span> &lt;&lt; <span class="s">" "</span>;
+<span class="c">// ...ถ้าถึง 1000 ล่ะ ?!</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 for loop โครงสร้าง + โค้ดเต็ม -->
+  <section class="slide">
+    <div class="kicker"><i data-lucide="repeat"></i> for loop — วนซ้ำตามจำนวนรอบ</div>
+    <h2 style="margin-bottom:.6vh">เขียนครั้งเดียว ทำงาน 5 รอบ</h2>
+    <div class="codewrap">
+      <div class="code"><span class="k">#include</span> <span class="c">&lt;iostream&gt;</span>
+<span class="k">using namespace</span> std;
+<span class="k">int</span> main() {
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="m">1</span>; i &lt;= <span class="m">5</span>; i++) {
+        cout &lt;&lt; i &lt;&lt; <span class="s">" "</span>;
+    }
+    <span class="k">return</span> <span class="m">0</span>;
+}</div>
+      <div class="explist">
+        <div class="exp"><code>int i = 1</code><p>① เริ่มต้น — สร้างตัวนับ เริ่มที่ 1</p></div>
+        <div class="exp"><code>i &lt;= 5</code><p>② เงื่อนไข — ทำต่อตราบที่ยังจริง</p></div>
+        <div class="exp"><code>i++</code><p>③ เพิ่มค่า — จบรอบแล้วบวก 1</p></div>
+        <div class="out" style="margin-top:.5vh">ผลลัพธ์: 1 2 3 4 5</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 for trace ทีละรอบ -->
+  <section class="slide">
+    <div class="kicker"><i data-lucide="footprints"></i> ทำงานทีละรอบยังไง</div>
+    <h2>คอมเดินวนแบบนี้</h2>
+    <ul style="gap:1.2vh">
+      <li><span class="b" style="background:var(--blue)">1</span><span>ตั้ง <code style="font-family:monospace">i = 1</code> → เช็ก <code style="font-family:monospace">1 &lt;= 5</code> จริง → พิมพ์ <b>1</b> → <code style="font-family:monospace">i++</code> เป็น 2</span></li>
+      <li><span class="b" style="background:var(--blue)">2</span><span>เช็ก <code style="font-family:monospace">2 &lt;= 5</code> จริง → พิมพ์ <b>2</b> → i เป็น 3</span></li>
+      <li><span class="b" style="background:var(--purple)">…</span><span>วนแบบนี้จนพิมพ์ <b>3, 4, 5</b></span></li>
+      <li><span class="b" style="background:var(--coral)">6</span><span>เช็ก <code style="font-family:monospace">6 &lt;= 5</code> <b>เท็จ</b> → หยุดวน ออกจาก loop</span></li>
+    </ul>
+    <p class="lead" style="margin-top:1.8vh"><i data-lucide="mouse-pointer-click" class="ic"></i> ลองเล่น <b>Loop Simulator</b> เห็นตัวนับ i เดินทีละรอบแบบเคลื่อนไหว เข้าใจง่ายขึ้นเยอะ</p>
+  </section>
+
+  <!-- 6 while loop -->
+  <section class="slide">
+    <div class="kicker"><i data-lucide="repeat-2"></i> while loop — วนจนกว่าเงื่อนไขจะเท็จ</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">while = “ตราบใดที่ยังจริง ให้ทำต่อ”</h2>
+        <p class="exline">เขียนเงื่อนไขไว้ก่อน ถ้าจริงก็ทำคำสั่งในปีกกา แล้ววนกลับมาเช็กใหม่</p>
+        <p class="exline muted">⚠ อย่าลืม <b>เพิ่มค่า i</b> ในลูป ไม่งั้นเงื่อนไขจริงตลอด = วนไม่รู้จบ (infinite loop)</p>
+      </div>
+      <div>
+        <div class="code" style="font-size:2.35vh"><span class="k">int</span> i = <span class="m">1</span>;
+<span class="k">while</span> (i &lt;= <span class="m">5</span>) {
+    cout &lt;&lt; i &lt;&lt; <span class="s">" "</span>;
+    i++;
+}</div>
+        <div class="out">ผลลัพธ์: 1 2 3 4 5</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 for vs while -->
+  <section class="slide">
+    <div class="kicker"><i data-lucide="git-compare"></i> for กับ while ต่างกันยังไง</div>
+    <h2>เลือกใช้ให้เหมาะกับงาน</h2>
+    <div class="grid">
+      <div class="card" style="border-color:#bcd3fb">
+        <h3><i data-lucide="repeat" class="ic" style="color:var(--blue)"></i> ใช้ <code>for</code> เมื่อ...</h3>
+        <p><b>รู้จำนวนรอบแน่นอน</b> เช่น พิมพ์ 1–100, วน array 5 ช่อง, ทำซ้ำ 10 ครั้ง — ตัวนับชัดเจน</p>
+      </div>
+      <div class="card" style="border-color:#d8ccff">
+        <h3><i data-lucide="repeat-2" class="ic" style="color:var(--purple)"></i> ใช้ <code>while</code> เมื่อ...</h3>
+        <p><b>ไม่รู้จำนวนรอบ</b> วนจนกว่าเงื่อนไขจะเปลี่ยน เช่น “วนจนกว่าผู้ใช้พิมพ์ 0”, “วนจนเงินหมด”</p>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:1.6vh">ทั้งคู่วนซ้ำเหมือนกัน — ต่างที่ <b>for</b> เก็บ 3 ส่วน (เริ่ม/เงื่อนไข/เพิ่ม) ไว้ที่เดียว เลยเหมาะกับรอบที่นับได้</p>
+  </section>
+
+  <!-- 8 ประยุกต์ ผลรวม -->
+  <section class="slide">
+    <div class="kicker"><i data-lucide="sigma"></i> นำไปใช้จริง — หาผลรวม</div>
+    <h2 style="margin-bottom:.6vh">บวกเลข 1 ถึง 100 ด้วยลูป</h2>
+    <div class="codewrap">
+      <div class="code"><span class="k">int</span> sum = <span class="m">0</span>;
+<span class="k">for</span> (<span class="k">int</span> i = <span class="m">1</span>; i &lt;= <span class="m">100</span>; i++) {
+    sum = sum + i;
+}
+cout &lt;&lt; <span class="s">"ผลรวม = "</span> &lt;&lt; sum;</div>
+      <div class="explist">
+        <div class="exp"><code>sum = 0</code><p>เตรียมตัวแปรเก็บผลรวม เริ่มที่ 0</p></div>
+        <div class="exp"><code>sum = sum + i</code><p>ทุกรอบ เอา i บวกสะสมเข้า sum</p></div>
+        <div class="out" style="margin-top:.5vh">ผลรวม = 5050</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 Array คืออะไร -->
+  <section class="slide">
+    <div class="kicker"><i data-lucide="boxes"></i> อาเรย์ (Array) คืออะไร</div>
+    <h2 style="margin-bottom:.4vh">ตัวแปรเดียว เก็บได้หลายค่า</h2>
+    <p class="lead" style="margin:.4vh 0 0;font-size:2.8vh">แทนที่จะสร้างตัวแปร 5 ตัว (score1, score2, ...) ใช้ <b>อาเรย์</b> เก็บเรียงต่อกันเป็นกล่อง ๆ — เลขกำกับกล่อง (index) <b>เริ่มที่ 0</b></p>
+    <div class="code" style="font-size:2.5vh;margin-top:1.8vh;display:inline-block"><span class="k">int</span> score[<span class="m">5</span>] = {<span class="m">80</span>, <span class="m">95</span>, <span class="m">70</span>, <span class="m">60</span>, <span class="m">100</span>};</div>
+    <div class="arr">
+      <div class="cell"><div class="box">80</div><div class="idx">score[<b>0</b>]</div></div>
+      <div class="cell"><div class="box">95</div><div class="idx">score[<b>1</b>]</div></div>
+      <div class="cell"><div class="box">70</div><div class="idx">score[<b>2</b>]</div></div>
+      <div class="cell"><div class="box">60</div><div class="idx">score[<b>3</b>]</div></div>
+      <div class="cell"><div class="box">100</div><div class="idx">score[<b>4</b>]</div></div>
+    </div>
+  </section>
+
+  <!-- 10 Array access -->
+  <section class="slide">
+    <div class="kicker"><i data-lucide="locate"></i> เข้าถึงสมาชิกในอาเรย์</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">เรียกใช้ด้วยเลข index</h2>
+        <p class="exline">เขียน <code style="font-family:monospace">score[เลขช่อง]</code> เพื่อหยิบค่านั้นมาใช้</p>
+        <p class="exline muted">ช่องแรกคือ <b>score[0]</b> ไม่ใช่ score[1] — มือใหม่พลาดตรงนี้บ่อย!</p>
+        <p class="exline">อาเรย์ 5 ช่อง index ใช้ได้ <b>0 ถึง 4</b> เท่านั้น</p>
+      </div>
+      <div>
+        <div class="code" style="font-size:2.4vh">cout &lt;&lt; score[<span class="m">0</span>];  <span class="c">// 80</span>
+cout &lt;&lt; score[<span class="m">2</span>];  <span class="c">// 70</span>
+cout &lt;&lt; score[<span class="m">4</span>];  <span class="c">// 100</span>
+
+<span class="c">// เปลี่ยนค่าก็ได้</span>
+score[<span class="m">1</span>] = <span class="m">88</span>;  <span class="c">// 95 -&gt; 88</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 Loop + Array -->
+  <section class="slide">
+    <div class="kicker"><i data-lucide="combine"></i> Loop + Array = พลังที่แท้จริง</div>
+    <h2 style="margin-bottom:.6vh">วนอ่านข้อมูลทั้งชุดด้วยลูปเดียว</h2>
+    <div class="codewrap">
+      <div class="code"><span class="k">int</span> score[<span class="m">5</span>] = {<span class="m">80</span>, <span class="m">95</span>, <span class="m">70</span>, <span class="m">60</span>, <span class="m">100</span>};
+
+<span class="k">for</span> (<span class="k">int</span> i = <span class="m">0</span>; i &lt; <span class="m">5</span>; i++) {
+    cout &lt;&lt; score[i] &lt;&lt; <span class="s">" "</span>;
+}</div>
+      <div class="explist">
+        <div class="exp"><code>i = 0; i &lt; 5</code><p>เริ่ม index ที่ 0 วนถึง 4 (5 ช่องพอดี)</p></div>
+        <div class="exp"><code>score[i]</code><p>แต่ละรอบหยิบช่องที่ i มาพิมพ์</p></div>
+        <div class="out" style="margin-top:.5vh">80 95 70 60 100</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 เครื่องมือ/กิจกรรม -->
+  <section class="slide">
+    <div class="kicker"><i data-lucide="gamepad-2"></i> เครื่องมือ &amp; กิจกรรมวันนี้</div>
+    <h2>เรียนสนุกด้วยสื่อโต้ตอบ</h2>
+    <div class="grid">
+      <div class="card" style="border-color:#bcd3fb">
+        <h3><i data-lucide="play-circle" class="ic" style="color:var(--blue)"></i> Loop Simulator</h3>
+        <p>เห็นตัวนับ i เดินทีละรอบแบบเคลื่อนไหว เข้าใจการวนซ้ำด้วยตา</p>
+      </div>
+      <div class="card" style="border-color:#ffd9cc">
+        <h3><i data-lucide="boxes" class="ic" style="color:var(--coral)"></i> Array Simulator</h3>
+        <p>ลองใส่ค่าในกล่อง index เห็นการเข้าถึง score[i] ทีละช่อง</p>
+      </div>
+      <div class="card" style="border-color:#d8ccff">
+        <h3><i data-lucide="trophy" class="ic" style="color:var(--purple)"></i> เกมแข่งทำนายผลลูป</h3>
+        <p>โจทย์ลูปสั้น ๆ แย่งกันตอบว่าพิมพ์อะไร ได้คะแนนทีม</p>
+      </div>
+      <div class="card" style="border-color:#cdeede">
+        <h3><i data-lucide="file-pen" class="ic" style="color:var(--green)"></i> ใบงานดิจิทัล</h3>
+        <p>เติมคำ/ทำนายผล/หา error ตอบเร็ว ตรวจให้คะแนนทันที</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 สรุป -->
+  <section class="slide">
+    <div class="kicker"><i data-lucide="check-circle-2"></i> สรุปวันที่ 3</div>
+    <h2>วันนี้เราทำอะไรได้บ้าง</h2>
+    <ul>
+      <li><span class="b" style="background:var(--blue)"><i data-lucide="repeat"></i></span><span>สั่งคอมทำงานซ้ำด้วย <b>for</b> (รู้จำนวนรอบ) และ <b>while</b> (วนจนเงื่อนไขเท็จ)</span></li>
+      <li><span class="b" style="background:var(--coral)"><i data-lucide="boxes"></i></span><span>เก็บข้อมูลหลายค่าด้วย <b>array</b> และเข้าถึงด้วย index (เริ่มที่ 0)</span></li>
+      <li><span class="b" style="background:var(--gold)"><i data-lucide="combine"></i></span><span>รวม <b>Loop + Array</b> วนอ่าน/ประมวลผลข้อมูลทั้งชุด</span></li>
+      <li><span class="b" style="background:var(--purple)"><i data-lucide="rocket"></i></span><span><b>พรุ่งนี้:</b> เอาทุกอย่างมารวมกัน ลองโจทย์สไตล์ <b>คอมพิวเตอร์โอลิมปิก</b>!</span></li>
+    </ul>
+    <p class="lead" style="margin-top:1.8vh">การวนซ้ำ + อาเรย์ คือหัวใจของการแก้โจทย์เขียนโปรแกรมเกือบทุกข้อ — ฝึกให้คล่องวันนี้ พรุ่งนี้จะสนุกมาก</p>
+  </section>
+
+</div>
+
+<div class="hintbar"><i data-lucide="keyboard"></i> ← → เลื่อนสไลด์ • กด F เต็มจอ • Ctrl+P เซฟ PDF</div>
+<div class="count" id="count">1 / 13</div>
+<div class="nav">
+  <button id="prev"><i data-lucide="arrow-left"></i></button>
+  <button id="next"><i data-lucide="arrow-right"></i></button>
+</div>
+<div class="bar"><i id="prog"></i></div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+if(window.lucide)lucide.createIcons();
+const slides=[...document.querySelectorAll(".slide")];
+let i=0;
+function show(n){
+  i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,k)=>s.classList.toggle("active",k===i));
+  document.getElementById("count").textContent=(i+1)+" / "+slides.length;
+  document.getElementById("prog").style.width=((i+1)/slides.length*100)+"%";
+}
+function nextS(){show(i+1)} function prevS(){show(i-1)}
+document.getElementById("next").onclick=nextS;
+document.getElementById("prev").onclick=prevS;
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"){e.preventDefault();nextS();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();prevS();}
+  else if(e.key==="Home")show(0); else if(e.key==="End")show(slides.length-1);
+  else if(e.key==="f"||e.key==="F"){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+document.querySelector(".deck").addEventListener("click",e=>{
+  if(e.target.closest(".nav"))return;
+  const x=e.clientX/window.innerWidth; if(x>0.35)nextS();else prevS();
+});
+show(0);
+</script>
+</body>
+</html>

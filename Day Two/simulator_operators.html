@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | Simulator ตัวดำเนินการ (Operators)</title>
+<link rel="icon" type="image/png" href="../Day One/srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
+<style>
+  :root{--blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--gold:#f2a900;--ink:#16224a;--muted:#5d6b8a;--line:#dbe6f7;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);height:100vh;overflow:hidden;
+    background:radial-gradient(900px 500px at 10% -10%,#d4e6ff 0,transparent 60%),radial-gradient(800px 500px at 100% 0,#ffe6f7 0,transparent 55%),linear-gradient(160deg,#eef4ff,#fdf3fb);
+    display:flex;flex-direction:column;gap:clamp(10px,2vh,18px);padding:clamp(12px,2.4vh,24px) clamp(14px,4vw,40px)}
+  svg.lucide{width:1em;height:1em;vertical-align:-.15em}
+  .head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .head img{height:clamp(32px,4.5vh,46px)}
+  h1{font-size:clamp(18px,2.7vh,26px);font-weight:700}
+  .head .tag{color:var(--muted);font-size:clamp(12px,1.6vh,15px);flex:1;min-width:200px}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border:2px solid var(--line);border-radius:14px;padding:11px 15px;box-shadow:0 8px 22px rgba(47,123,246,.08);font-size:17px}
+  .bar label{color:var(--muted);font-weight:600}
+  input{font-family:ui-monospace,monospace;font-size:22px;font-weight:700;padding:7px 12px;border-radius:10px;border:2px solid var(--line);background:#f7faff;color:var(--ink);outline:none;width:90px;text-align:center}
+  .modes{display:flex;gap:6px;margin-left:auto}
+  .mode{font-family:inherit;font-size:15px;font-weight:700;padding:8px 16px;border-radius:10px;border:2px solid var(--line);background:#f7faff;color:#2f4a7d;cursor:pointer}
+  .mode.on{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border-color:transparent}
+  .grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(10px,1.8vw,18px)}
+  .op{background:#fff;border:2px solid var(--line);border-radius:18px;box-shadow:0 10px 26px rgba(31,43,72,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:clamp(16px,3vh,30px);gap:clamp(12px,2.6vh,24px)}
+  .op .sym{font-family:ui-monospace,monospace;font-size:clamp(42px,8.5vh,78px);font-weight:700;color:var(--clr);line-height:1}
+  .op .name{font-size:clamp(16px,2.5vh,22px);color:var(--muted);font-weight:700}
+  .op .con{font-size:clamp(13px,1.9vh,16px);color:#7a8aa8;line-height:1.3;min-height:2.6em;padding:0 4px}
+  .op .expr{font-family:ui-monospace,monospace;font-size:clamp(18px,3vh,28px);color:#3a4a6e}
+  .op .eq{font-family:ui-monospace,monospace;font-size:clamp(38px,7.5vh,72px);font-weight:700;color:var(--ink);line-height:1}
+  .op.dim{opacity:.4}
+  .op .tag{font-size:clamp(11px,1.5vh,13px);color:#8a5e00;background:#fff6dd;border:1px solid #ffe2a1;border-radius:8px;padding:2px 8px}
+  .note{background:#fff6dd;border:2px solid #ffe2a1;border-radius:12px;padding:10px 16px;font-size:clamp(13px,1.9vh,17px);color:#8a5e00;display:flex;align-items:center;gap:10px}
+  .mascot{position:fixed;right:clamp(8px,2vw,28px);bottom:clamp(6px,1.5vh,16px);width:clamp(80px,11vh,116px);height:auto;z-index:6;transform-origin:center bottom;animation:dance 1.4s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.15))}
+  @keyframes dance{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-10px) rotate(5deg)}}
+  .mascot .armL,.mascot .armR{transform-box:fill-box;transform-origin:center top}
+  .mascot .armL{animation:dL .6s ease-in-out infinite}.mascot .armR{animation:dR .6s ease-in-out infinite}
+  @keyframes dL{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(24deg)}}
+  @keyframes dR{0%,100%{transform:rotate(30deg)}50%{transform:rotate(-24deg)}}
+  .mascot.cheer{animation:mcheer .8s ease}
+  @keyframes mcheer{0%{transform:translateY(0)}30%{transform:translateY(-30px) scale(1.1)}60%{transform:translateY(0)}80%{transform:translateY(-12px)}100%{transform:translateY(0)}}
+</style>
+</head>
+<body>
+  <div class="head">
+    <img src="../Day One/srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
+    <h1>ตัวดำเนินการ + − * / %</h1>
+    <span class="tag">ใส่ตัวเลข 2 ตัว ดูผลการคำนวณ — สลับโหมด int/double เพื่อเห็นความต่างของการหาร</span>
+  </div>
+
+  <div class="bar">
+    <label>a =</label><input id="a" value="7">
+    <label>b =</label><input id="b" value="2">
+    <div class="modes">
+      <button class="mode on" data-m="int">int (จำนวนเต็ม)</button>
+      <button class="mode" data-m="double">double (ทศนิยม)</button>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <div class="note" id="note"></div>
+
+  <svg class="mascot" id="mascot" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+    <line x1="110" y1="20" x2="110" y2="42" stroke="#7a5cff" stroke-width="5"/><circle cx="110" cy="15" r="9" fill="#ffd24d" stroke="#7a5cff" stroke-width="3"/>
+    <g class="armL"><rect x="24" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="34" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
+    <g class="armR"><rect x="176" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="186" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
+    <rect x="48" y="42" width="124" height="96" rx="28" fill="#eef2ff" stroke="#7a5cff" stroke-width="5"/>
+    <ellipse cx="74" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/><ellipse cx="146" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
+    <circle cx="88" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="88" cy="84" r="7" fill="#2f7bf6"/>
+    <circle cx="132" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="132" cy="84" r="7" fill="#2f7bf6"/>
+    <rect x="88" y="110" width="44" height="16" rx="8" fill="#19b877"/>
+    <rect x="64" y="148" width="92" height="58" rx="16" fill="#fff" stroke="#7a5cff" stroke-width="4"/><rect x="80" y="164" width="60" height="28" rx="8" fill="#e6f0ff"/><path d="M80 178 H140 M98 168 V188" stroke="#2f7bf6" stroke-width="3"/>
+  </svg>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const icons=()=>{if(window.lucide)lucide.createIcons();};
+let mode="int";
+const OPS=[
+ {sym:"+",name:"บวก",clr:"#19b877",f:(a,b)=>a+b,con:(a,b)=>`นำ ${a} กับ ${b} มารวมกัน`},
+ {sym:"−",name:"ลบ",clr:"#2f7bf6",f:(a,b)=>a-b,con:(a,b)=>`เอา ${b} ออกจาก ${a}`},
+ {sym:"*",name:"คูณ",clr:"#7a5cff",f:(a,b)=>a*b,con:(a,b)=>`คือบวก ${a} ซ้ำ ${b} ครั้ง`},
+ {sym:"/",name:"หาร",clr:"#f2a900",f:(a,b)=>a/b,con:(a,b)=>`แบ่ง ${a} เป็น ${b} ส่วนเท่า ๆ กัน`},
+ {sym:"%",name:"เศษ (mod)",clr:"#ff6a3d",f:(a,b)=>a%b,con:(a,b)=>`หาร ${a} ด้วย ${b} แล้วดูเศษที่เหลือ`},
+];
+function calc(){
+  let a=parseFloat($("a").value)||0,b=parseFloat($("b").value)||0;
+  if(mode==="int"){a=Math.trunc(a);b=Math.trunc(b);}
+  $("grid").innerHTML=OPS.map(o=>{
+    let dim="",tag="",res;
+    if(o.sym==="%"&&mode==="double"){dim="dim";tag='<span class="tag">% ใช้กับจำนวนเต็มเท่านั้น</span>';res="—";}
+    else if((o.sym==="/"||o.sym==="%")&&b===0){res="error";tag='<span class="tag">หารด้วย 0 ไม่ได้</span>';}
+    else{let r=o.f(a,b);if(mode==="int"&&o.sym==="/")r=Math.trunc(r);if(mode==="int"&&o.sym==="%")r=Math.trunc(a)%Math.trunc(b);res=(Number.isInteger(r)?r:parseFloat(r.toFixed(4)));}
+    return `<div class="op ${dim}" style="--clr:${o.clr}"><div class="sym">${o.sym}</div><div class="name">${o.name}</div>
+      <div class="con">${o.con(a,b)}</div>
+      <div class="expr">${a} ${o.sym} ${b}</div><div class="eq">${res}</div>${tag}</div>`;
+  }).join("");
+  // note
+  const a2=Math.trunc(parseFloat($("a").value)),b2=Math.trunc(parseFloat($("b").value));
+  if(mode==="int"&&b2!==0){
+    $("note").innerHTML=`<i data-lucide="lightbulb"></i> โหมด int: การหาร ${a2}/${b2} ตัดเศษทิ้งเหลือ <b>${Math.trunc(a2/b2)}</b> และ ${a2}%${b2} = <b>${a2%b2}</b> (เศษ) — ลองสลับเป็น double ดูผลต่าง`;
+  }else if(mode==="double"){
+    $("note").innerHTML=`<i data-lucide="lightbulb"></i> โหมด double: การหารได้ทศนิยมจริง แต่ % (mod) ใช้กับจำนวนเต็มเท่านั้น`;
+  }else{$("note").innerHTML="";}
+  icons();
+}
+function cheer(){const m=document.getElementById("mascot");if(m){m.classList.remove("cheer");void m.offsetWidth;m.classList.add("cheer");setTimeout(()=>m.classList.remove("cheer"),800);}}
+document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>{mode=b.dataset.m;document.querySelectorAll(".mode").forEach(x=>x.classList.toggle("on",x===b));calc();cheer();});
+["a","b"].forEach(id=>$(id).addEventListener("input",calc));
+calc();icons();
+</script>
+</body>
+</html>

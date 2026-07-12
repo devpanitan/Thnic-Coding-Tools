@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ตัวแปร &amp; หน่วยความจำ (3D)</title>
+<link rel="icon" type="image/png" href="../Day One/srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
+<style>
+  :root{--blue:#1565C0;--purple:#6A3FC0;--green:#1B5E20;--coral:#C0392B;--gold:#B8860B;--ink:#1f2733;--muted:#5b6673;--line:#d7dbe2;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden}
+  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);background:#C1C2C2}
+  #c{position:fixed;inset:0;display:block}
+  svg.lucide{width:1em;height:1em;vertical-align:-.15em}
+  .hud{position:fixed;inset:0;pointer-events:none;z-index:5;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(12px,2.2vh,20px) clamp(14px,3vw,32px)}
+  .top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;pointer-events:auto}
+  .top img{height:clamp(26px,4vh,40px)}
+  h1{font-size:clamp(16px,2.4vh,23px);font-weight:700;color:var(--ink)}
+  .top .tag{color:var(--muted);font-size:clamp(11px,1.4vh,13px);flex:1;min-width:160px}
+  /* big-expr header */
+  .bigexpr{position:absolute;top:clamp(58px,9vh,84px);left:50%;transform:translateX(-50%);
+    background:rgba(255,255,255,.9);border:1px solid #cfd4dc;border-radius:14px;
+    padding:clamp(8px,1.5vh,14px) clamp(18px,3vw,32px);font-family:ui-monospace,"Consolas",monospace;
+    font-size:clamp(20px,3.4vh,34px);font-weight:700;color:var(--ink);box-shadow:0 8px 26px rgba(40,50,70,.14);
+    backdrop-filter:blur(4px);white-space:nowrap;pointer-events:auto}
+  .bigexpr .k{color:#c026a3}.bigexpr .n{color:#1b7a3e}.bigexpr .s{color:#b5761a}.bigexpr .mut{color:#9aa4b2;font-weight:400}
+  #democap{position:absolute;top:clamp(120px,20vh,200px);left:50%;transform:translateX(-50%);width:min(94vw,860px);text-align:center;display:none;pointer-events:none;
+    background:rgba(255,255,255,.94);border:2px solid #c7cdd6;border-radius:20px;padding:clamp(14px,2.4vh,22px) clamp(24px,3.5vw,44px);box-shadow:0 14px 38px rgba(40,50,70,.18);backdrop-filter:blur(5px)}
+  @keyframes capin{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%)}}
+  #democap .cn{font-size:clamp(15px,2.3vh,21px);color:#5b6673;font-weight:700}
+  #democap .cn b{color:#1565C0}
+  #democap .cc{font-family:ui-monospace,monospace;font-size:clamp(22px,3.6vh,36px);font-weight:700;color:#1f2733;margin:7px 0}
+  #democap .cd{font-size:clamp(15px,2.4vh,22px);color:#1f2733;line-height:1.45}
+  /* แผงโค้ดมุมซ้ายบน (IDE) */
+  .codepanel{position:absolute;top:clamp(62px,9.5vh,92px);left:clamp(14px,3vw,32px);background:rgba(14,19,38,.92);border:1px solid rgba(255,255,255,.13);border-radius:14px;padding:11px 16px;font-family:ui-monospace,"Consolas",monospace;font-size:clamp(13px,2vh,18px);line-height:1.75;color:#e8eefc;max-width:min(46vw,420px);max-height:46vh;overflow:auto;box-shadow:0 12px 32px rgba(0,0,0,.3);backdrop-filter:blur(6px);pointer-events:auto}
+  .codepanel .cpt{font-family:"Sarabun";font-size:12.5px;color:#9db0e0;margin-bottom:6px;font-weight:700}
+  .codepanel .ln{white-space:pre;border-radius:6px;padding:1px 9px;transition:.2s}
+  .codepanel .ln.on{background:rgba(255,210,77,.22);box-shadow:inset 3px 0 0 #ffd24d}
+  .codepanel .k{color:#ff9bd0}.codepanel .n{color:#9ad27f}.codepanel .s{color:#ffd27f}.codepanel .c{color:#7fb0d8}
+  .codepanel .ln.fr{color:#67769f}
+  /* กล่องคำถาม + นับถอยหลัง */
+  #qbox{position:absolute;top:clamp(108px,18vh,196px);left:50%;transform:translateX(-50%);width:min(94vw,780px);text-align:center;display:none;pointer-events:auto;
+    background:rgba(255,255,255,.97);border:3px solid #ffd24d;border-radius:22px;padding:clamp(16px,2.6vh,26px) clamp(24px,3.5vw,44px);box-shadow:0 18px 46px rgba(40,50,70,.24)}
+  #qbox .ql{font-size:clamp(15px,2.2vh,20px);color:#8a5e00;font-weight:700}
+  #qbox .qt{font-size:clamp(18px,2.9vh,27px);color:#1f2733;font-weight:700;margin:10px 0;line-height:1.4}
+  #qbox .qtm{font-family:ui-monospace,monospace;font-size:clamp(42px,7.5vh,78px);font-weight:700;color:#C0392B;line-height:1}
+  #qbox .qtm.low{color:#e11}
+  #qbox .qsk{margin-top:12px;font-family:inherit;font-size:clamp(14px,2vh,17px);font-weight:700;color:#fff;background:linear-gradient(135deg,#1565C0,#6A3FC0);border:0;border-radius:12px;padding:10px 24px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+  /* จอเล็ก/มือถือ — จัดใหม่ไม่ให้ทับกัน */
+  @media (max-width:820px){
+    .top .tag{display:none} h1{font-size:17px}
+    .codepanel{left:8px;right:8px;max-width:none;top:50px;max-height:22vh;font-size:12px;padding:8px 11px}
+    .reason{display:none}
+    .ctrls{width:96vw;max-width:none}
+    #democap{top:25vh;width:94vw;padding:12px 16px}
+    #democap .cc{font-size:20px}#democap .cd{font-size:15px}#democap .cn{font-size:14px}
+    #qbox{top:24vh;width:94vw;padding:14px 16px}#qbox .qtm{font-size:46px}#qbox .qt{font-size:17px}
+    .legend{display:none}
+  }
+  .panel{background:rgba(255,255,255,.86);border:1px solid #d3d8e0;border-radius:16px;padding:12px 15px;box-shadow:0 10px 30px rgba(40,50,70,.12);backdrop-filter:blur(8px);pointer-events:auto}
+  .mid{display:flex;gap:12px;align-items:flex-end;justify-content:space-between;flex:1;min-height:0}
+  .ctrls{display:flex;flex-direction:column;gap:9px;width:min(320px,88vw);align-self:flex-end}
+  .types{display:flex;gap:5px;flex-wrap:wrap}
+  .ty{font-family:inherit;font-size:14px;font-weight:700;padding:7px 12px;border-radius:9px;border:2px solid var(--line);background:#fff;cursor:pointer}
+  .ty.on{border-width:2px}
+  .row{display:flex;gap:8px;align-items:center}
+  .row label{font-size:13px;color:var(--muted);font-weight:700;width:42px}
+  .row input{flex:1;font-family:ui-monospace,monospace;font-size:15px;font-weight:700;padding:7px 11px;border-radius:9px;border:2px solid var(--line);background:#f6f8fb;color:var(--ink);outline:none}
+  .row input:focus{border-color:var(--blue)}
+  .actions{display:flex;gap:8px}
+  .btn{flex:1;font-family:inherit;font-size:15px;font-weight:700;padding:10px;border-radius:11px;border:0;cursor:pointer;color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(135deg,#1565C0,#6A3FC0)}
+  .btn.clr{flex:0 0 auto;padding:10px 13px;background:#eef1f6;color:#48505c;border:1px solid var(--line)}
+  #demopick{width:100%;font-family:inherit;font-size:14px;font-weight:700;color:#1B5E20;padding:8px 11px;border-radius:10px;border:2px solid #bfe3c6;background:#f2fbf4;cursor:pointer;outline:none}
+  .note{font-size:13px;line-height:1.35;padding:8px 12px;border-radius:10px;min-height:1.2em}
+  .note.warn{background:#fdece8;border:1px solid #f3b8a8;color:#b23a1c}
+  .note.ok{background:#e8f5ea;border:1px solid #a8ddb0;color:#1B5E20}
+  .note.info{background:#e9f1fc;border:1px solid #b6cef0;color:#1565C0}
+  /* reasoning panel */
+  .reason{width:min(360px,90vw);align-self:flex-end;font-size:13.5px;line-height:1.5}
+  .reason .h{font-weight:700;font-size:14px;margin-bottom:4px}
+  .reason ol{margin:2px 0 6px 20px}.reason li{margin:1px 0}
+  .reason .think{background:#fff7e6;border:1px solid #f0d79a;border-radius:9px;padding:7px 11px;color:#8a5e00;margin-top:6px}
+  .legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;pointer-events:auto}
+  .lg{display:flex;align-items:center;gap:6px;font-size:12px;background:rgba(255,255,255,.82);border:1px solid #d3d8e0;border-radius:20px;padding:4px 11px}
+  .lg i{width:12px;height:12px;border-radius:3px;display:inline-block}
+  @keyframes shakeX{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+  .shake{animation:shakeX .4s}
+  .flash{border-color:#C0392B!important;background:#fdece8!important}
+  .mascot{position:fixed;right:clamp(8px,1.8vw,24px);bottom:clamp(6px,1.4vh,14px);width:clamp(64px,9vh,94px);height:auto;z-index:6;transform-origin:center bottom;animation:dance 1.6s ease-in-out infinite;filter:drop-shadow(0 6px 12px rgba(0,0,0,.28));pointer-events:none}
+  @keyframes dance{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(5deg)}}
+  .mascot .armL,.mascot .armR{transform-box:fill-box;transform-origin:center top}
+  .mascot .armL{animation:dL .6s ease-in-out infinite}.mascot .armR{animation:dR .6s ease-in-out infinite}
+  @keyframes dL{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(24deg)}}
+  @keyframes dR{0%,100%{transform:rotate(30deg)}50%{transform:rotate(-24deg)}}
+  .mascot.cheer{animation:mcheer .8s ease}
+  @keyframes mcheer{0%{transform:translateY(0)}30%{transform:translateY(-30px) scale(1.14)}60%{transform:translateY(0)}80%{transform:translateY(-12px)}100%{transform:translateY(0)}}
+</style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <div class="hud">
+    <div>
+      <div class="top">
+        <img src="../Day One/srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
+        <h1>ตัวแปร &amp; หน่วยความจำ (3D)</h1>
+        <span class="tag">ตัวแปร = “กล่องเก็บของ” ในหน่วยความจำ (สีตามชนิด · ขนาดตาม bytes) — <i data-lucide="mouse-pointer-2"></i>ลากซ้าย=หมุน · ลากขวา/Shift+ลาก=เลื่อน · สกอลล์=ซูม · มือถือ: 1 นิ้วหมุน, 2 นิ้วซูม/เลื่อน</span>
+      </div>
+    </div>
+
+    <div class="codepanel" id="codepanel"><div class="cpt">// โค้ด C++ (ไฮไลต์ = บรรทัดที่กำลังทำ)</div><div id="codelines"><span style="color:#6b7ba6">// ยังไม่มีตัวแปร…</span></div></div>
+    <div id="democap"></div>
+    <div id="qbox">
+      <div class="ql"><i data-lucide="help-circle"></i>คำถาม — ลองคิด &amp; เขียนในกระดาษก่อน!</div>
+      <div class="qt" id="qtext"></div>
+      <div class="qtm" id="qtimer">3:00</div>
+      <button class="qsk" onclick="skipQuestion()"><i data-lucide="fast-forward"></i> เฉลย / ข้ามเวลา</button>
+    </div>
+
+    <div class="mid">
+      <div class="panel reason" id="reason">
+        <div class="h"><i data-lucide="lightbulb"></i> ยังไม่มีตัวแปร</div>
+        เลือกชนิด → ตั้งชื่อ → ใส่ค่า → กด “ประกาศตัวแปร” แล้วดูกล่องปรากฏในหน่วยความจำ
+        <div class="think">ชวนคิด: คิดว่า <b>int</b> กับ <b>double</b> กล่องไหนใหญ่กว่ากัน? เพราะอะไร</div>
+      </div>
+
+      <div class="panel ctrls">
+        <div class="types" id="types">
+          <button class="ty on" data-t="int" style="color:#1565C0;border-color:#1565C0">int</button>
+          <button class="ty" data-t="double" style="color:#6A3FC0">double</button>
+          <button class="ty" data-t="char" style="color:#C0392B">char</button>
+          <button class="ty" data-t="string" style="color:#1B5E20">string</button>
+          <button class="ty" data-t="bool" style="color:#B8860B">bool</button>
+        </div>
+        <div class="row"><label>ชื่อ</label><input id="vname" value="age"></div>
+        <div class="row"><label>ค่า</label><input id="vval" value="15"></div>
+        <div class="actions">
+          <button class="btn" id="mainbtn" onclick="declareVar()"><i data-lucide="plus"></i> ประกาศตัวแปร</button>
+          <button class="btn clr" onclick="resetView()" title="จัดมุมมองใหม่"><i data-lucide="focus"></i></button>
+          <button class="btn clr" onclick="clearAll()" title="ล้างทั้งหมด"><i data-lucide="trash-2"></i></button>
+        </div>
+        <select id="demopick" onchange="curDemo=this.value">
+          <option value="int">โจทย์ 1 · int — ร้านกาแฟ (เงินทอน)</option>
+          <option value="double">โจทย์ 2 · double — แบ่งบิลอาหาร</option>
+          <option value="char">โจทย์ 3 · char — เก็บเกรด</option>
+          <option value="string">โจทย์ 4 · string — ทักทายด้วยชื่อ</option>
+          <option value="bool">โจทย์ 5 · bool — สถานะสอบผ่าน</option>
+        </select>
+        <div class="actions">
+          <button class="btn" id="demobtn" style="background:linear-gradient(135deg,#1B5E20,#2e9e4a)" onclick="toggleDemo()"><i data-lucide="play"></i> เล่นโจทย์นี้</button>
+          <button class="btn clr" id="demostop" style="display:none" onclick="stopDemo()" title="หยุดเดโม"><i data-lucide="square"></i></button>
+        </div>
+        <div class="note info" id="note">เคล็ดลับ: พิมพ์ “ชื่อเดิม” ใส่ค่าใหม่ = เปลี่ยนค่า (เขียนทับ) · หรือกด ▶ ดูตัวอย่าง</div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="lg"><i style="background:#1565C0"></i> int · 4B (จำนวนเต็ม)</span>
+      <span class="lg"><i style="background:#6A3FC0"></i> double · 8B (ทศนิยม)</span>
+      <span class="lg"><i style="background:#C0392B"></i> char · 1B (1 อักขระ)</span>
+      <span class="lg"><i style="background:#1B5E20"></i> string (ข้อความ)</span>
+      <span class="lg"><i style="background:#B8860B"></i> bool · 1B (จริง/เท็จ)</span>
+    </div>
+  </div>
+
+  <svg class="mascot" id="mascot" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+    <line x1="110" y1="20" x2="110" y2="42" stroke="#7a5cff" stroke-width="5"/><circle cx="110" cy="15" r="9" fill="#ffd24d" stroke="#7a5cff" stroke-width="3"/>
+    <g class="armL"><rect x="24" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="34" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
+    <g class="armR"><rect x="176" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="186" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
+    <rect x="48" y="42" width="124" height="96" rx="28" fill="#eef2ff" stroke="#7a5cff" stroke-width="5"/>
+    <ellipse cx="74" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/><ellipse cx="146" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
+    <circle cx="88" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="88" cy="84" r="7" fill="#2f7bf6"/>
+    <circle cx="132" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="132" cy="84" r="7" fill="#2f7bf6"/>
+    <rect x="88" y="110" width="44" height="16" rx="8" fill="#19b877"/>
+    <rect x="64" y="148" width="92" height="58" rx="16" fill="#fff" stroke="#7a5cff" stroke-width="4"/><rect x="80" y="164" width="60" height="28" rx="8" fill="#e6f0ff"/><path d="M80 178 H140 M98 168 V188" stroke="#2f7bf6" stroke-width="3"/>
+  </svg>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const icons=()=>{if(window.lucide)lucide.createIcons();};
+let scene,camera,renderer;
+let vars=[],type="int",particles=[],fallers=[],activeVar=null,activeRing;
+function setActive(v){if(activeVar&&activeVar!==v&&activeVar.mesh)activeVar.mesh.material.emissiveIntensity=0.16;activeVar=v;if(v&&activeRing)activeRing.material.color.setHex(COL[v.t]);}
+function cheer(){const m=$("mascot");if(m){m.classList.remove("cheer");void m.offsetWidth;m.classList.add("cheer");setTimeout(()=>m.classList.remove("cheer"),800);}}
+function errFx(el){if(!el)return;el.classList.remove('shake','flash');void el.offsetWidth;el.classList.add('shake','flash');setTimeout(()=>el.classList.remove('shake','flash'),500);}
+function burst(pos,base){
+  for(let i=0;i<22;i++){
+    const col=[0xffd24d,base,0x19b877,0x2f7bf6][i%4];
+    const p=new THREE.Mesh(new THREE.SphereGeometry(0.09,6,6),new THREE.MeshBasicMaterial({color:col}));
+    p.position.copy(pos);p.userData.v=new THREE.Vector3((Math.random()-.5)*.28,Math.random()*.32+.14,(Math.random()-.5)*.28);
+    scene.add(p);particles.push(p);
+  }
+}
+function dropText(text,x,y,z,fg='#C0392B',vy0=0.03){
+  const s=makeSprite(text,{size:56,bg:'rgba(255,255,255,.96)',fg:fg,bd:fg});
+  s.scale.set(0.85,0.5,1);s.position.set(x,y,z);s.material.transparent=true;
+  s.userData.vy=vy0;s.userData.life=1.2;scene.add(s);fallers.push(s);
+}
+function setValueSprite(v,txt){scene.remove(v.vs);v.vs=makeSprite(txt,{size:50});v.vs.scale.set(1.55,0.63,1);scene.add(v.vs);}
+let codeList=[];
+function renderCode(){const el=$("codelines");if(!el)return;
+  const L=[];
+  L.push(['<span class="k">#include</span> <span class="s">&lt;iostream&gt;</span>','fr']);
+  L.push(['<span class="k">using namespace</span> std;','fr']);
+  L.push(['&nbsp;','fr']);
+  L.push(['<span class="k">int</span> main() {','fr']);
+  codeList.forEach((h,i)=>L.push(['    '+h,(i===codeList.length-1)?'on':'']));
+  L.push(['    <span class="k">return</span> <span class="s">0</span>;','fr']);
+  L.push(['}','fr']);
+  el.innerHTML=L.map(([h,c])=>'<div class="ln '+c+'">'+h+'</div>').join('');
+  const cp=$("codepanel");if(cp)cp.scrollTop=cp.scrollHeight;}
+function addCodeLine(html){codeList.push(html);renderCode();}
+function coreDeclare(t,name,val){
+  const p=slotPos(vars.length);
+  const bytes=SIZE[t]==='~'?Math.max(2,[...val].length):SIZE[t];
+  addBox(t,name,val);setActive(vars[vars.length-1]);
+  addCodeLine('<span class="k">'+t+'</span> '+name+' = <span class="'+((t==='char'||t==='string')?'s':'n')+'">'+fmt(t,val)+'</span>;');
+  updateReason(t,name,val);
+  burst(new THREE.Vector3(p.x,(0.6+bytes*0.17)/2+0.5,p.z),COL[t]);cheer();
+}
+function bigExprAssign(name,val){const s=(val[0]==="'"||val[0]=='"')?'s':'n';$("bigexpr").innerHTML=name+' = <span class="'+s+'">'+val+'</span>;';}
+function coreAssign(name,raw){
+  const v=vars.find(x=>x.name===name);if(!v)return false;
+  const r=validate(v.t,raw);if(!r.ok){note("⚠ "+r.msg,"warn");errFx($("vval"));return true;}
+  setActive(v);
+  const old=fmt(v.t,v.val),nv=fmt(v.t,r.val);
+  dropText(old,v.mesh.position.x-0.2,v.mesh.position.y+0.5,v.mesh.position.z+0.9,'#8a94a6',0.15); // โยนค่าเก่าทิ้ง
+  v.val=r.val;setValueSprite(v,nv);
+  v.mesh.material.emissiveIntensity=0.7;setTimeout(()=>{if(v!==activeVar)v.mesh.material.emissiveIntensity=0.16;},420);
+  addCodeLine(name+' = <span class="'+((nv[0]==="'"||nv[0]=='"')?'s':'n')+'">'+nv+'</span>;');
+  $("reason").innerHTML='<div class="h"><i data-lucide="pencil"></i>เปลี่ยนค่า: <b>'+name+' = '+nv+';</b></div>'
+    +'<ol><li>เปิดกล่อง <b>'+name+'</b> (ค่าเดิม '+old+')</li><li>โยนค่าเดิมทิ้ง</li><li>เขียนค่าใหม่ <b>'+nv+'</b> ลงกล่องเดิม</li></ol>'
+    +'<div class="think"><i data-lucide="lightbulb"></i> ตัวแปรเก็บได้ <b>ทีละค่า</b> — ค่าใหม่เขียนทับค่าเก่าเสมอ</div>';
+  burst(new THREE.Vector3(v.mesh.position.x,v.mesh.position.y+0.4,v.mesh.position.z),COL[v.t]);cheer();
+  note("เปลี่ยน <b>"+name+"</b> = "+nv+" (เขียนทับค่าเก่า)","ok");updateMainBtn();return true;
+}
+function updateMainBtn(){const ex=vars.some(v=>v.name===($("vname").value||"").trim());
+  const b=$("mainbtn");if(b){b.innerHTML=ex?'<i data-lucide="pencil"></i> เปลี่ยนค่า (=)':'<i data-lucide="plus"></i> ประกาศตัวแปร';icons();}}
+let demoPaused=false,demoAbort=false;
+function wait(ms){return new Promise(res=>{let rem=ms,last=performance.now();
+  (function tick(){ if(demoAbort){res();return;} const now=performance.now(); if(!demoPaused)rem-=now-last; last=now;
+    if(rem<=0){res();return;} requestAnimationFrame(tick); })();
+});}
+let demoRunning=false;
+function showCap(n,title,code,desc){const el=$("democap");
+  el.innerHTML='<div class="cn">ขั้นที่ '+n+' · หน้าที่: <b>'+title+'</b></div>'+(code?'<div class="cc">'+code+'</div>':'')+'<div class="cd">'+desc+'</div>';
+  el.style.display='block';el.style.animation='none';void el.offsetWidth;el.style.animation='capin .45s';}
+async function demoStep2(n,title,code,desc,fn,ms){showCap(n,title,code,desc);await wait(1300);if(demoAbort)return;if(fn)fn();await wait(ms-1300);}
+function setDemoBtn(){const b=$("demobtn"),s=$("demostop");if(!b)return;
+  if(!demoRunning){b.innerHTML='<i data-lucide="play"></i> เล่นโจทย์นี้';s.style.display='none';}
+  else if(demoPaused){b.innerHTML='<i data-lucide="play"></i> เล่นต่อ';s.style.display='';}
+  else{b.innerHTML='<i data-lucide="pause"></i> หยุดชั่วคราว';s.style.display='';}
+  icons();}
+function toggleDemo(){ if(!demoRunning){autoDemo();return;} demoPaused=!demoPaused;setDemoBtn(); }
+function stopDemo(){demoAbort=true;demoPaused=false;}
+function demoVar(t,name,val,codeHtml){
+  const p=slotPos(vars.length);const bytes=SIZE[t]==='~'?Math.max(2,[...val].length):SIZE[t];
+  addBox(t,name,val);setActive(vars[vars.length-1]);addCodeLine(codeHtml);
+  burst(new THREE.Vector3(p.x,(0.6+bytes*0.17)/2+0.5,p.z),COL[t]);cheer();
+}
+function demoCodeOnly(html){addCodeLine(html);}
+let demoQuestion=false,qSkip=null;
+function updateTimer(t){const m=Math.floor(t/60),s=t%60;const el=$("qtimer");el.textContent=m+':'+(s<10?'0':'')+s;el.classList.toggle('low',t<=30);}
+function skipQuestion(){if(qSkip)qSkip();}
+function askQuestion(qHtml,seconds){
+  return new Promise(res=>{
+    demoQuestion=true;$("democap").style.display='none';
+    $("qtext").innerHTML=qHtml;let t=seconds;updateTimer(t);$("qbox").style.display='block';icons();
+    const iv=setInterval(()=>{ if(demoAbort){done();return;} if(demoPaused)return; t--;updateTimer(t); if(t<=0)done(); },1000);
+    function done(){clearInterval(iv);$("qbox").style.display='none';demoQuestion=false;qSkip=null;res();}
+    qSkip=done;
+  });
+}
+function endDemo(){$("democap").style.display='none';$("qbox").style.display='none';demoRunning=false;demoPaused=false;demoAbort=false;demoQuestion=false;qSkip=null;setDemoBtn();}
+const DEMOS={
+ int:{steps:[
+  {cap:['โจทย์','ร้านกาแฟ — หาเงินทอน','','ลูกค้าซื้อกาแฟ 45 บาท จ่ายแบงก์ 100 บาท → หา “เงินทอน”'],ms:4600},
+  {q:'ราคากับเงินเป็น “จำนวนเต็ม” (บาท) → ควรใช้ตัวแปร<b>ชนิดอะไร</b>?',sec:120},
+  {cap:['เฉลย','ใช้ int (จำนวนเต็ม)','int','เงินเป็นบาทเต็ม ไม่มีทศนิยม → int'],ms:3800},
+  {cap:['①','เก็บราคา','int price = 45;','ประกาศ price เก็บ 45'],fn:()=>demoVar('int','price','45','<span class="k">int</span> price = <span class="n">45</span>;   <span class="c">// ราคากาแฟ</span>'),ms:4000},
+  {cap:['②','เก็บเงินที่จ่าย','int paid = 100;','ประกาศ paid เก็บ 100'],fn:()=>demoVar('int','paid','100','<span class="k">int</span> paid = <span class="n">100</span>;   <span class="c">// เงินที่จ่าย</span>'),ms:4000},
+  {q:'จะหา “เงินทอน” ยังไง? เขียนสูตรใช้ <b>paid</b> กับ <b>price</b>',sec:180},
+  {cap:['เฉลย','คำนวณเงินทอน','int change = paid - price;','100 − 45 = 55 เก็บลง change'],fn:()=>demoVar('int','change','55','<span class="k">int</span> change = paid - price;   <span class="c">// = 55</span>'),ms:4600},
+  {cap:['③','แสดงผล','cout << "เงินทอน = " << change;','พิมพ์ → เงินทอน = 55'],fn:()=>demoCodeOnly('cout &lt;&lt; <span class="s">"เงินทอน = "</span> &lt;&lt; change;'),ms:4400},
+  {cap:['สรุป','int = จำนวนเต็ม','','เก็บเงิน/จำนวนที่ไม่มีทศนิยม แล้วเอามาคำนวณได้'],ms:4600},
+ ]},
+ double:{steps:[
+  {cap:['โจทย์','แบ่งบิลอาหาร','','ค่าอาหาร 100 บาท หารกัน 3 คน → คนละเท่าไร?'],ms:4600},
+  {q:'100 ÷ 3 = 33.33… มีเศษ<b>ทศนิยม</b> → ควรใช้ตัวแปรชนิดอะไร?',sec:120},
+  {cap:['เฉลย','ใช้ double (ทศนิยม)','double','ผลหารมีจุดทศนิยม → ต้องใช้ double ไม่ใช่ int'],ms:4000},
+  {cap:['①','ค่าอาหารรวม','double total = 100;','ประกาศ total = 100'],fn:()=>demoVar('double','total','100','<span class="k">double</span> total = <span class="n">100</span>;'),ms:4000},
+  {cap:['②','จำนวนคน','int people = 3;','ประกาศ people = 3'],fn:()=>demoVar('int','people','3','<span class="k">int</span> people = <span class="n">3</span>;'),ms:4000},
+  {q:'คนละเท่าไร? เขียนสูตร (total ÷ people)',sec:150},
+  {cap:['เฉลย','หารแบ่ง','double each = total / people;','100 / 3 = 33.33… (หารไม่ลงตัว มีทศนิยม)'],fn:()=>demoVar('double','each','33.33','<span class="k">double</span> each = total / people;   <span class="c">// ≈ 33.33</span>'),ms:4600},
+  {cap:['③','แสดงผล','cout << "คนละ " << each;','พิมพ์ค่า each ออกมา ≈ 33.33 บาท (double เก็บทศนิยมได้)'],fn:()=>demoCodeOnly('cout &lt;&lt; <span class="s">"คนละ "</span> &lt;&lt; each;'),ms:4400},
+  {cap:['สรุป','double = ทศนิยม','','ใช้เมื่อค่ามีจุดทศนิยม เช่น ผลหาร ราคา ส่วนสูง'],ms:4600},
+ ]},
+ char:{steps:[
+  {cap:['โจทย์','เก็บเกรดนักเรียน','','อยากเก็บ “เกรด” วิชาคณิต (A / B / C / D)'],ms:4400},
+  {q:'เกรดคือ<b>ตัวอักษร 1 ตัว</b> → ใช้ตัวแปรชนิดอะไร?',sec:120},
+  {cap:['เฉลย','ใช้ char (1 อักขระ)','char','เก็บตัวอักษรได้ทีละ 1 ตัว → char'],ms:3800},
+  {cap:['①','เก็บเกรด',"char grade = 'A';",'ประกาศ grade = ‘A’ (ใช้เครื่องหมาย single quote)'],fn:()=>demoVar('char','grade','A',"<span class=\"k\">char</span> grade = <span class=\"s\">'A'</span>;"),ms:4400},
+  {cap:['②','แสดงผล','cout << "เกรด: " << grade;','พิมพ์ → เกรด: A'],fn:()=>demoCodeOnly('cout &lt;&lt; <span class="s">"เกรด: "</span> &lt;&lt; grade;'),ms:4400},
+  {cap:['สรุป','char = อักขระ 1 ตัว','',"เก็บตัวอักษรตัวเดียว ใช้เครื่องหมาย ' '"],ms:4600},
+ ]},
+ string:{steps:[
+  {cap:['โจทย์','โปรแกรมทักทาย','','อยากให้โปรแกรมทักทายด้วย “ชื่อ” ของเรา'],ms:4400},
+  {q:'ชื่อคน (<b>หลายตัวอักษร</b>) → ใช้ตัวแปรชนิดอะไร?',sec:120},
+  {cap:['เฉลย','ใช้ string (ข้อความ)','string','เก็บข้อความหลายตัวอักษร → string'],ms:3800},
+  {cap:['①','เก็บชื่อ','string name = "แนน";','ประกาศ name = “แนน” (ใช้ double quote)'],fn:()=>demoVar('string','name','แนน','<span class="k">string</span> name = <span class="s">"แนน"</span>;'),ms:4400},
+  {cap:['②','แสดงผล','cout << "สวัสดี " << name;','พิมพ์ → สวัสดี แนน'],fn:()=>demoCodeOnly('cout &lt;&lt; <span class="s">"สวัสดี "</span> &lt;&lt; name;'),ms:4400},
+  {cap:['สรุป','string = ข้อความ','','เก็บข้อความหลายตัวอักษร ใช้เครื่องหมาย " "'],ms:4600},
+ ]},
+ bool:{steps:[
+  {cap:['โจทย์','เก็บสถานะสอบ','','อยากเก็บว่านักเรียน “สอบผ่านไหม” (ผ่าน / ไม่ผ่าน)'],ms:4400},
+  {q:'ค่ามีแค่ 2 แบบ (ผ่าน/ไม่ผ่าน) → ใช้ตัวแปรชนิดอะไร?',sec:120},
+  {cap:['เฉลย','ใช้ bool (จริง/เท็จ)','bool','เก็บได้ 2 ค่า: true / false → bool'],ms:3800},
+  {cap:['①','เก็บสถานะ','bool isPass = true;','ประกาศ isPass = true (สอบผ่าน)'],fn:()=>demoVar('bool','isPass','true','<span class="k">bool</span> isPass = <span class="k">true</span>;'),ms:4400},
+  {cap:['②','แสดงผล','cout << isPass;','พิมพ์ → 1  (true = 1, false = 0)'],fn:()=>demoCodeOnly('cout &lt;&lt; isPass;   <span class="c">// พิมพ์ 1</span>'),ms:4600},
+  {cap:['สรุป','bool = จริง/เท็จ','','เก็บ true/false — พิมพ์ออกมาเป็น 1/0'],ms:4600},
+ ]},
+};
+let curDemo='int';
+async function autoDemo(){
+  if(demoRunning)return;
+  demoRunning=true;demoPaused=false;demoAbort=false;setDemoBtn();
+  clearAll();await wait(500);
+  for(const s of DEMOS[curDemo].steps){
+    if(s.q) await askQuestion('<b>คำถาม:</b> '+s.q, s.sec);
+    else await demoStep2(s.cap[0],s.cap[1],s.cap[2],s.cap[3],s.fn||null,s.ms);
+    if(demoAbort)break;
+  }
+  endDemo();
+}
+const COL={int:0x1565C0,double:0x6A3FC0,char:0xC0392B,string:0x1B5E20,bool:0xB8860B};
+const SIZE={int:4,double:8,char:1,bool:1,string:'~'};
+const PERROW=5,SPX=2.6,SPZ=3.0;
+// camera (ลากหมุน + ซูม + auto-frame)
+let target=new THREE.Vector3(0,1,0),targetEnd=new THREE.Vector3(0,1,0);
+let radius=16,radiusEnd=16,theta=0,phi=1.05,dragging=false,px=0,py=0,mode='rot';
+function updateCamera(){const sp=Math.sin(phi),cp=Math.cos(phi);
+  camera.position.set(target.x+radius*sp*Math.sin(theta),target.y+radius*cp,target.z+radius*sp*Math.cos(theta));
+  camera.lookAt(target);}
+
+function roundRect(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath();}
+function makeSprite(text,{size=52,bg='rgba(255,255,255,.97)',fg='#1f2733',bd=null,w=256,h=104}={}){
+  const c=document.createElement('canvas');c.width=w;c.height=h;
+  const x=c.getContext('2d');
+  x.fillStyle=bg;roundRect(x,5,5,w-10,h-10,20);x.fill();
+  if(bd){x.lineWidth=7;x.strokeStyle=bd;x.stroke();}
+  x.fillStyle=fg;x.font='bold '+size+'px Sarabun,Arial';x.textAlign='center';x.textBaseline='middle';
+  x.fillText(text,w/2,h/2+2);
+  const t=new THREE.CanvasTexture(c);t.minFilter=THREE.LinearFilter;t.anisotropy=4;
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthTest:false,depthWrite:false}));
+  return s;
+}
+
+function init(){
+  scene=new THREE.Scene();
+  scene.background=new THREE.Color(0xC1C2C2);
+  scene.fog=new THREE.Fog(0xC1C2C2,42,150);
+  camera=new THREE.PerspectiveCamera(46,innerWidth/innerHeight,.1,4000);
+  camera.position.set(0,9,16);
+  renderer=new THREE.WebGLRenderer({canvas:$("c"),antialias:true});
+  renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  scene.add(new THREE.HemisphereLight(0xffffff,0xb8bcc4,.85));
+  const d=new THREE.DirectionalLight(0xffffff,.85);d.position.set(9,16,10);d.castShadow=true;
+  d.shadow.mapSize.set(1024,1024);d.shadow.camera.left=-20;d.shadow.camera.right=20;d.shadow.camera.top=20;d.shadow.camera.bottom=-20;scene.add(d);
+  // grid floor
+  const grid=new THREE.GridHelper(8000,400,0xffffff,0xd2d8de);
+  grid.material.opacity=.42;grid.material.transparent=true;grid.position.y=0.02;scene.add(grid);
+  // shadow catcher
+  const sc=new THREE.Mesh(new THREE.PlaneGeometry(400,400),new THREE.ShadowMaterial({opacity:.18}));
+  sc.rotation.x=-Math.PI/2;sc.receiveShadow=true;scene.add(sc);
+  // วงแหวนไฟใต้กล่องที่กำลังถูกกระทำ
+  activeRing=new THREE.Mesh(new THREE.RingGeometry(0.92,1.3,44),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false}));
+  activeRing.rotation.x=-Math.PI/2;activeRing.position.y=0.05;scene.add(activeRing);
+  addEventListener('resize',onResize);
+  const dom=renderer.domElement;dom.style.touchAction='none';dom.style.cursor='grab';
+  dom.addEventListener('contextmenu',e=>e.preventDefault());
+  const _dir=new THREE.Vector3(),_rt=new THREE.Vector3(),_up=new THREE.Vector3();
+  const pointers=new Map();let lastDist=0,lastMid=null;
+  function panBy(dx,dy){camera.getWorldDirection(_dir);_rt.crossVectors(_dir,camera.up).normalize();_up.crossVectors(_rt,_dir).normalize();
+    const s=radius*0.0016;targetEnd.addScaledVector(_rt,-dx*s).addScaledVector(_up,dy*s);target.copy(targetEnd);}
+  dom.addEventListener('pointerdown',e=>{pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});dom.setPointerCapture&&dom.setPointerCapture(e.pointerId);
+    mode=(e.button===2||e.button===1||e.shiftKey)?'pan':'rot';dom.style.cursor=mode==='pan'?'move':'grabbing';
+    if(pointers.size===2){const p=[...pointers.values()];lastDist=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);lastMid={x:(p[0].x+p[1].x)/2,y:(p[0].y+p[1].y)/2};}});
+  dom.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;
+    const pv=pointers.get(e.pointerId),dx=e.clientX-pv.x,dy=e.clientY-pv.y;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pointers.size>=2){const p=[...pointers.values()];const dist=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y),mid={x:(p[0].x+p[1].x)/2,y:(p[0].y+p[1].y)/2};
+      if(lastDist)radiusEnd=Math.max(5,Math.min(80,radiusEnd*(lastDist/dist)));
+      if(lastMid)panBy(mid.x-lastMid.x,mid.y-lastMid.y);lastDist=dist;lastMid=mid;}
+    else if(mode==='pan')panBy(dx,dy);
+    else{theta-=dx*0.005;phi=Math.max(0.15,Math.min(1.5,phi-dy*0.005));}});
+  const up=e=>{pointers.delete(e.pointerId);if(pointers.size<2){lastDist=0;lastMid=null;}if(pointers.size===0)dom.style.cursor='grab';};
+  dom.addEventListener('pointerup',up);dom.addEventListener('pointercancel',up);
+  dom.addEventListener('wheel',e=>{e.preventDefault();radiusEnd=Math.max(5,Math.min(80,radiusEnd*(1+e.deltaY*0.0012)));},{passive:false});
+  frameCam(true);animate();
+}
+function slotPos(i){const col=i%PERROW,row=Math.floor(i/PERROW);return {x:(col-(PERROW-1)/2)*SPX,z:-row*SPZ};}
+function note(msg,cls){const n=$("note");n.className="note "+cls;n.innerHTML=msg;}
+function fmt(t,v){if(t==="char")return "'"+v+"'";if(t==="string")return '"'+v+'"';return v;}
+
+function validate(t,v){
+  if(t==="int"){ if(v.trim()===""||isNaN(Number(v)))return{ok:false,msg:'int ต้องเป็นตัวเลขจำนวนเต็ม'};
+    const n=Number(v); if(!Number.isInteger(n))return{ok:true,val:String(Math.trunc(n)),warn:'int เก็บ<b>จำนวนเต็ม</b> → ตัดทศนิยมทิ้ง: '+v+' → '+Math.trunc(n)};
+    return{ok:true,val:String(n)}; }
+  if(t==="double"){ if(v.trim()===""||isNaN(Number(v)))return{ok:false,msg:'double ต้องเป็นตัวเลข'};return{ok:true,val:v}; }
+  if(t==="char"){ if([...v].length!==1)return{ok:false,msg:"char เก็บได้<b>ตัวเดียว</b> (เช่น A)"};return{ok:true,val:v}; }
+  if(t==="bool"){ const lv=v.trim().toLowerCase(); if(!["true","false","1","0"].includes(lv))return{ok:false,msg:"bool ใส่ได้แค่ <b>true</b> หรือ <b>false</b>"};
+    return{ok:true,val:(lv==="true"||lv==="1")?"true":"false"}; }
+  return{ok:true,val:v};
+}
+const THINK={
+  int:'ถ้าใส่ <b>3.9</b> ลงใน int จะได้เท่าไร? ลองดู!',
+  double:'double กิน <b>8 bytes</b> (ใหญ่กว่า int) เพราะต้องเก็บทศนิยม — ลองประกาศ int เทียบขนาดกล่อง',
+  char:'char เก็บได้กี่ตัว? ลองใส่ <b>AB</b> ดูจะเกิดอะไรขึ้น',
+  string:'string ต่างจาก char ยังไง? (char = 1 ตัว, string = หลายตัว)',
+  bool:'ถ้า <b>cout</b> ตัวแปร bool จะพิมพ์อะไร? (ใบ้: ไม่ใช่คำว่า true)'
+};
+function updateReason(t,name,val){
+  const bytes=SIZE[t]==='~'?'ตามความยาวข้อความ':SIZE[t]+' bytes';
+  $("reason").innerHTML='<div class="h"><i data-lucide="search"></i>กำลังทำ: <b>'+t+' '+name+' = '+fmt(t,val)+';</b></div>'
+    +'<ol><li>จองกล่องในหน่วยความจำ ขนาด <b>'+bytes+'</b> (ชนิด '+t+')</li>'
+    +'<li>ตั้งชื่อกล่องว่า <b>'+name+'</b></li>'
+    +'<li>ใส่ค่า <b>'+fmt(t,val)+'</b> ลงในกล่อง</li></ol>'
+    +'<div class="think"><i data-lucide="lightbulb"></i> ชวนคิด: '+THINK[t]+'</div>';
+  icons();
+}
+function updateBigExpr(t,name,val){
+  const vc=(t==="char"||t==="string")?'s':'n';
+  $("bigexpr").innerHTML='<span class="k">'+t+'</span> '+name+' = <span class="'+vc+'">'+fmt(t,val)+'</span>;';
+}
+
+function declareVar(){
+  const t=type,name=$("vname").value.trim(),raw=$("vval").value;
+  if(!name){note("ตั้งชื่อตัวแปรก่อน","warn");$("vname").focus();errFx($("vname"));return;}
+  if(vars.some(v=>v.name===name)){ coreAssign(name,raw); return; } // ชื่อเดิม = เปลี่ยนค่า (เขียนทับ)
+  if(vars.length>=12){note("หน่วยความจำเต็ม (สาธิต 12 ตัว) — กดถังขยะเพื่อล้าง","warn");return;}
+  const r=validate(t,raw); if(!r.ok){note("⚠ "+r.msg,"warn");errFx($("vval"));return;}
+  const p=slotPos(vars.length);
+  coreDeclare(t,name,r.val);
+  if(r.warn){ const dot=raw.indexOf('.'); dropText(dot>=0?raw.slice(dot):'.999',p.x+0.6,1.5,p.z+0.7); note("⚠ "+r.warn,"warn"); }
+  else note("สร้าง <b>"+t+" "+name+"</b> เก็บใน memory แล้ว","ok");
+  updateMainBtn();
+}
+function addBox(t,name,val){
+  const bytes=SIZE[t]==='~'?Math.max(2,[...val].length):SIZE[t];
+  const h=0.6+bytes*0.17,w=1.35,dep=1.35;
+  const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,dep),
+    new THREE.MeshStandardMaterial({color:COL[t],roughness:.4,metalness:.15,emissive:COL[t],emissiveIntensity:.16}));
+  mesh.castShadow=true;
+  const i=vars.length,p=slotPos(i);
+  mesh.position.set(p.x,6.2,p.z);
+  scene.add(mesh);
+  const hx='#'+COL[t].toString(16).padStart(6,'0');
+  const ns=makeSprite(name,{size:46,bd:hx});ns.scale.set(1.7,0.7,1);
+  const vs=makeSprite(fmt(t,val),{size:50});vs.scale.set(1.55,0.63,1);
+  const tg=makeSprite(t+' · '+(SIZE[t]==='~'?'str':SIZE[t]+'B'),{size:32,bg:'rgba(31,39,51,.9)',fg:'#eaf0fb',w:256,h:92});tg.scale.set(1.4,0.5,1);
+  scene.add(ns);scene.add(vs);scene.add(tg);
+  vars.push({t,name,val,mesh,ns,vs,tg,h,targetY:h/2,vy:0,landed:false,squash:0});
+  layout();
+}
+function layout(){vars.forEach((v,i)=>{const p=slotPos(i);v.mesh.userData.tx=p.x;v.mesh.userData.tz=p.z;v.targetY=v.h/2;});}
+function clearAll(){
+  vars.forEach(v=>{scene.remove(v.mesh);scene.remove(v.ns);scene.remove(v.vs);scene.remove(v.tg);});
+  particles.forEach(p=>scene.remove(p));fallers.forEach(s=>scene.remove(s));particles=[];fallers=[];
+  setActive(null);if(activeRing)activeRing.material.opacity=0;
+  codeList=[];renderCode();
+  vars=[];
+  if($("qbox"))$("qbox").style.display='none';
+  $("reason").innerHTML='<div class="h"><i data-lucide="lightbulb"></i> ล้างหน่วยความจำแล้ว</div>ลองประกาศตัวแปรใหม่ดู';
+  note("ล้างหน่วยความจำแล้ว","info");updateMainBtn();
+}
+function resetView(){theta=0;phi=1.05;frameCam(false);}
+function frameCam(instant){
+  const box=new THREE.Box3();
+  if(vars.length===0)box.setFromCenterAndSize(new THREE.Vector3(0,1,0),new THREE.Vector3(7,3,4));
+  else vars.forEach(v=>box.expandByObject(v.mesh));
+  const ctr=box.getCenter(new THREE.Vector3()),sz=box.getSize(new THREE.Vector3());
+  const maxd=Math.max(sz.x,sz.y*1.4,sz.z,5);
+  targetEnd.copy(ctr);radiusEnd=maxd*1.75+7;
+  if(instant){target.copy(targetEnd);radius=radiusEnd;updateCamera();}
+}
+const PRESET={int:['age','15'],double:['price','3.14'],char:['grade','A'],string:['name','แนน'],bool:['isPass','true']};
+document.querySelectorAll(".ty").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".ty").forEach(x=>{x.classList.toggle("on",x===b);if(x!==b)x.style.borderColor='var(--line)';});
+  b.style.borderColor=b.style.color;type=b.dataset.t;
+  const [n,v]=PRESET[type];$("vname").value=n;$("vval").value=v;updateMainBtn();
+  $("reason").querySelector('.think')&&($("reason").querySelector('.think').innerHTML='<i data-lucide="lightbulb"></i> ชวนคิด: '+THINK[type]);
+  icons();
+});
+$("vname").addEventListener('input',updateMainBtn);
+$("vval").addEventListener('keydown',e=>{if(e.key==='Enter')declareVar();});
+function onResize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);}
+function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+let ph=0;
+function animate(){
+  requestAnimationFrame(animate);ph+=0.02;
+  target.lerp(targetEnd,0.08);radius+=(radiusEnd-radius)*0.08;updateCamera();
+  vars.forEach(v=>{
+    const m=v.mesh;
+    if(m.userData.tx!==undefined){m.position.x+=(m.userData.tx-m.position.x)*0.15;m.position.z+=(m.userData.tz-m.position.z)*0.15;}
+    // ตกลง + เด้ง (bounce)
+    if(!v.landed){
+      v.vy-=0.013;m.position.y+=v.vy;
+      if(m.position.y<=v.targetY){m.position.y=v.targetY;
+        if(v.vy<-0.11){v.vy=-v.vy*0.4;v.squash=0.32;}else{v.vy=0;v.landed=true;}}
+    }else{ m.position.y+=(v.targetY-m.position.y)*0.15; }
+    v.squash*=0.86; if(v.squash<0.005)v.squash=0;
+    const sq=v.squash;m.scale.set(1+sq*0.5,1-sq,1+sq*0.5);
+    m.rotation.y=Math.sin(ph*0.5+m.position.x)*0.03;
+    if(v===activeVar)m.material.emissiveIntensity=0.5+Math.sin(ph*1.7)*0.28; // ไฟ LED กล่องที่กำลังทำ (กะพริบช้า)
+    const y=m.position.y;
+    v.tg.position.set(m.position.x,y+v.h/2+1.32,m.position.z);
+    v.ns.position.set(m.position.x,y+v.h/2+0.58,m.position.z);
+    v.vs.position.set(m.position.x,y,m.position.z+0.8);
+  });
+  if(activeVar&&activeVar.mesh){activeRing.position.x=activeVar.mesh.position.x;activeRing.position.z=activeVar.mesh.position.z;
+    activeRing.material.opacity=0.4+Math.sin(ph*1.7)*0.2;const rs=1+Math.sin(ph*1.7)*0.06;activeRing.scale.set(rs,rs,rs);}
+  else if(activeRing){activeRing.material.opacity*=0.85;}
+  particles.forEach(p=>{p.position.add(p.userData.v);p.userData.v.y-=0.012;p.scale.multiplyScalar(0.94);});
+  particles=particles.filter(p=>{if(p.scale.x<0.12){scene.remove(p);return false;}return true;});
+  fallers.forEach(s=>{s.userData.vy-=0.02;s.position.y+=s.userData.vy;s.userData.life-=0.013;s.material.opacity=Math.max(s.userData.life,0);s.material.rotation+=0.06;});
+  fallers=fallers.filter(s=>{if(s.userData.life<=0){scene.remove(s);return false;}return true;});
+  renderer.render(scene,camera);
+}
+init();icons();
+</script>
+</body>
+</html>

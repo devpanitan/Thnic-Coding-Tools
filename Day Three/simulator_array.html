@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | Simulator อาเรย์ (Array)</title>
+<link rel="icon" type="image/png" href="../Day One/srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
+<style>
+  :root{--blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--gold:#f2a900;--ink:#16224a;--muted:#5d6b8a;--line:#dbe6f7;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);height:100vh;overflow:hidden;
+    background:radial-gradient(900px 500px at 10% -10%,#d4e6ff 0,transparent 60%),radial-gradient(800px 500px at 100% 0,#ffe6f7 0,transparent 55%),linear-gradient(160deg,#eef4ff,#fdf3fb);
+    display:flex;flex-direction:column;gap:clamp(8px,1.6vh,14px);padding:clamp(12px,2.2vh,22px) clamp(14px,3.5vw,36px)}
+  svg.lucide{width:1em;height:1em;vertical-align:-.15em}
+  .head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .head img{height:clamp(30px,4.2vh,42px)}
+  h1{font-size:clamp(17px,2.5vh,25px);font-weight:700}
+  .head .tag{color:var(--muted);font-size:clamp(12px,1.5vh,15px);flex:1;min-width:200px}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 14px;box-shadow:0 8px 22px rgba(47,123,246,.08);font-size:16px}
+  .bar label{color:var(--muted);font-weight:600}
+  input{font-family:ui-monospace,monospace;font-size:17px;font-weight:700;padding:7px 11px;border-radius:10px;border:2px solid var(--line);background:#f7faff;color:var(--ink);outline:none;text-align:center}
+  input:focus{border-color:var(--blue)}
+  #vals{width:230px;text-align:left}
+  #idx{width:64px}
+  .btn{font-family:inherit;font-size:15px;font-weight:700;padding:8px 16px;border-radius:10px;border:0;cursor:pointer;color:#fff;display:inline-flex;align-items:center;gap:7px}
+  .btn.b1{background:linear-gradient(135deg,var(--blue),var(--purple))}
+  .btn.b2{background:linear-gradient(135deg,var(--coral),var(--gold))}
+  .btn.ghost{background:#f0f3fa;color:#2f4a7d;border:2px solid var(--line)}
+  .main{flex:1;min-height:0;display:grid;grid-template-columns:1.02fr 1.18fr;gap:clamp(12px,1.6vw,20px)}
+  .panel{background:#fff;border:2px solid var(--line);border-radius:18px;box-shadow:0 10px 26px rgba(31,43,72,.08);padding:clamp(12px,2vh,20px);display:flex;flex-direction:column;min-height:0}
+  .panel h2{font-size:15px;color:var(--muted);font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+  .code{flex:1;background:#11203a;border-radius:14px;padding:clamp(12px,2vh,20px);overflow:auto}
+  .code .ln{font-family:ui-monospace,"Consolas",monospace;font-size:clamp(13px,1.95vh,17px);line-height:1.7;color:#e8eefc;white-space:pre;border-radius:6px;padding:0 6px}
+  .code .ln.fr{color:#6b7ba6}
+  .code .ln.on{background:#33405e}
+  .code .k{color:#ff9bd0}.code .s{color:#ffd27f}.code .c{color:#7fd1ff}.code .m{color:#9ad27f}
+  .rightcol{display:flex;flex-direction:column;gap:clamp(10px,1.4vh,16px);min-height:0}
+  .arrwrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+  .arrname{font-family:ui-monospace,monospace;font-size:clamp(14px,2vh,18px);color:var(--purple);font-weight:700}
+  .arr{display:flex;gap:clamp(6px,1vw,12px);flex-wrap:wrap;justify-content:center}
+  .cell{display:flex;flex-direction:column;align-items:center;gap:5px}
+  .cell .box{width:clamp(54px,8.4vh,80px);height:clamp(54px,8.4vh,80px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:clamp(20px,3.4vh,30px);font-weight:700;background:#fff;border:3px solid var(--line);border-radius:14px;color:var(--ink);transition:.2s}
+  .cell .idx{font-family:ui-monospace,monospace;font-size:clamp(12px,1.7vh,15px);color:var(--muted);font-weight:700}
+  .cell.hot .box{border-color:var(--coral);background:#fff1ec;transform:translateY(-6px) scale(1.06);box-shadow:0 10px 20px rgba(255,106,61,.28)}
+  .cell.hot .idx{color:var(--coral)}
+  .cell.done .box{border-color:var(--green);background:#eafaf2}
+  .outbox{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 16px;display:flex;align-items:center;gap:12px;min-height:54px}
+  .outbox .lab{font-size:13px;color:var(--muted);font-weight:700}
+  .outbox .val{font-family:ui-monospace,monospace;font-size:clamp(18px,2.8vh,26px);font-weight:700;color:#0c6b46}
+  .note{background:#eef4ff;border:2px solid #cfe0fb;border-radius:12px;padding:9px 14px;font-size:clamp(12px,1.7vh,15px);color:#2f4a7d;display:flex;align-items:center;gap:9px;line-height:1.35}
+  .note.warn{background:#fff1ec;border-color:#ffc3ad;color:#c0431d}
+  .note.ok{background:#eafaf2;border-color:#a9e7c9;color:#0d7a4f}
+  .tips{background:#fff6dd;border:2px solid #ffe2a1;border-radius:12px;padding:9px 13px;font-size:clamp(12px,1.6vh,15px);color:#8a5e00;line-height:1.4}
+  .tips b{color:#6b4a00}
+  .tips .row{display:flex;gap:7px;align-items:flex-start;margin-top:3px}
+  .tips code{font-family:ui-monospace,monospace;background:#fff0c4;border-radius:5px;padding:0 5px;color:#8a5e00}
+  .mascot{position:fixed;right:clamp(8px,1.8vw,24px);bottom:clamp(6px,1.4vh,14px);width:clamp(72px,10vh,104px);height:auto;z-index:6;transform-origin:center bottom;animation:dance 1.5s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.15))}
+  @keyframes dance{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-9px) rotate(5deg)}}
+  .mascot .armL,.mascot .armR{transform-box:fill-box;transform-origin:center top}
+  .mascot .armL{animation:dL .6s ease-in-out infinite}.mascot .armR{animation:dR .6s ease-in-out infinite}
+  @keyframes dL{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(24deg)}}
+  @keyframes dR{0%,100%{transform:rotate(30deg)}50%{transform:rotate(-24deg)}}
+  .mascot.cheer{animation:mcheer .8s ease}
+  @keyframes mcheer{0%{transform:translateY(0)}30%{transform:translateY(-26px) scale(1.1)}60%{transform:translateY(0)}80%{transform:translateY(-10px)}100%{transform:translateY(0)}}
+</style>
+</head>
+<body>
+  <div class="head">
+    <img src="../Day One/srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
+    <h1>อาเรย์ (Array)</h1>
+    <span class="tag">ใส่ค่าในกล่อง — เข้าถึงทีละช่องด้วย index (เริ่มที่ 0) หรือกดวน for ดูทั้งชุด</span>
+  </div>
+
+  <div class="bar">
+    <label>ค่าในอาเรย์:</label><input id="vals" value="80,95,70,60,100">
+    <button class="btn ghost" onclick="build()"><i data-lucide="wand-2"></i> สร้าง</button>
+    <span style="width:1px;height:26px;background:var(--line)"></span>
+    <label>score[</label><input id="idx" value="2"><label>]</label>
+    <button class="btn b1" onclick="access()"><i data-lucide="locate"></i> เข้าถึง</button>
+    <button class="btn b2" onclick="loopAll()"><i data-lucide="repeat"></i> วน for ทั้งหมด</button>
+  </div>
+
+  <div class="main">
+    <div class="panel">
+      <h2><i data-lucide="code-2"></i> โค้ดโปรแกรม</h2>
+      <div class="code" id="code"></div>
+    </div>
+    <div class="rightcol">
+      <div class="panel arrwrap">
+        <div class="arrname" id="arrname">int score[5]</div>
+        <div class="arr" id="arr"></div>
+      </div>
+      <div class="outbox"><span class="lab">ผลลัพธ์ (Output)</span><span class="val" id="out">—</span></div>
+      <div class="note" id="note"><i data-lucide="info"></i><span>index เริ่มที่ <b>0</b> เสมอ — อาเรย์ 5 ช่อง ใช้ index ได้ 0 ถึง 4</span></div>
+      <div class="tips">
+        <b><i data-lucide="lightbulb"></i> นำไปต่อยอด</b> — ลองใช้ for วนทั้งอาเรย์เพื่อ:
+        <div class="row"><i data-lucide="sigma" style="color:var(--coral)"></i><span>หา<b>ผลรวม</b>ทุกช่อง: <code>sum += score[i];</code></span></div>
+        <div class="row"><i data-lucide="trophy" style="color:var(--gold)"></i><span>หา<b>คะแนนมากสุด</b>: <code>if(score[i]&gt;max) max=score[i];</code></span></div>
+        <div class="row"><i data-lucide="check-check" style="color:var(--green)"></i><span><b>นับคนสอบผ่าน</b>: <code>if(score[i]&gt;=50) pass++;</code></span></div>
+      </div>
+    </div>
+  </div>
+
+  <svg class="mascot" id="mascot" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+    <line x1="110" y1="20" x2="110" y2="42" stroke="#7a5cff" stroke-width="5"/><circle cx="110" cy="15" r="9" fill="#ffd24d" stroke="#7a5cff" stroke-width="3"/>
+    <g class="armL"><rect x="24" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="34" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
+    <g class="armR"><rect x="176" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="186" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
+    <rect x="48" y="42" width="124" height="96" rx="28" fill="#eef2ff" stroke="#7a5cff" stroke-width="5"/>
+    <ellipse cx="74" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/><ellipse cx="146" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
+    <circle cx="88" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="88" cy="84" r="7" fill="#2f7bf6"/>
+    <circle cx="132" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="132" cy="84" r="7" fill="#2f7bf6"/>
+    <rect x="88" y="110" width="44" height="16" rx="8" fill="#19b877"/>
+    <rect x="64" y="148" width="92" height="58" rx="16" fill="#fff" stroke="#7a5cff" stroke-width="4"/><rect x="80" y="164" width="60" height="28" rx="8" fill="#e6f0ff"/><path d="M80 178 H140 M98 168 V188" stroke="#2f7bf6" stroke-width="3"/>
+  </svg>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const icons=()=>{if(window.lucide)lucide.createIcons();};
+let arr=[80,95,70,60,100];
+let busy=false;
+
+function cheer(){const m=$("mascot");if(m){m.classList.remove("cheer");void m.offsetWidth;m.classList.add("cheer");setTimeout(()=>m.classList.remove("cheer"),800);}}
+
+function note(msg,cls){const n=$("note");n.className="note"+(cls?" "+cls:"");n.innerHTML=`<i data-lucide="${cls==='warn'?'alert-triangle':cls==='ok'?'check-circle-2':'info'}"></i><span>${msg}</span>`;icons();}
+
+function renderArr(hot,doneSet){
+  $("arrname").textContent=`int score[${arr.length}]`;
+  $("arr").innerHTML=arr.map((v,j)=>{
+    let c="cell"; if(j===hot)c+=" hot"; if(doneSet&&doneSet.has(j))c+=" done";
+    return `<div class="${c}"><div class="box">${v}</div><div class="idx">[${j}]</div></div>`;
+  }).join("");
+}
+
+function valsStr(){return arr.join(", ");}
+
+function renderCode(mode,idx){
+  // mode: "idle" | "access" | "loop"
+  const L=[];
+  L.push([`<span class="k">#include</span> <span class="c">&lt;iostream&gt;</span>`,"fr"]);
+  L.push([`<span class="k">using namespace</span> std;`,"fr"]);
+  L.push([`<span class="k">int</span> main() {`,"fr"]);
+  L.push([`    <span class="k">int</span> score[${arr.length}] = {${valsStr()}};`,""]);
+  if(mode==="access"){
+    L.push([`    cout &lt;&lt; score[<span class="m">${idx}</span>];`,"on"]);
+  }else if(mode==="loop"){
+    L.push([`    <span class="k">for</span> (<span class="k">int</span> i = <span class="m">0</span>; i &lt; <span class="m">${arr.length}</span>; i++) {`, idx==="head"?"on":""]);
+    L.push([`        cout &lt;&lt; score[i] &lt;&lt; <span class="s">" "</span>;`, (typeof idx==="number")?"on":""]);
+    L.push([`    }`,""]);
+  }else{
+    L.push([`    <span class="c">// กดปุ่มเพื่อเข้าถึง หรือ วน for</span>`,""]);
+  }
+  L.push([`    <span class="k">return</span> <span class="m">0</span>;`,"fr"]);
+  L.push([`}`,"fr"]);
+  $("code").innerHTML=L.map(([h,c])=>`<div class="ln ${c}">${h}</div>`).join("");
+}
+
+function build(){
+  const raw=$("vals").value.split(",").map(s=>s.trim()).filter(s=>s!=="");
+  const nums=raw.map(Number);
+  if(!raw.length||nums.some(n=>Number.isNaN(n))){note("ใส่เป็นตัวเลขคั่นด้วยจุลภาค เช่น 80,95,70","warn");return;}
+  arr=nums;
+  renderArr(-1,null);renderCode("idle");$("out").textContent="—";
+  note(`สร้างอาเรย์ <b>${arr.length}</b> ช่องแล้ว — index ใช้ได้ 0 ถึง ${arr.length-1}`,"ok");
+  cheer();
+}
+
+function access(){
+  if(busy)return;
+  const i=parseInt($("idx").value,10);
+  if(Number.isNaN(i)){note("ใส่เลข index ที่ต้องการ","warn");return;}
+  if(i<0||i>=arr.length){
+    renderArr(-1,null);renderCode("idle");$("out").textContent="error";
+    note(`index <b>${i}</b> เกินขอบเขต! อาเรย์มี ${arr.length} ช่อง ใช้ได้แค่ 0 ถึง ${arr.length-1} (นอกขอบเขต = โปรแกรมพัง)`,"warn");
+    return;
+  }
+  renderArr(i,null);renderCode("access",i);
+  $("out").textContent=arr[i];
+  note(`score[<b>${i}</b>] คือค่าในกล่องช่องที่ ${i} = <b>${arr[i]}</b>`,"ok");
+  cheer();
+}
+
+async function loopAll(){
+  if(busy)return;busy=true;
+  const done=new Set();let outStr="";
+  $("out").textContent="";
+  note("วน for: i เริ่ม 0 ไปทีละช่องจนถึง "+(arr.length-1),"");
+  renderCode("loop","head");
+  for(let i=0;i<arr.length;i++){
+    renderArr(i,done);
+    renderCode("loop",i);
+    outStr+=arr[i]+" ";
+    $("out").textContent=outStr.trim();
+    await new Promise(r=>setTimeout(r,650));
+    done.add(i);
+  }
+  renderArr(-1,done);
+  note("วนครบทุกช่องแล้ว — พิมพ์ค่าทั้งอาเรย์ออกมาด้วยลูปเดียว","ok");
+  cheer();busy=false;
+}
+
+renderArr(-1,null);renderCode("idle");icons();
+</script>
+</body>
+</html>

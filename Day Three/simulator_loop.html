@@ -6,12 +6,13 @@
 <title>SRRU | Loop Simulator — การวนซ้ำ (for / while)</title>
 <link rel="icon" type="image/png" href="../Day One/srru-logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
 <style>
   :root{--blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--gold:#f2a900;
     --ink:#16224a;--muted:#5d6b8a;--line:#dbe6f7;--card:#fff;--bg1:#eaf3ff;--bg2:#fef6ff;}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
-  body{font-family:"Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);height:100vh;overflow:hidden;
+  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);height:100vh;overflow:hidden;
     background:radial-gradient(900px 500px at 10% -10%,#d4e6ff 0%,transparent 60%),
               radial-gradient(800px 500px at 100% 0%,#ffe6f7 0%,transparent 55%),
               linear-gradient(160deg,var(--bg1),var(--bg2));
@@ -31,30 +32,46 @@
   #play{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff}
   input[type=range]{width:120px}
 
-  .main{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(12px,2vw,22px)}
+  .main{flex:1;min-height:0;display:grid;grid-template-columns:1.12fr .88fr;gap:clamp(12px,2vw,22px)}
   .panel{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:clamp(12px,2vh,20px);box-shadow:0 8px 22px rgba(31,43,72,.07);display:flex;flex-direction:column;min-height:0}
-  .code{font-family:ui-monospace,monospace;font-size:clamp(14px,2vh,18px);line-height:1.9;background:#0f1b38;border-radius:12px;padding:14px 16px;color:#e8eefc;overflow:auto}
-  .code .ln{display:block;padding:1px 8px;border-radius:6px;white-space:pre}
+  .ptitle{font-size:clamp(13px,1.8vh,16px);color:var(--muted);font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+  .code{flex:1;min-height:0;font-family:ui-monospace,"Consolas",monospace;font-size:clamp(15px,2.45vh,22px);line-height:1.62;background:#0f1b38;border-radius:14px;padding:clamp(14px,2.2vh,22px) clamp(16px,2vw,24px);color:#e8eefc;overflow:auto}
+  .code .ln{display:block;padding:2px 10px;border-radius:7px;white-space:pre}
+  .code .ln.fr{color:#67769f}
   .code .ln.on{background:#2a3a66;outline:2px solid #5aa2ff}
-  .k{color:#ff9bd0}.s{color:#ffd27f}.c{color:#7fd1ff}
+  .code .num{color:#5b6b95;margin-right:10px;user-select:none}
+  .k{color:#ff9bd0}.s{color:#ffd27f}.c{color:#7fd1ff}.m{color:#9ad27f}
 
-  .vars{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
-  .vbox{flex:1;min-width:80px;background:#f3f7ff;border:2px solid var(--line);border-radius:12px;padding:8px 12px;text-align:center}
-  .vbox .vn{font-size:13px;color:var(--muted);font-weight:600}
-  .vbox .vv{font-size:clamp(20px,3vh,28px);font-weight:700;font-family:ui-monospace,monospace;color:var(--blue)}
+  .vars{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+  .vbox{flex:1;min-width:80px;background:#f3f7ff;border:2px solid var(--line);border-radius:12px;padding:10px 12px;text-align:center}
+  .vbox .vn{font-size:clamp(12px,1.7vh,15px);color:var(--muted);font-weight:600}
+  .vbox .vv{font-size:clamp(24px,3.6vh,34px);font-weight:700;font-family:ui-monospace,monospace;color:var(--blue)}
   .vbox.sum .vv{color:var(--green)}
 
   .arrwrap{display:flex;flex-direction:column;justify-content:center;flex:1;gap:10px}
-  .arr{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-  .cell{position:relative;min-width:clamp(46px,7vh,64px);height:clamp(46px,7vh,64px);border-radius:12px;border:2px solid var(--line);
-    background:#fff;display:flex;align-items:center;justify-content:center;font-size:clamp(18px,2.6vh,24px);font-weight:700;font-family:ui-monospace,monospace;transition:.25s}
-  .cell .ix{position:absolute;top:-20px;left:0;right:0;font-size:12px;color:var(--muted);font-weight:600}
+  .arr{display:flex;gap:clamp(8px,1vw,14px);flex-wrap:wrap;justify-content:center;margin-top:24px}
+  .cell{position:relative;min-width:clamp(52px,8.4vh,78px);height:clamp(52px,8.4vh,78px);border-radius:14px;border:3px solid var(--line);
+    background:#fff;display:flex;align-items:center;justify-content:center;font-size:clamp(22px,3.4vh,32px);font-weight:700;font-family:ui-monospace,monospace;transition:.25s}
+  .cell .ix{position:absolute;top:-22px;left:0;right:0;font-size:clamp(12px,1.7vh,15px);color:var(--muted);font-weight:700}
   .cell.done{background:#e7faf1;border-color:#aee7ce;color:#0c6b46}
   .cell.cur{background:#fff3da;border-color:var(--gold);transform:translateY(-8px) scale(1.08);box-shadow:0 10px 20px -6px var(--gold)}
   .pointer{text-align:center;font-size:14px;color:var(--coral);font-weight:700;min-height:1.2em}
   .note{background:#fff6dd;border:2px solid #ffe2a1;border-radius:14px;padding:12px 16px;font-size:clamp(14px,2vh,18px);font-weight:600;color:#9a6a00;text-align:center;min-height:7vh;display:flex;align-items:center;justify-content:center}
   .note.fin{background:#e7faf1;border-color:#aee7ce;color:#0c6b46}
+  .note.warn{background:#fff1ec;border-color:#ffc3ad;color:#c0431d}
   .stepinfo{font-size:13px;color:var(--muted);text-align:right;margin-top:6px}
+  .tips{margin-top:10px;background:#eef4ff;border:2px solid #cfe0fb;border-radius:12px;padding:9px 13px;font-size:clamp(12px,1.7vh,15px);color:#2f4a7d;line-height:1.4}
+  .tips b{color:#16224a}
+  .tips .row{display:flex;gap:7px;align-items:flex-start;margin-top:3px}
+  .tips code{font-family:ui-monospace,monospace;background:#dceaff;border-radius:5px;padding:0 5px;color:#1c4e96}
+  .mascot{position:fixed;right:clamp(8px,1.8vw,24px);bottom:clamp(6px,1.4vh,14px);width:clamp(70px,9.5vh,100px);height:auto;z-index:6;transform-origin:center bottom;animation:dance 1.5s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.15))}
+  @keyframes dance{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-9px) rotate(5deg)}}
+  .mascot .armL,.mascot .armR{transform-box:fill-box;transform-origin:center top}
+  .mascot .armL{animation:dL .6s ease-in-out infinite}.mascot .armR{animation:dR .6s ease-in-out infinite}
+  @keyframes dL{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(24deg)}}
+  @keyframes dR{0%,100%{transform:rotate(30deg)}50%{transform:rotate(-24deg)}}
+  .mascot.cheer{animation:mcheer .8s ease}
+  @keyframes mcheer{0%{transform:translateY(0)}30%{transform:translateY(-26px) scale(1.1)}60%{transform:translateY(0)}80%{transform:translateY(-10px)}100%{transform:translateY(0)}}
 </style>
 </head>
 <body>
@@ -79,57 +96,88 @@
 
   <div class="main">
     <div class="panel">
+      <h2 class="ptitle"><i data-lucide="code-2"></i> โปรแกรมเต็ม (หาผลรวมในอาเรย์)</h2>
       <div class="code" id="code"></div>
+      <div class="tips">
+        <b><i data-lucide="lightbulb"></i> นำไปต่อยอด</b> — เปลี่ยนบรรทัดในลูปเป็น:
+        <div class="row"><i data-lucide="trending-up" style="color:var(--coral)"></i><span>หา<b>ค่ามากสุด</b>: <code>if(a[i]&gt;max) max=a[i];</code></span></div>
+        <div class="row"><i data-lucide="divide" style="color:var(--purple)"></i><span>หา<b>ค่าเฉลี่ย</b>: ผลรวม <code>sum / n</code></span></div>
+        <div class="row"><i data-lucide="hash" style="color:var(--green)"></i><span><b>นับเลขคู่</b>: <code>if(a[i]%2==0) count++;</code></span></div>
+      </div>
+    </div>
+
+    <div class="panel">
       <div class="vars">
         <div class="vbox"><div class="vn">i</div><div class="vv" id="vi">–</div></div>
         <div class="vbox"><div class="vn">n (ขนาด)</div><div class="vv" id="vn">5</div></div>
         <div class="vbox sum"><div class="vn">sum (ผลรวม)</div><div class="vv" id="vsum">0</div></div>
       </div>
-      <div class="stepinfo" id="stepinfo">ขั้นที่ 0</div>
-    </div>
-
-    <div class="panel">
       <div class="arrwrap">
         <div class="pointer" id="pointer"></div>
         <div class="arr" id="arr"></div>
       </div>
       <div class="note" id="note">กด “เล่น” หรือ “▶︎ ถัดไป” เพื่อเริ่มเดินลูปทีละรอบ</div>
+      <div class="stepinfo" id="stepinfo">ขั้นที่ 0</div>
     </div>
   </div>
 
+  <svg class="mascot" id="mascot" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+    <line x1="110" y1="20" x2="110" y2="42" stroke="#7a5cff" stroke-width="5"/><circle cx="110" cy="15" r="9" fill="#ffd24d" stroke="#7a5cff" stroke-width="3"/>
+    <g class="armL"><rect x="24" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="34" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
+    <g class="armR"><rect x="176" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="186" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
+    <rect x="48" y="42" width="124" height="96" rx="28" fill="#eef2ff" stroke="#7a5cff" stroke-width="5"/>
+    <ellipse cx="74" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/><ellipse cx="146" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
+    <circle cx="88" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="88" cy="84" r="7" fill="#2f7bf6"/>
+    <circle cx="132" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="132" cy="84" r="7" fill="#2f7bf6"/>
+    <rect x="88" y="110" width="44" height="16" rx="8" fill="#19b877"/>
+    <rect x="64" y="148" width="92" height="58" rx="16" fill="#fff" stroke="#7a5cff" stroke-width="4"/><rect x="80" y="164" width="60" height="28" rx="8" fill="#e6f0ff"/><path d="M80 178 H140 M98 168 V188" stroke="#2f7bf6" stroke-width="3"/>
+  </svg>
+
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
-const CODE=[
- ['1','<span class="k">int</span> sum = <span class="s">0</span>;'],
- ['2','<span class="k">for</span>(<span class="k">int</span> i=<span class="s">0</span>; i&lt;n; i++){'],
- ['3','    sum += a[i];'],
- ['4','}'],
- ['5','cout &lt;&lt; sum;'],
-];
 let arr=[3,8,1,6,4], states=[], idx=0, timer=null;
 
 const $=id=>document.getElementById(id);
 const codeEl=$("code"),arrEl=$("arr"),noteEl=$("note"),pointerEl=$("pointer");
+function cheer(){const m=$("mascot");if(m){m.classList.remove("cheer");void m.offsetWidth;m.classList.add("cheer");setTimeout(()=>m.classList.remove("cheer"),800);}}
 
 function buildStates(a){
   const n=a.length,st=[];let sum=0,i=0;
-  st.push({line:1,i:null,sum:0,hi:null,done:0,note:`กำหนดค่าเริ่มต้น sum = 0`});
-  st.push({line:2,i:0,sum:0,hi:null,done:0,note:`เริ่มลูป: กำหนด i = 0`});
+  st.push({line:6,i:null,sum:0,hi:null,done:0,note:`กำหนดค่าเริ่มต้น sum = 0`});
+  st.push({line:7,i:0,sum:0,hi:null,done:0,note:`เริ่มลูป: กำหนด i = 0`});
   i=0;
   while(true){
     const cond=i<n;
-    st.push({line:2,i,sum,hi:null,done:i,note:`ตรวจเงื่อนไข  i < n  : ${i} < ${n} → ${cond?'จริง ✓ เข้าลูป':'เท็จ ✗ ออกจากลูป'}`});
+    st.push({line:7,i,sum,hi:null,done:i,note:`ตรวจเงื่อนไข  i < n  : ${i} < ${n} → ${cond?'จริง ✓ เข้าลูป':'เท็จ ✗ ออกจากลูป'}`});
     if(!cond)break;
     const prev=sum;sum+=a[i];
-    st.push({line:3,i,sum,hi:i,done:i,note:`sum = ${prev} + a[${i}](${a[i]}) = ${sum}`});
-    st.push({line:2,i:i+1,sum,hi:null,done:i+1,note:`i++  →  i = ${i+1}`});
+    st.push({line:8,i,sum,hi:i,done:i,note:`sum = ${prev} + a[${i}](${a[i]}) = ${sum}`});
+    st.push({line:7,i:i+1,sum,hi:null,done:i+1,note:`i++  →  i = ${i+1}`});
     i++;
   }
-  st.push({line:5,i,sum,hi:null,done:n,fin:true,note:`จบลูป! ผลรวมทั้งหมด sum = ${sum}`});
+  st.push({line:10,i,sum,hi:null,done:n,fin:true,note:`จบลูป! ผลรวมทั้งหมด sum = ${sum}`});
   return st;
 }
 function renderCode(line){
-  codeEl.innerHTML=CODE.map(([no,html])=>`<span class="ln ${(+no===line)?'on':''}">${no}  ${html}</span>`).join("");
+  const vals=arr.join(", "), n=arr.length;
+  const L=[
+    ['1',`<span class="k">#include</span> <span class="c">&lt;iostream&gt;</span>`,'fr'],
+    ['2',`<span class="k">using namespace</span> std;`,'fr'],
+    ['3',`<span class="k">int</span> main() {`,'fr'],
+    ['4',`    <span class="k">int</span> a[] = {${vals}};`,''],
+    ['5',`    <span class="k">int</span> n = <span class="m">${n}</span>;`,''],
+    ['6',`    <span class="k">int</span> sum = <span class="m">0</span>;`,''],
+    ['7',`    <span class="k">for</span> (<span class="k">int</span> i = <span class="m">0</span>; i &lt; n; i++) {`,''],
+    ['8',`        sum += a[i];`,''],
+    ['9',`    }`,''],
+    ['10',`    cout &lt;&lt; sum;`,''],
+    ['11',`    <span class="k">return</span> <span class="m">0</span>;`,'fr'],
+    ['12',`}`,'fr'],
+  ];
+  codeEl.innerHTML=L.map(([no,html,fr])=>{
+    const cls=(+no===line)?'on':(fr||'');
+    return `<span class="ln ${cls}"><span class="num">${(no+'').padStart(2,' ')}</span>${html}</span>`;
+  }).join("");
 }
 function renderArr(s){
   arrEl.innerHTML="";
@@ -149,11 +197,18 @@ function show(){
   noteEl.textContent=s.note;noteEl.className="note"+(s.fin?" fin":"");
   $("stepinfo").textContent=`ขั้นที่ ${idx} / ${states.length-1}`;
   $("prev").disabled=idx<=0;$("next").disabled=idx>=states.length-1;
+  if(s.fin)cheer();
 }
 function rebuild(){
-  const nums=$("arrin").value.split(/[, ]+/).map(x=>parseInt(x)).filter(x=>!isNaN(x)).slice(0,9);
-  arr=nums.length?nums:[3,8,1,6,4];
+  const raw=$("arrin").value.split(/[, ]+/).filter(x=>x!=="");
+  const nums=raw.map(x=>parseInt(x)).filter(x=>!isNaN(x));
+  let warn="";
+  if(!raw.length){warn="ยังไม่ได้ใส่ค่า — ใช้ค่าตัวอย่าง 3, 8, 1, 6, 4 ไปก่อน";}
+  else if(nums.length<raw.length){warn="มีบางค่าไม่ใช่ตัวเลข ระบบข้ามให้ — ใส่เฉพาะตัวเลขคั่นด้วยจุลภาค เช่น 3, 8, 1";}
+  else if(raw.length>9){warn="อาเรย์ยาวเกิน 9 ช่อง ตัดเหลือ 9 ช่องเพื่อให้แสดงผลพอดีจอ";}
+  arr=nums.length?nums.slice(0,9):[3,8,1,6,4];
   states=buildStates(arr);idx=0;stop();show();
+  if(warn){noteEl.textContent="⚠ "+warn;noteEl.className="note warn";}
 }
 function step(d){idx=Math.max(0,Math.min(states.length-1,idx+d));show();}
 function play(){

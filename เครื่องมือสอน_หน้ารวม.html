@@ -6,6 +6,7 @@
 <title>SRRU | ชุดเครื่องมือสอน Introduction to Programming</title>
 <link rel="icon" type="image/png" href="Day One/srru-logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
 <style>
   :root{
     --blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--gold:#f2a900;
@@ -16,7 +17,7 @@
     background:radial-gradient(1100px 640px at 6% -10%,#d7e7ff 0%,transparent 58%),
               radial-gradient(1000px 640px at 104% -6%,#ffe3f4 0%,transparent 55%),
               linear-gradient(165deg,var(--bg1),var(--bg2));background-attachment:fixed}
-  body{font-family:"Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);min-height:100vh;
+  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);min-height:100vh;
     max-width:1240px;margin:0 auto;background:transparent;padding:34px clamp(16px,4vw,40px) 70px}
   svg.lucide{width:1em;height:1em;vertical-align:-.15em;stroke-width:2px}
 
@@ -82,14 +83,14 @@
     </div>
     <p class="lead">ศูนย์รวมสื่อการสอนทั้ง 5 วันในที่เดียว — คลิกการ์ดเพื่อเปิดใช้งานบนเบราว์เซอร์ ฉายหน้าห้องได้ทันที</p>
     <div class="stats">
-      <span class="stat"><span class="d" style="background:#3ee08f"></span>พร้อมใช้ <b>8</b></span>
-      <span class="stat"><span class="d" style="background:#ffd24d"></span>กำลังพัฒนา <b>5</b></span>
+      <span class="stat"><span class="d" style="background:#3ee08f"></span>พร้อมใช้ <b>21</b></span>
+      <span class="stat"><span class="d" style="background:#ffd24d"></span>กำลังพัฒนา <b>2</b></span>
       <span class="stat"><span class="d" style="background:#b8a6ff"></span>เครื่องมือภายนอก <b>3</b></span>
     </div>
   </div>
 
   <div class="daysec">
-    <div class="dayhead"><span class="daybadge" style="background:var(--green);color:var(--green)"><span style="color:#fff">วันที่ 1</span></span><h2>เปิดค่าย + ปูพื้น</h2><span class="cnt">7 รายการ</span></div>
+    <div class="dayhead"><span class="daybadge" style="background:var(--green);color:var(--green)"><span style="color:#fff">วันที่ 1</span></span><h2>เปิดค่าย + ปูพื้น</h2><span class="cnt">8 รายการ</span></div>
     <div class="grid">
       <a class="card" style="--clr:var(--blue)" href="Day One/สไลด์นำเสนอ_วันที่1.html">
         <div class="thumb"><span class="step">1</span><i class="ic" data-lucide="presentation"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
@@ -126,38 +127,88 @@
         <div class="cbody"><h3>เกมหา error ในโค้ด</h3><p>ใช้คู่สไลด์ 13 — หาบรรทัดที่ผิด (ลืม ; / ลืม quote)</p></div>
         <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
       </a>
-    </div>
-  </div>
-
-  <div class="daysec">
-    <div class="dayhead"><span class="daybadge" style="background:var(--blue)"><span style="color:#fff">วันที่ 2</span></span><h2>เน้น C++ #1 — พื้นฐาน &amp; เงื่อนไข</h2><span class="cnt">2 รายการ</span></div>
-    <div class="grid">
-      <div class="card disabled" style="--clr:var(--blue)">
-        <div class="thumb"><i class="ic" data-lucide="variable"></i><span class="pill soon"><i data-lucide="clock"></i>เร็วๆ นี้</span></div>
-        <div class="cbody"><h3>ตัวแปร &amp; ชนิดข้อมูล</h3><p>เห็นกล่องเก็บค่า ค่าตัวแปรเปลี่ยนเมื่อกำหนดค่าใหม่</p></div>
-        <div class="cfoot muted">กำลังพัฒนา</div>
-      </div>
-      <div class="card disabled" style="--clr:var(--purple)">
-        <div class="thumb"><i class="ic" data-lucide="git-branch"></i><span class="pill soon"><i data-lucide="clock"></i>เร็วๆ นี้</span></div>
-        <div class="cbody"><h3>เงื่อนไข if / else</h3><p>เห็นเส้นทาง true/false แยกตามเงื่อนไข</p></div>
-        <div class="cfoot muted">กำลังพัฒนา</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="daysec">
-    <div class="dayhead"><span class="daybadge" style="background:var(--green)"><span style="color:#fff">วันที่ 3</span></span><h2>เน้น C++ #2 — วนซ้ำ &amp; ข้อมูลชุด</h2><span class="cnt">2 รายการ</span></div>
-    <div class="grid">
-      <a class="card" style="--clr:var(--green)" href="Day Three/simulator_loop.html">
-        <div class="thumb"><i class="ic" data-lucide="repeat"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
-        <div class="cbody"><h3>การวนซ้ำ Loop</h3><p>เดินทีละรอบ เห็นตัวแปร i, อาเรย์ และผลรวมเปลี่ยนแบบ step-by-step</p></div>
+      <a class="card" style="--clr:var(--green)" href="Day One/ใบงานดิจิทัล_วันที่1.html">
+        <div class="thumb"><span class="step">8</span><i class="ic" data-lucide="file-pen"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>ใบงานดิจิทัลวันที่ 1</h3><p>เติมคำ/ทำนายผล/หา error ตรวจให้คะแนนทันที + ส่งเข้า Google Sheet</p></div>
         <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
       </a>
-      <div class="card disabled" style="--clr:var(--gold)">
-        <div class="thumb"><i class="ic" data-lucide="layout-grid"></i><span class="pill soon"><i data-lucide="clock"></i>เร็วๆ นี้</span></div>
-        <div class="cbody"><h3>Array + Loop</h3><p>เห็นการเข้าถึงสมาชิกอาเรย์ด้วย index ร่วมกับลูป</p></div>
-        <div class="cfoot muted">กำลังพัฒนา</div>
-      </div>
+    </div>
+  </div>
+
+  <div class="daysec">
+    <div class="dayhead"><span class="daybadge" style="background:var(--blue)"><span style="color:#fff">วันที่ 2</span></span><h2>เน้น C++ #1 — พื้นฐาน &amp; เงื่อนไข</h2><span class="cnt">7 รายการ</span></div>
+    <div class="grid">
+      <a class="card" style="--clr:var(--blue)" href="Day Two/สไลด์นำเสนอ_วันที่2.html">
+        <div class="thumb"><span class="step">1</span><i class="ic" data-lucide="presentation"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>สไลด์นำเสนอวันที่ 2</h3><p>แกนหลักทั้งวัน — Structure, I/O, ตัวแปร, Operators, if-else</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--coral)" href="Day Two/simulator_ตัวแปร.html">
+        <div class="thumb"><span class="step">2</span><i class="ic" data-lucide="variable"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>ตัวแปร &amp; ชนิดข้อมูล</h3><p>ใช้คู่สไลด์ 7–8 — ประกาศตัวแปร เห็นกล่องในหน่วยความจำ</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--green)" href="Day Two/เกม_จับคู่ชนิดข้อมูล.html">
+        <div class="thumb"><span class="step">3</span><i class="ic" data-lucide="shapes"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>เกมจับคู่ชนิดข้อมูล</h3><p>เสริมต่อจากชนิดข้อมูล — int/double/char/string/bool?</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--gold)" href="Day Two/simulator_operators.html">
+        <div class="thumb"><span class="step">4</span><i class="ic" data-lucide="calculator"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>ตัวดำเนินการ (Operators)</h3><p>ใช้คู่สไลด์ 9 — + − * / % สลับ int/double เห็นการหารปัดเศษ</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--purple)" href="Day Two/simulator_if_else.html">
+        <div class="thumb"><span class="step">5</span><i class="ic" data-lucide="git-branch"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>เงื่อนไข if / else</h3><p>ใช้คู่สไลด์ 10 — ใส่ค่า+เงื่อนไข เห็นเส้นทาง true/false</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--blue)" href="Day Two/ใบฝึก_วันที่2.html">
+        <div class="thumb"><span class="step">6</span><i class="ic" data-lucide="clipboard-list"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>ใบฝึก C++ วันที่ 2 (กระดาษ)</h3><p>ใช้คู่สไลด์ 11 — ตัวแปร · cin/cout · operators · if-else (พิมพ์แจก)</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--green)" href="Day Two/ใบงานดิจิทัล_วันที่2.html">
+        <div class="thumb"><span class="step">7</span><i class="ic" data-lucide="file-pen"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>ใบงานดิจิทัลวันที่ 2</h3><p>เติมคำ/ทำนายผล/หา error ตรวจให้คะแนนทันที + ส่งเข้า Google Sheet</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="daysec">
+    <div class="dayhead"><span class="daybadge" style="background:var(--green)"><span style="color:#fff">วันที่ 3</span></span><h2>เน้น C++ #2 — วนซ้ำ &amp; ข้อมูลชุด</h2><span class="cnt">6 รายการ</span></div>
+    <div class="grid">
+      <a class="card" style="--clr:var(--blue)" href="Day Three/สไลด์นำเสนอ_วันที่3.html">
+        <div class="thumb"><span class="step">1</span><i class="ic" data-lucide="presentation"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>สไลด์นำเสนอวันที่ 3</h3><p>แกนหลักทั้งวัน 13 หน้า — for/while, array, loop+array พร้อมโค้ดเต็ม</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--green)" href="Day Three/simulator_loop.html">
+        <div class="thumb"><span class="step">2</span><i class="ic" data-lucide="repeat"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>การวนซ้ำ Loop</h3><p>ใช้คู่สไลด์ 4–8 — เดินทีละรอบ เห็นตัวแปร i และผลรวมแบบ step-by-step</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--coral)" href="Day Three/simulator_array.html">
+        <div class="thumb"><span class="step">3</span><i class="ic" data-lucide="layout-grid"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>อาเรย์ Array</h3><p>ใช้คู่สไลด์ 9–11 — กล่อง index 0, เข้าถึง score[i], วน for ทั้งชุด</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--purple)" href="Day Three/เกม_ทำนายผลลูป.html">
+        <div class="thumb"><span class="step">4</span><i class="ic" data-lucide="trophy"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>เกมแข่งทำนายผลลูป</h3><p>โจทย์ลูป/อาเรย์ แย่งกันตอบทีละทีม ตอบถูกได้คะแนน</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--green)" href="Day Three/ใบงานดิจิทัล_วันที่3.html">
+        <div class="thumb"><span class="step">5</span><i class="ic" data-lucide="file-pen"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>ใบงานดิจิทัลวันที่ 3</h3><p>เติมคำ/ทำนายผล/หา error ตรวจให้คะแนนทันที + ส่งเข้า Google Sheet</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
+      <a class="card" style="--clr:var(--blue)" href="Day Three/ใบฝึก_วันที่3.html">
+        <div class="thumb"><span class="step">6</span><i class="ic" data-lucide="clipboard-list"></i><span class="pill ready"><i data-lucide="circle-check"></i>พร้อมใช้</span></div>
+        <div class="cbody"><h3>ใบฝึกวันที่ 3 (กระดาษ)</h3><p>เติมคำ/ทำนายผล/หา error พิมพ์แจกได้ + มีเฉลยสำหรับครู</p></div>
+        <div class="cfoot">เปิดเครื่องมือ <i data-lucide="arrow-right"></i></div>
+      </a>
     </div>
   </div>
 
@@ -190,9 +241,9 @@
         <div class="cbody"><h3>VisuAlgo</h3><p>ภาพเคลื่อนไหวอัลกอริทึม (เรียง/ค้นหา/กราฟ) สำหรับวันโอลิมปิก</p></div>
         <div class="cfoot">เปิดเว็บ <i data-lucide="arrow-up-right"></i></div>
       </a>
-      <a class="card" style="--clr:var(--green)" href="https://www.onlinegdb.com/online_c++_compiler" target="_blank" rel="noopener">
+      <a class="card" style="--clr:var(--green)" href="https://onecompiler.com/cpp" target="_blank" rel="noopener">
         <div class="thumb"><i class="ic" data-lucide="terminal-2"></i><span class="pill ext"><i data-lucide="external-link"></i>ภายนอก</span></div>
-        <div class="cbody"><h3>OnlineGDB</h3><p>เขียนและรัน C++ จริงในเบราว์เซอร์ ไม่ต้องติดตั้ง</p></div>
+        <div class="cbody"><h3>OneCompiler</h3><p>เขียนและรัน C++ จริงในเบราว์เซอร์ ไม่ต้องติดตั้ง</p></div>
         <div class="cfoot">เปิดเว็บ <i data-lucide="arrow-up-right"></i></div>
       </a>
     </div>

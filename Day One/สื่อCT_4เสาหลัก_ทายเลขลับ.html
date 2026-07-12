@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>การคิดเชิงคำนวณ — 4 เสาหลัก (ทายเลขลับ)</title>
+<link rel="icon" type="image/png" href="srru-logo.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root{
+    --bg:#eef2f8; --card:#ffffff; --ink:#1e2740; --muted:#5b6478; --line:#e3e8f1;
+    --c1:#3b82f6; --c1b:#e8f1ff;  /* decomposition */
+    --c2:#22a565; --c2b:#e6f7ee;  /* pattern */
+    --c3:#8b5cf6; --c3b:#f0eaff;  /* abstraction */
+    --c4:#f59e0b; --c4b:#fff3dd;  /* algorithm */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'LINE Seed Sans TH',system-ui,sans-serif;background:radial-gradient(1200px 600px at 50% -10%,#f7faff,var(--bg));color:var(--ink);height:100vh;overflow:hidden;padding:10px 12px}
+  .wrap{max-width:900px;height:100%;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+  .head{text-align:center;flex:none}
+  .head h1{font-size:20px;letter-spacing:-.5px}
+  .head .sub{color:var(--muted);font-size:12.5px;margin-top:2px}
+  .prob{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:5px 14px;margin-top:6px;font-weight:700;font-size:13.5px;box-shadow:0 8px 22px rgba(40,50,80,.06)}
+  .prob i{width:16px;height:16px;color:var(--c4)}
+
+  /* pillar progress */
+  .pills{display:flex;gap:7px;flex:none;flex-wrap:nowrap;justify-content:center}
+  .pill{flex:1;min-width:0;display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:7px 10px;cursor:pointer;transition:.18s;opacity:.62}
+  .pill .n{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;flex:none;font-size:14px}
+  .pill .t{font-weight:800;font-size:13px;line-height:1.1}
+  .pill .t small{display:block;font-weight:600;font-size:10px;color:var(--muted)}
+  .pill.on{opacity:1;transform:translateY(-2px);box-shadow:0 12px 28px rgba(40,50,80,.12)}
+  .pill.done{opacity:.85}
+  .pill:nth-child(1) .n{background:var(--c1)} .pill:nth-child(1).on{border-color:var(--c1)}
+  .pill:nth-child(2) .n{background:var(--c2)} .pill:nth-child(2).on{border-color:var(--c2)}
+  .pill:nth-child(3) .n{background:var(--c3)} .pill:nth-child(3).on{border-color:var(--c3)}
+  .pill:nth-child(4) .n{background:var(--c4)} .pill:nth-child(4).on{border-color:var(--c4)}
+
+  .stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .card{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:20px 26px;box-shadow:0 16px 40px rgba(40,50,80,.08);display:none;animation:fade .3s;width:100%;max-height:100%;overflow-y:auto}
+  .card.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .tag{display:inline-flex;align-items:center;gap:7px;font-weight:800;font-size:12.5px;padding:4px 11px;border-radius:999px;margin-bottom:6px}
+  .tag i{width:15px;height:15px}
+  .s1 .tag{background:var(--c1b);color:var(--c1)} .s2 .tag{background:var(--c2b);color:var(--c2)}
+  .s3 .tag{background:var(--c3b);color:var(--c3)} .s4 .tag{background:var(--c4b);color:#b6730a}
+  .card h2{font-size:22px;margin-bottom:3px}
+  .card .lead{color:var(--muted);font-size:15px;line-height:1.55;margin-bottom:13px}
+
+  .think{background:#fffbe9;border:1.5px solid #ffe6a0;border-radius:13px;padding:12px 16px;margin:13px 0;font-size:14.5px}
+  .think b{color:#a9750a}
+  .think .opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .think .opts button{font-family:inherit;font-weight:700;font-size:13.5px;border:1.5px solid #ecd28a;background:#fff;color:#7a5600;border-radius:9px;padding:6px 13px;cursor:pointer}
+  .think .opts button:hover{background:#fff3d4}
+  .think .rv{display:none;margin-top:8px;font-weight:700;color:#0d6b3f}
+  .think .rv.show{display:block}
+
+  /* decomposition chips */
+  .steps{display:grid;gap:9px}
+  .sub{display:flex;align-items:center;gap:13px;background:#f7f9fd;border:1.5px solid var(--line);border-left:5px solid var(--c1);border-radius:12px;padding:11px 16px;opacity:0;transform:translateX(-10px);transition:.3s}
+  .sub.show{opacity:1;transform:none}
+  .sub .k{width:28px;height:28px;border-radius:8px;background:var(--c1);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;font-size:14px}
+  .sub b{font-size:15.5px}
+  .sub span{color:var(--muted);font-size:13.5px}
+
+  /* pattern loop */
+  .loop{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:4px 0 2px}
+  .lstep{background:var(--c2b);border:1.5px solid #b7e5cd;border-radius:12px;padding:8px 14px;text-align:center;min-width:120px}
+  .lstep i{width:19px;height:19px;color:var(--c2)}
+  .lstep b{display:block;font-size:14px;margin-top:2px}
+  .lstep small{color:var(--muted);font-size:11px}
+  .arrow{color:var(--c2);font-size:19px;font-weight:800}
+  .repeat{text-align:center;color:var(--c2);font-weight:800;margin-top:4px;font-size:14px}
+  table.rounds{width:100%;border-collapse:collapse;margin-top:9px;font-size:13px}
+  table.rounds th,table.rounds td{border:1px solid var(--line);padding:4px 6px;text-align:center}
+  table.rounds th{background:var(--c2b);color:#0e774a}
+  table.rounds td.same{color:var(--c2);font-weight:700}
+
+  /* abstraction sorter */
+  .absgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+  .bin{border:2px dashed var(--line);border-radius:14px;padding:12px;min-height:120px}
+  .bin.keep{border-color:#9ad9b6;background:#f2fbf6}
+  .bin.toss{border-color:#f2b8b8;background:#fdf3f3}
+  .bin h4{font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .bin.keep h4{color:#12894f} .bin.toss h4{color:#c0392b}
+  .detbank{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
+  .det{font-family:inherit;font-weight:700;font-size:13.5px;border:1.5px solid var(--line);background:#fff;color:#5b6478;border-radius:9px;padding:7px 13px;cursor:pointer;transition:.15s}
+  .det::before{content:"＋ ";font-weight:800;opacity:.5}
+  .det:hover{border-color:var(--c3);background:#faf7ff}
+  .det.k{border-color:#159a5b;background:#12a866;color:#fff}
+  .det.k::before{content:"✓ ";opacity:1}
+  .det.t{border-color:#d94b4b;background:#fdeaea;color:#c0392b;text-decoration:line-through;text-decoration-thickness:2px}
+  .det.t::before{content:"✕ ";text-decoration:none;display:inline-block;opacity:1}
+  .abscheck{margin-top:9px;font-weight:800;display:none;font-size:14px}
+  .abscheck.show{display:block}
+
+  /* algorithm game */
+  .bar{position:relative;height:40px;background:#eef1f7;border-radius:12px;margin:10px 0 4px;overflow:hidden;border:1.5px solid var(--line)}
+  .range{position:absolute;top:0;bottom:0;background:linear-gradient(180deg,#fff3dd,#ffe4b0);border-left:2px solid var(--c4);border-right:2px solid var(--c4);transition:.45s}
+  .mid{position:absolute;top:0;bottom:0;width:3px;background:#e2570b;transition:.45s}
+  .mid::after{content:attr(data-v);position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:#e2570b;color:#fff;font-size:12px;font-weight:800;padding:1px 6px;border-radius:6px;white-space:nowrap}
+  .scale{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;font-weight:700;margin-bottom:6px}
+  .grow{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .btn{font-family:inherit;font-weight:800;font-size:14px;border:0;border-radius:11px;padding:9px 17px;cursor:pointer;color:#fff;display:inline-flex;align-items:center;gap:7px}
+  .btn.go{background:linear-gradient(135deg,var(--c4),#e07d00)}
+  .btn.ghost{background:#eef1f6;color:#48505c;border:1.5px solid var(--line)}
+  .fb{margin-top:9px;font-weight:800;font-size:14.5px;min-height:22px}
+  .cnt{background:var(--c4b);color:#b6730a;border-radius:9px;padding:4px 11px;font-weight:800;font-size:13.5px}
+  .codewrap{margin-top:11px;background:#11203a;border-radius:12px;padding:14px 16px;font-family:ui-monospace,Consolas,monospace;font-size:13.5px;color:#e8eefc;line-height:1.75;overflow-x:auto;white-space:pre;tab-size:2}
+  .codewrap .k{color:#ff9bd0}.codewrap .c{color:#8aa0c0;font-style:italic}.codewrap .m{color:#9ad27f}.codewrap .f{color:#ffd27f}
+
+  .nav{display:flex;justify-content:space-between;gap:10px;flex:none}
+  .nav button{font-family:inherit;font-weight:800;font-size:14px;border:1.5px solid var(--line);background:#fff;color:var(--ink);border-radius:11px;padding:9px 18px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+  .nav button.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .nav button:disabled{opacity:.35;cursor:default}
+  .nav i{width:16px;height:16px}
+
+  /* summary */
+  .sumgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:6px 0 10px}
+  .sc{border-radius:12px;padding:10px;color:#fff;text-align:center}
+  .sc:nth-child(1){background:var(--c1)}.sc:nth-child(2){background:var(--c2)}.sc:nth-child(3){background:var(--c3)}.sc:nth-child(4){background:var(--c4)}
+  .sc b{display:block;font-size:14px}.sc small{font-size:11px;opacity:.92}
+  .links{display:flex;gap:9px;flex-wrap:wrap;margin-top:5px}
+  .links a{text-decoration:none;font-weight:800;font-size:13.5px;border:1.5px solid var(--line);border-radius:11px;padding:8px 13px;color:var(--ink);display:inline-flex;align-items:center;gap:7px}
+  .links a:hover{border-color:var(--c4)}
+  @media(max-width:640px){.absgrid,.sumgrid{grid-template-columns:1fr 1fr}.head h1{font-size:22px}.card{padding:20px 16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>การคิดเชิงคำนวณ · 4 เสาหลัก</h1>
+    <div class="sub">Computational Thinking — แกะปัญหาจริงทีละเสา แล้วต่อยอดเป็นโปรแกรม</div>
+    <div class="prob"><i data-lucide="target"></i> โจทย์: “ทายเลขลับ 1–100 ให้ใช้จำนวนครั้งน้อยที่สุด”</div>
+  </div>
+
+  <div class="pills">
+    <div class="pill" data-go="1"><div class="n">1</div><div class="t">แตกย่อย<small>Decomposition</small></div></div>
+    <div class="pill" data-go="2"><div class="n">2</div><div class="t">หาแบบซ้ำ<small>Pattern</small></div></div>
+    <div class="pill" data-go="3"><div class="n">3</div><div class="t">คัดสำคัญ<small>Abstraction</small></div></div>
+    <div class="pill" data-go="4"><div class="n">4</div><div class="t">ลำดับขั้น<small>Algorithm</small></div></div>
+  </div>
+
+  <div class="stage">
+  <!-- ========= STEP 1 : DECOMPOSITION ========= -->
+  <section class="card s1 on" data-step="1">
+    <span class="tag"><i data-lucide="scissors"></i> เสาที่ 1 · Decomposition</span>
+    <h2>แตกปัญหาใหญ่ ให้เป็นงานเล็ก ๆ</h2>
+    <p class="lead">ปัญหา “ทายเลขลับให้ไวที่สุด” ดูยาก แต่ถ้า<b>แตกเป็นงานย่อย</b> จะทำทีละก้าวได้ กดปุ่มเพื่อค่อย ๆ แตกปัญหาออกมา</p>
+
+    <div class="think">
+      <b>💡 ชวนคิด:</b> ถ้าเลขลับอยู่ระหว่าง 1–100 แล้ว “เดามั่ว” ไปเรื่อย ๆ โดยเฉลี่ยจะใช้กี่ครั้งกว่าจะเจอ?
+      <div class="opts">
+        <button onclick="reveal(this,'q1')">~7 ครั้ง</button>
+        <button onclick="reveal(this,'q1')">~50 ครั้ง</button>
+        <button onclick="reveal(this,'q1')">~100 ครั้ง</button>
+      </div>
+      <div class="rv" id="q1">เฉลี่ยราว ๆ <b>50 ครั้ง!</b> เพราะเดามั่วตัดตัวเลือกทิ้งได้ทีละ 1 ตัว → เดี๋ยวเสาที่ 4 เราจะทำให้เหลือแค่ ~7 ครั้ง</div>
+    </div>
+
+    <div class="steps" id="declist">
+      <div class="sub"><div class="k">A</div><div><b>กำหนดช่วงที่เลขลับเป็นไปได้</b> <span>— เริ่มจาก 1 ถึง 100</span></div></div>
+      <div class="sub"><div class="k">B</div><div><b>เลือกเลขมาเดา 1 ครั้ง</b> <span>— เดาตัวไหนดีให้คุ้มที่สุด?</span></div></div>
+      <div class="sub"><div class="k">C</div><div><b>ดูคำใบ้ว่า “สูงไป” หรือ “ต่ำไป”</b> <span>— เทียบกับเลขที่เดา</span></div></div>
+      <div class="sub"><div class="k">D</div><div><b>ตัดครึ่งที่เป็นไปไม่ได้ทิ้ง</b> <span>— หดช่วงให้เล็กลง</span></div></div>
+      <div class="sub"><div class="k">E</div><div><b>ทำซ้ำจนกว่าจะเจอ</b> <span>— วนกลับไปข้อ B</span></div></div>
+    </div>
+    <div class="grow" style="margin-top:14px">
+      <button class="btn go" style="background:linear-gradient(135deg,var(--c1),#2f6fd6)" onclick="decompNext()"><i data-lucide="plus"></i> แตกงานย่อยถัดไป</button>
+      <span class="cnt" id="decCnt" style="background:var(--c1b);color:var(--c1)">แตกแล้ว 0 / 5 งาน</span>
+    </div>
+  </section>
+
+  <!-- ========= STEP 2 : PATTERN ========= -->
+  <section class="card s2" data-step="2">
+    <span class="tag"><i data-lucide="repeat"></i> เสาที่ 2 · Pattern Recognition</span>
+    <h2>มองหา “สิ่งที่ทำซ้ำ” เดิม ๆ</h2>
+    <p class="lead">ถ้าดูงานย่อย B→C→D จะเห็นว่าทุกก้าวเรา<b>ทำ 3 อย่างเดิมซ้ำ ๆ</b> พอเจอแบบซ้ำ เราก็เขียนเป็นวงวน (loop) ได้เลย</p>
+
+    <div class="loop">
+      <div class="lstep"><i data-lucide="crosshair"></i><b>หาเลขกลาง</b><small>mid ของช่วง</small></div>
+      <span class="arrow">→</span>
+      <div class="lstep"><i data-lucide="scale"></i><b>เทียบสูง/ต่ำ</b><small>กับเลขลับ</small></div>
+      <span class="arrow">→</span>
+      <div class="lstep"><i data-lucide="scissors"></i><b>ตัดครึ่งทิ้ง</b><small>หดช่วง</small></div>
+    </div>
+    <div class="repeat">↺ วนซ้ำชุดนี้ไปเรื่อย ๆ จนเจอ</div>
+
+    <p class="lead" style="margin:14px 0 0">ลองดูตัวอย่างจริง (เลขลับ = 73) — สังเกตคอลัมน์ “ทำอะไร” มัน<b style="color:var(--c2)">เหมือนกันทุกแถว</b>:</p>
+    <table class="rounds">
+      <tr><th>รอบ</th><th>ช่วง (lo–hi)</th><th>เดากลาง (mid)</th><th>คำใบ้</th><th>ทำอะไร</th></tr>
+      <tr><td>1</td><td>1–100</td><td>50</td><td>ต่ำไป</td><td class="same">หากลาง→เทียบ→ตัดครึ่ง</td></tr>
+      <tr><td>2</td><td>51–100</td><td>75</td><td>สูงไป</td><td class="same">หากลาง→เทียบ→ตัดครึ่ง</td></tr>
+      <tr><td>3</td><td>51–74</td><td>62</td><td>ต่ำไป</td><td class="same">หากลาง→เทียบ→ตัดครึ่ง</td></tr>
+      <tr><td>4</td><td>63–74</td><td>68</td><td>ต่ำไป</td><td class="same">หากลาง→เทียบ→ตัดครึ่ง</td></tr>
+      <tr><td>5</td><td>69–74</td><td>71</td><td>ต่ำไป</td><td class="same">หากลาง→เทียบ→ตัดครึ่ง</td></tr>
+      <tr><td>6</td><td>72–74</td><td>73</td><td>ถูกต้อง!</td><td class="same">เจอใน 6 ครั้ง 🎉</td></tr>
+    </table>
+    <div class="think" style="margin-top:14px"><b>สรุปเสา 2:</b> เจอแบบซ้ำ = โอกาสเขียนเป็น <b>loop</b> — ไม่ต้องเขียนคำสั่งเดิมซ้ำ ๆ หลายรอบ</div>
+  </section>
+
+  <!-- ========= STEP 3 : ABSTRACTION ========= -->
+  <section class="card s3" data-step="3">
+    <span class="tag"><i data-lucide="filter"></i> เสาที่ 3 · Abstraction</span>
+    <h2>คัดเฉพาะสิ่งสำคัญ ตัดที่ไม่จำเป็นทิ้ง</h2>
+    <p class="lead">เกมจริงมีรายละเอียดเยอะ (สี เสียง ชื่อคนเล่น) แต่ในการ<b>แก้ปัญหา</b> เราสนใจแค่ไม่กี่อย่าง กดการ์ดเพื่อจัดว่า “เก็บ” หรือ “ตัดทิ้ง” แล้วกดตรวจ</p>
+
+    <div class="detbank" id="bank">
+      <button class="det" data-keep="1" onclick="toggleDet(this)">ค่าต่ำสุด lo</button>
+      <button class="det" data-keep="1" onclick="toggleDet(this)">ค่าสูงสุด hi</button>
+      <button class="det" data-keep="1" onclick="toggleDet(this)">เลขกลาง mid</button>
+      <button class="det" data-keep="0" onclick="toggleDet(this)">สีของกล่อง</button>
+      <button class="det" data-keep="0" onclick="toggleDet(this)">ชื่อผู้เล่น</button>
+      <button class="det" data-keep="0" onclick="toggleDet(this)">เพลงประกอบ</button>
+      <button class="det" data-keep="0" onclick="toggleDet(this)">รูปพื้นหลัง</button>
+    </div>
+    <p style="color:var(--muted);font-size:13px;margin:8px 2px">แตะ 1 ครั้ง = <b style="color:#12a866">✓ เก็บ</b> · แตะซ้ำ = <b style="color:#c0392b">✕ ตัดทิ้ง</b> · แตะอีกครั้ง = ล้าง</p>
+    <div class="grow">
+      <button class="btn go" style="background:linear-gradient(135deg,var(--c3),#6f42d6)" onclick="checkAbs()"><i data-lucide="check-check"></i> ตรวจคำตอบ</button>
+    </div>
+    <div class="abscheck" id="absOut"></div>
+    <div class="think" style="margin-top:14px"><b>สรุปเสา 3:</b> เหลือแค่ 3 อย่างที่จำเป็นจริง ๆ คือ <b>lo, hi, mid</b> → กลายเป็น “ตัวแปร” ในโปรแกรมพอดี</div>
+  </section>
+
+  <!-- ========= STEP 4 : ALGORITHM ========= -->
+  <section class="card s4" data-step="4">
+    <span class="tag"><i data-lucide="list-ordered"></i> เสาที่ 4 · Algorithm</span>
+    <h2>เรียงเป็นลำดับขั้นตอน → กลายเป็นโปรแกรม</h2>
+    <p class="lead">เอา 3 เสาก่อนหน้ามาร้อยเป็น<b>ขั้นตอนชัดเจน</b> นี่แหละคือ <b>Binary Search</b> ลองกด “เดาเลขกลาง” ดูว่ากี่ครั้งถึงเจอ (เลขลับสุ่มไว้แล้ว 1–100)</p>
+
+    <div class="scale"><span>1</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+    <div class="bar" id="bar">
+      <div class="range" id="range"></div>
+      <div class="mid" id="midMark" data-v="?"></div>
+    </div>
+    <div class="grow">
+      <button class="btn go" onclick="guessMid()"><i data-lucide="crosshair"></i> เดาเลขกลาง (mid)</button>
+      <button class="btn ghost" onclick="resetGame()"><i data-lucide="rotate-ccw"></i> เริ่มใหม่</button>
+      <span class="cnt" id="gcnt">เดาไปแล้ว 0 ครั้ง</span>
+    </div>
+    <div class="fb" id="gfb">ช่วงตอนนี้: 1 – 100 (มี 100 ตัวเลขที่เป็นไปได้)</div>
+
+    <div class="codewrap" id="code"><span class="k">#include</span> <span class="m">&lt;iostream&gt;</span>
+<span class="k">using namespace</span> std;
+
+<span class="k">int</span> main() {
+    <span class="k">int</span> secret = <span class="m">73</span>;         <span class="c">// เลขลับที่ต้องหา (1..100)</span>
+    <span class="k">int</span> lo = <span class="m">1</span>, hi = <span class="m">100</span>;      <span class="c">// เสา 3: เก็บแค่ lo, hi</span>
+    <span class="k">int</span> rounds = <span class="m">0</span>;           <span class="c">// นับจำนวนครั้งที่เดา</span>
+
+    <span class="k">while</span> (lo &lt;= hi) {           <span class="c">// เสา 2: ทำซ้ำ = loop</span>
+        <span class="k">int</span> mid = (lo + hi) / <span class="m">2</span>; <span class="c">// หาเลขกลาง</span>
+        rounds++;
+
+        <span class="k">if</span> (mid == secret) {              <span class="c">// เทียบ: เจอแล้ว</span>
+            <span class="f">cout</span> &lt;&lt; <span class="m">"เจอเลข "</span> &lt;&lt; mid
+                 &lt;&lt; <span class="m">" ใน "</span> &lt;&lt; rounds &lt;&lt; <span class="m">" ครั้ง\n"</span>;
+            <span class="k">break</span>;
+        }
+        <span class="k">else if</span> (mid &lt; secret) {        <span class="c">// ต่ำไป → ตัดครึ่งล่างทิ้ง</span>
+            <span class="f">cout</span> &lt;&lt; mid &lt;&lt; <span class="m">" ต่ำไป\n"</span>;
+            lo = mid + <span class="m">1</span>;
+        }
+        <span class="k">else</span> {                          <span class="c">// สูงไป → ตัดครึ่งบนทิ้ง</span>
+            <span class="f">cout</span> &lt;&lt; mid &lt;&lt; <span class="m">" สูงไป\n"</span>;
+            hi = mid - <span class="m">1</span>;
+        }
+    }
+
+    <span class="k">return</span> <span class="m">0</span>;
+}</div>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:9px">💡 โค้ดนี้รันได้จริง — คัดลอกไปลองที่ <a href="https://onecompiler.com/cpp" target="_blank" style="color:#b6730a;font-weight:800">OneCompiler</a> แล้วลองเปลี่ยนค่า <b>secret</b> ดู</p>
+  </section>
+
+  <!-- ========= SUMMARY ========= -->
+  <section class="card" data-step="5" style="text-align:center">
+    <span class="tag" style="background:#eef2ff;color:#3b57d6"><i data-lucide="sparkles"></i> สรุป</span>
+    <h2>4 เสา ทำงานร่วมกันเป็น “โปรแกรม”</h2>
+    <p class="lead" style="text-align:center">จากปัญหาที่ดูยาก → แตกย่อย → หาแบบซ้ำ → คัดสิ่งสำคัญ → เรียงเป็นขั้นตอน = เขียนโค้ดได้จริง</p>
+    <div class="sumgrid">
+      <div class="sc"><b>แตกย่อย</b><small>ปัญหาใหญ่ → งานเล็ก</small></div>
+      <div class="sc"><b>หาแบบซ้ำ</b><small>งานซ้ำ → loop</small></div>
+      <div class="sc"><b>คัดสำคัญ</b><small>เหลือ lo, hi, mid</small></div>
+      <div class="sc"><b>ลำดับขั้น</b><small>= Binary Search</small></div>
+    </div>
+    <p class="lead" style="text-align:center">ลองนำไปเล่นต่อกับเครื่องมืออื่น ๆ ของเรา 👇</p>
+    <div class="links" style="justify-content:center">
+      <a href="เกม_ทายเลข_BinarySearch.html"><i data-lucide="gamepad-2"></i> เกมทายเลขลับ (แข่งเป็นทีม)</a>
+      <a href="เกม3D_ล่าสมบัติ_BinarySearch.html"><i data-lucide="box"></i> เกม 3D ล่าสมบัติ</a>
+      <a href="เกม3D_หุ่นยนต์แซนด์วิช.html"><i data-lucide="bot"></i> หุ่นยนต์แซนด์วิช (Algorithm)</a>
+    </div>
+  </section>
+  </div><!-- /stage -->
+
+  <div class="nav">
+    <button id="prev" onclick="nav(-1)"><i data-lucide="chevron-left"></i> ก่อนหน้า</button>
+    <button id="next" class="primary" onclick="nav(1)">ถัดไป <i data-lucide="chevron-right"></i></button>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let step=1; const LAST=5;
+function icons(){if(window.lucide)lucide.createIcons();}
+
+function show(n){
+  step=Math.max(1,Math.min(LAST,n));
+  document.querySelectorAll('.card').forEach(c=>c.classList.toggle('on',+c.dataset.step===step));
+  document.querySelectorAll('.pill').forEach((p,i)=>{const s=i+1;p.classList.toggle('on',s===step);p.classList.toggle('done',s<step);});
+  $('prev').disabled=step===1;
+  $('next').innerHTML=step>=LAST?'จบแล้ว 🎉':'ถัดไป <i data-lucide="chevron-right"></i>';
+  window.scrollTo({top:0,behavior:'smooth'});
+  icons();
+}
+function nav(d){show(step+d);}
+document.querySelectorAll('.pill').forEach(p=>p.addEventListener('click',()=>show(+p.dataset.go)));
+
+/* reveal think */
+function reveal(btn,id){$(id).classList.add('show');const box=btn.closest('.opts');[...box.children].forEach(b=>b.style.opacity=b===btn?1:.45);btn.style.borderColor='#0d6b3f';}
+
+/* --- decomposition --- */
+let dec=0; const decItems=document.querySelectorAll('#declist .sub');
+function decompNext(){if(dec<decItems.length){decItems[dec].classList.add('show');dec++;$('decCnt').textContent='แตกแล้ว '+dec+' / 5 งาน';}}
+
+/* --- abstraction --- */
+function toggleDet(b){if(b.classList.contains('k')){b.classList.remove('k');b.classList.add('t');}
+  else if(b.classList.contains('t')){b.classList.remove('t');}
+  else{b.classList.add('k');}}
+function checkAbs(){let ok=0,tot=0,wrong=[];
+  document.querySelectorAll('#bank .det').forEach(b=>{tot++;const keep=b.dataset.keep==='1';
+    const chosenKeep=b.classList.contains('k'); const chosenToss=b.classList.contains('t');
+    if(keep&&chosenKeep)ok++; else if(!keep&&chosenToss)ok++; else wrong.push(b.textContent);});
+  const out=$('absOut'); out.classList.add('show');
+  if(ok===tot){out.style.color='#12894f';out.innerHTML='<i data-lucide="party-popper"></i> เยี่ยม! คัดถูกทั้งหมด — เก็บแค่ lo, hi, mid ที่จำเป็นจริง ๆ';}
+  else{out.style.color='#c0392b';out.innerHTML='ยังไม่ครบ ('+ok+'/'+tot+') ลองคิดว่า “สี/เสียง/ชื่อ” จำเป็นต่อการหาเลขไหม? → ตัดทิ้งได้';}
+  icons();}
+
+/* --- algorithm mini game --- */
+let secret,lo,hi,guesses;
+function resetGame(){secret=Math.floor(Math.random()*100)+1;lo=1;hi=100;guesses=0;
+  drawBar(null);$('gcnt').textContent='เดาไปแล้ว 0 ครั้ง';
+  $('gfb').style.color='var(--ink)';$('gfb').textContent='ช่วงตอนนี้: 1 – 100 (มี 100 ตัวเลขที่เป็นไปได้)';}
+function drawBar(mid){const L=(lo-1)/99*100, W=(hi-lo+1)/99*100;
+  $('range').style.left=L+'%';$('range').style.width=W+'%';
+  const mm=$('midMark');
+  if(mid==null){mm.style.left='-10px';mm.dataset.v='?';}
+  else{mm.style.left=((mid-1)/99*100)+'%';mm.dataset.v=mid;}}
+function guessMid(){
+  if(lo>hi)return;
+  const mid=Math.floor((lo+hi)/2);guesses++;drawBar(mid);
+  $('gcnt').textContent='เดาไปแล้ว '+guesses+' ครั้ง';
+  const fb=$('gfb');
+  if(mid===secret){fb.style.color='#12894f';fb.innerHTML='<i data-lucide="party-popper"></i> เจอแล้ว! เลขลับคือ <b>'+mid+'</b> — ใช้แค่ <b>'+guesses+' ครั้ง</b> (เดามั่วเฉลี่ย ~50 ครั้ง!)';lo=hi+1;}
+  else if(mid<secret){fb.style.color='#b6730a';fb.innerHTML='mid = '+mid+' → <b>ต่ำไป</b> ตัดครึ่งล่างทิ้ง → เหลือช่วง '+(mid+1)+' – '+hi;lo=mid+1;}
+  else{fb.style.color='#b6730a';fb.innerHTML='mid = '+mid+' → <b>สูงไป</b> ตัดครึ่งบนทิ้ง → เหลือช่วง '+lo+' – '+(mid-1);hi=mid-1;}
+  icons();
+}
+
+resetGame();
+show(1);
+icons();
+</script>
+</body>
+</html>

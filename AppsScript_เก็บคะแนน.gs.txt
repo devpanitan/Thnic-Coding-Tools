@@ -1,0 +1,21 @@
+// ===== Apps Script เก็บคะแนนใบงาน =====
+// วางโค้ดนี้แทนของเดิมใน Apps Script แล้ว Deploy ใหม่ (New version)
+
+function doPost(e){
+  try{
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheets()[0]; // เขียนลงแท็บแรกเสมอ เปลี่ยนชื่อแท็บได้ ไม่พัง
+    if(sheet.getLastRow() === 0){
+      sheet.appendRow(["เวลา","ใบงาน","ชื่อทีม/ผู้ทำ","สมาชิก","คะแนน","เต็ม","ผลรายข้อ","คำตอบเด็ก"]);
+    }
+    var d = JSON.parse(e.postData.contents);
+    sheet.appendRow([new Date(), d.sheet||"", d.team||"", d.member||"", d.score, d.total, d.detail||"", d.answers||""]);
+    return ContentService.createTextOutput("OK");
+  }catch(err){
+    return ContentService.createTextOutput("ERROR: " + err);
+  }
+}
+
+function doGet(){
+  return ContentService.createTextOutput("ระบบเก็บคะแนนพร้อมทำงาน");
+}

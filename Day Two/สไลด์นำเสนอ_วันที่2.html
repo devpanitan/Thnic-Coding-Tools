@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRRU | สไลด์นำเสนอวันที่ 2 — C++ พื้นฐาน &amp; เงื่อนไข</title>
+<link rel="icon" type="image/png" href="../Day One/srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--gold:#f2a900;
+    --ink:#16224a;--muted:#5d6b8a;--line:#dbe6f7;--card:#fff;--bg1:#eaf3ff;--bg2:#fef6ff;}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html,body{height:100%}
+  body{font-family:"TH Sarabun PSK","TH SarabunPSK","Sarabun","Tahoma",sans-serif;color:var(--ink);background:#0d1530;overflow:hidden}
+  .deck{position:fixed;inset:0}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:6vh 7vw;
+    background:radial-gradient(1000px 600px at 12% -8%,#d4e6ff 0%,transparent 60%),radial-gradient(900px 600px at 100% 0%,#ffe6f7 0%,transparent 55%),linear-gradient(160deg,var(--bg1),var(--bg2));}
+  .slide.active{display:flex;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  svg.lucide{width:1.05em;height:1.05em;vertical-align:-0.16em;stroke-width:2px;flex:none}
+  .kicker svg.lucide{width:1.15em;height:1.15em}
+  .ic svg.lucide{width:1em;height:1em;stroke-width:1.7px}
+  .b svg.lucide{width:1em;height:1em}
+  .kicker{display:inline-flex;align-items:center;gap:12px;font-size:2.2vh;font-weight:700;color:var(--blue);background:#e6f0ff;border:2px solid #cfe0fb;border-radius:99px;padding:.6vh 1.8vh;width:fit-content;margin-bottom:2vh}
+  h1{font-size:7.4vh;line-height:1.1;color:var(--ink)}
+  h2{font-size:5vh;line-height:1.12;margin-bottom:1.6vh}
+  .lead{font-size:3.1vh;color:var(--muted);margin-top:1.6vh;max-width:84%;display:block}
+  ul{list-style:none;display:flex;flex-direction:column;gap:1.6vh;margin-top:1vh}
+  li{font-size:3.05vh;display:flex;gap:1.5vh;align-items:flex-start;line-height:1.3}
+  li .b{flex:none;width:1.5em;height:1.5em;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.8em;font-weight:700;color:#fff;margin-top:.15em}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:2.2vh;margin-top:1vh}
+  .card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:2.4vh 2.8vh;box-shadow:0 10px 30px rgba(31,43,72,.08)}
+  .card h3{font-size:3vh;color:var(--ink);margin-bottom:.3vh;display:flex;align-items:center;gap:10px}
+  .card code{font-family:ui-monospace,monospace;color:#185fa5;font-weight:700}
+  .card p{font-size:2.5vh;color:var(--muted);line-height:1.3}
+  .two{display:grid;grid-template-columns:1.06fr .94fr;gap:4vh;align-items:center;margin-top:.5vh}
+  .exline{font-size:3vh;color:var(--ink);margin-top:1.4vh;line-height:1.34}
+  .exline.muted{color:var(--muted);font-size:2.8vh}
+  .codewrap{display:grid;grid-template-columns:1.1fr .9fr;gap:3vh;align-items:start;margin-top:1vh}
+  .code{font-family:"Consolas",ui-monospace,monospace;background:#11203a;color:#e8eefc;border-radius:18px;padding:3vh 3.2vh;font-size:2.7vh;line-height:1.55;white-space:pre;box-shadow:0 14px 36px rgba(13,21,48,.4)}
+  .code.big{font-size:3vh}
+  .code .c{color:#7fd1ff}.code .s{color:#ffd27f}.code .k{color:#ff9bd0}.code .m{color:#9ad27f}.code .o{color:#ffb86b}
+  .explist{display:flex;flex-direction:column;gap:1.3vh}
+  .exp{background:#fff;border:2px solid var(--line);border-radius:14px;padding:1.4vh 1.8vh}
+  .exp code{font-family:ui-monospace,monospace;color:#185fa5;font-weight:700;font-size:2.5vh}
+  .exp p{font-size:2.4vh;color:var(--muted);margin-top:.3vh;line-height:1.28}
+  .out{display:inline-block;font-family:ui-monospace,monospace;background:#e7faf1;border:2px dashed #aee7ce;border-radius:12px;padding:1vh 2vh;font-size:2.7vh;color:#0c6b46;margin-top:1.5vh}
+  .title-slide{background:linear-gradient(160deg,#16224a,#2a1f5e 60%,#3a2c6e);justify-content:center}
+  .title-slide .kicker{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:#d6e2ff}
+  .title-slide h1{color:#fff;font-size:8vh}
+  .title-slide .lead{color:#b9c6ee;max-width:90%}
+  .title-slide .by{margin-top:4vh;font-size:3vh;color:#aebbe6;line-height:1.5}
+  .title-slide .by b{color:#fff}
+  .title-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:5vh;align-items:center;width:100%}
+  .codewin{background:#0f1b38;border:1px solid #33457a;border-radius:18px;box-shadow:0 26px 60px rgba(0,0,0,.45);overflow:hidden}
+  .codewin .tb{display:flex;gap:9px;align-items:center;padding:1.5vh 2vh;background:#172653;border-bottom:1px solid #33457a}
+  .codewin .dot{width:1.7vh;height:1.7vh;border-radius:50%;display:block}
+  .codewin .fn{margin-left:8px;color:#8ea3d6;font-family:Consolas,monospace;font-size:1.9vh}
+  .codewin pre{margin:0;padding:2.6vh 3vh;font-family:Consolas,ui-monospace,monospace;font-size:2.35vh;line-height:1.65;color:#e8eefc;white-space:pre}
+  .codewin .k{color:#ff9bd0}.codewin .s{color:#ffd27f}.codewin .c{color:#7fd1ff}.codewin .m{color:#9ad27f}.codewin .o{color:#ffb86b}
+  .logoSmall{position:fixed;top:3vh;right:4vw;height:6vh;width:auto;z-index:5;opacity:.95}
+  .bar{position:fixed;left:0;right:0;bottom:0;height:.8vh;background:rgba(255,255,255,.25);z-index:10}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--purple),var(--green));transition:width .3s}
+  .nav{position:fixed;bottom:2.4vh;right:3vw;display:flex;gap:1.2vh;z-index:10;align-items:center}
+  .nav button{font-family:inherit;border:0;border-radius:12px;padding:1vh 1.6vh;cursor:pointer;background:#fff;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.18);display:flex;align-items:center}
+  .nav button:active{transform:scale(.95)}
+  .nav button svg{width:3vh;height:3vh}
+  .count{position:fixed;bottom:2.8vh;left:3vw;font-size:2.6vh;color:var(--muted);z-index:10;font-weight:700}
+  .hintbar{position:fixed;top:2.4vh;left:3vw;font-size:2.1vh;color:var(--muted);z-index:5;display:flex;align-items:center;gap:8px}
+  .hintbar svg{width:1em;height:1em}
+  @media print{
+    @page{size:landscape;margin:0}
+    html,body{height:auto;overflow:visible;background:#fff}
+    .deck{position:static}
+    .logoSmall,.nav,.hintbar,.count,.bar{display:none!important}
+    .slide{display:flex!important;position:relative;inset:auto;width:100vw;height:100vh;overflow:hidden;page-break-after:always;break-after:page;animation:none}
+    .slide:last-child{page-break-after:auto}
+  }
+</style>
+</head>
+<body>
+<img src="../Day One/srru-logo.png" alt="SRRU" class="logoSmall" onerror="this.style.display='none'">
+<div class="deck" id="deck">
+
+  <section class="slide title-slide">
+    <div class="title-grid">
+      <div>
+        <div class="kicker"><i data-lucide="graduation-cap"></i> THNIC Academy • วันที่ 2</div>
+        <h1>เน้น C++<br>พื้นฐาน &amp; เงื่อนไข</h1>
+        <p class="lead">ตัวแปร, รับ-แสดงผล, ตัวดำเนินการ และการตัดสินใจด้วย if / else</p>
+        <div class="by">26 กรกฎาคม 2569<br><b>Introduction to Programming</b> — THNIC × SRRU</div>
+      </div>
+      <div class="codewin">
+        <div class="tb"><span class="dot" style="background:#ff6058"></span><span class="dot" style="background:#ffbd2e"></span><span class="dot" style="background:#28c940"></span><span class="fn">day2.cpp</span></div>
+        <pre><span class="k">int</span> age;
+cin &gt;&gt; age;
+<span class="k">if</span> (age &gt;= <span class="m">18</span>)
+    cout &lt;&lt; <span class="s">"ผู้ใหญ่"</span>;
+<span class="k">else</span>
+    cout &lt;&lt; <span class="s">"เยาวชน"</span>;</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="target"></i> เป้าหมายวันนี้</div>
+    <h2>วันนี้เราจะได้เรียนอะไรบ้าง?</h2>
+    <ul>
+      <li><span class="b" style="background:var(--gray,#8aa0c8)"><i data-lucide="rotate-ccw"></i></span><span><b>ทบทวน:</b> เมื่อวานเขียน Hello World เป็นแล้ว</span></li>
+      <li><span class="b" style="background:var(--blue)"><i data-lucide="braces"></i></span><span>โครงสร้างโปรแกรม (Structure code) และ Syntax</span></li>
+      <li><span class="b" style="background:var(--purple)"><i data-lucide="terminal"></i></span><span><b>Input / Output</b> — รับค่า (cin) และแสดงผล (cout)</span></li>
+      <li><span class="b" style="background:var(--coral)"><i data-lucide="variable"></i></span><span><b>ตัวแปร</b> และ <b>ชนิดข้อมูล</b> (int, float, string, bool)</span></li>
+      <li><span class="b" style="background:var(--gold)"><i data-lucide="calculator"></i></span><span><b>ตัวดำเนินการ</b> + − * / % และ <b>เงื่อนไข if / else</b></span></li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="braces"></i> โครงสร้างโปรแกรม C++</div>
+    <h2 style="margin-bottom:.6vh">ทุกโปรแกรม C++ มีโครงเหมือนกัน</h2>
+    <p class="lead" style="margin:0 0 1.4vh;font-size:2.8vh">จำโครงนี้ให้ขึ้นใจ — เริ่มทุกโปรแกรมจาก 4 ส่วนนี้เสมอ แล้วค่อยเขียนคำสั่งเพิ่มตรงกลางใน main()</p>
+    <div class="codewrap">
+      <div class="code"><span class="k">#include</span> <span class="c">&lt;iostream&gt;</span>
+<span class="k">using namespace</span> std;
+
+<span class="k">int</span> main() {
+    <span class="c">// เขียนคำสั่งตรงนี้</span>
+    <span class="k">return</span> <span class="m">0</span>;
+}</div>
+      <div class="explist">
+        <div class="exp"><code>#include &lt;iostream&gt;</code><p>ขอเครื่องมือ “พิมพ์/รับ” ข้อความ</p></div>
+        <div class="exp"><code>using namespace std;</code><p>ใช้ชื่อย่อ cout / cin ได้เลย</p></div>
+        <div class="exp"><code>int main() { }</code><p>ตัวโปรแกรมหลัก คอมเริ่มทำงานในนี้</p></div>
+        <div class="exp"><code>return 0;</code><p>บอกว่าโปรแกรมจบเรียบร้อย</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="spell-check"></i> Syntax — กฎการเขียน</div>
+    <h2>เขียนผิดกฎนิดเดียว = error</h2>
+    <ul>
+      <li><span class="b" style="background:var(--coral)"><i data-lucide="square"></i></span><span>ทุกคำสั่งจบด้วยเครื่องหมาย <b>;</b></span></li>
+      <li><span class="b" style="background:var(--blue)"><i data-lucide="braces"></i></span><span>กลุ่มคำสั่งอยู่ในวงเล็บปีกกา <b>{ }</b></span></li>
+      <li><span class="b" style="background:var(--purple)"><i data-lucide="quote"></i></span><span>ข้อความ (string) อยู่ในเครื่องหมาย <b>" "</b></span></li>
+      <li><span class="b" style="background:var(--green)"><i data-lucide="message-square"></i></span><span>คอมเมนต์ (คำอธิบาย คอมไม่อ่าน) ใช้ <b>//</b> หรือ <b>/* */</b></span></li>
+    </ul>
+    <p class="lead" style="margin-top:1.6vh">คอมพิวเตอร์ไม่ยืดหยุ่นเหมือนคน — ลืม ; หรือพิมพ์ผิดนิดเดียวก็ไม่ทำงาน แต่ไม่ต้องกลัว เพราะ error จะบอกบรรทัดที่ผิดให้เราแก้ได้เสมอ</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="monitor"></i> Output — แสดงผล (cout)</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">cout = พิมพ์ข้อความออกหน้าจอ</h2>
+        <p class="exline">ใช้ <b>cout &lt;&lt;</b> ตามด้วยสิ่งที่อยากพิมพ์ ต่อกันได้หลายอันด้วย <b>&lt;&lt;</b></p>
+        <p class="exline muted"><b>endl</b> = ขึ้นบรรทัดใหม่</p>
+        <p class="exline">พิมพ์ค่าตัวแปรก็ได้ เช่น <code style="font-family:monospace">cout &lt;&lt; age;</code> — ตัวแปร <b>ไม่ต้อง</b> ใส่ " " (ถ้าใส่จะพิมพ์คำว่า age แทนค่า)</p>
+      </div>
+      <div>
+        <div class="code" style="font-size:2.3vh"><span class="k">#include</span> <span class="c">&lt;iostream&gt;</span>
+<span class="k">using namespace</span> std;
+<span class="k">int</span> main() {
+    cout &lt;&lt; <span class="s">"คะแนน = "</span> &lt;&lt; <span class="m">90</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="s">"เยี่ยมมาก!"</span>;
+    <span class="k">return</span> <span class="m">0</span>;
+}</div>
+        <div class="out">คะแนน = 90<br>เยี่ยมมาก!</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="keyboard"></i> Input — รับค่า (cin)</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">cin = รับค่าจากผู้ใช้</h2>
+        <p class="exline">ใช้ <b>cin &gt;&gt;</b> ตามด้วยชื่อตัวแปรที่จะเก็บค่าที่พิมพ์เข้ามา</p>
+        <p class="exline muted">ลูกศรกลับด้านกับ cout — มองว่า “ข้อมูลไหลเข้าตัวแปร”</p>
+        <p class="exline">เคล็ดลับ: ใช้ <b>cout</b> บอกผู้ใช้ก่อนเสมอว่าให้กรอกอะไร แล้วค่อย <b>cin</b> รับค่า</p>
+      </div>
+      <div>
+        <div class="code" style="font-size:2.3vh"><span class="k">#include</span> <span class="c">&lt;iostream&gt;</span>
+<span class="k">using namespace</span> std;
+<span class="k">int</span> main() {
+    <span class="k">int</span> age;
+    cout &lt;&lt; <span class="s">"กรอกอายุ: "</span>;
+    cin &gt;&gt; age;
+    cout &lt;&lt; <span class="s">"อายุของคุณคือ "</span> &lt;&lt; age;
+    <span class="k">return</span> <span class="m">0</span>;
+}</div>
+        <div class="out">กรอกอายุ: 15  ← ผู้ใช้พิมพ์</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="variable"></i> ตัวแปร (Variable)</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">ตัวแปร = กล่องเก็บค่า</h2>
+        <p class="exline">ประกาศแบบ: <b>ชนิด ชื่อ = ค่า;</b></p>
+        <p class="exline">เปลี่ยนค่าใหม่ได้ตลอด เช่น <code style="font-family:monospace">age = 16;</code> ค่าจะทับของเดิม</p>
+        <p class="exline muted">ตั้งชื่อให้สื่อความหมาย (age, score) ใช้ตัวอักษร/ตัวเลข/_ ห้ามขึ้นต้นด้วยตัวเลข</p>
+      </div>
+      <div>
+        <div class="code" style="font-size:2.3vh"><span class="k">#include</span> <span class="c">&lt;iostream&gt;</span>
+<span class="k">using namespace</span> std;
+<span class="k">int</span> main() {
+    <span class="k">int</span> age = <span class="m">15</span>;
+    <span class="k">string</span> name = <span class="s">"แนน"</span>;
+    age = <span class="m">16</span>;  <span class="c">// เปลี่ยนค่า</span>
+    cout &lt;&lt; name &lt;&lt; <span class="s">" อายุ "</span> &lt;&lt; age;
+    <span class="k">return</span> <span class="m">0</span>;
+}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="shapes"></i> ชนิดข้อมูล (Type)</div>
+    <h2 style="margin-bottom:.6vh">เลือกกล่องให้ตรงกับชนิดของค่า</h2>
+    <p class="lead" style="margin:0 0 1.2vh;font-size:2.8vh">คอมต้องรู้ “ชนิด” ของข้อมูลก่อน เพื่อจองพื้นที่หน่วยความจำให้พอดี และรู้ว่าจะคำนวณ/แสดงผลค่านั้นอย่างไร</p>
+    <div class="grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="card"><h3><code>int</code></h3><p>จำนวนเต็ม — 15, -3, 100</p></div>
+      <div class="card"><h3><code>float / double</code></h3><p>ทศนิยม — 3.14, 9.5</p></div>
+      <div class="card"><h3><code>char</code></h3><p>อักขระ 1 ตัว — 'A', '5'</p></div>
+      <div class="card"><h3><code>string</code></h3><p>ข้อความ — "สวัสดี"</p></div>
+      <div class="card"><h3><code>bool</code></h3><p>จริง/เท็จ — true, false</p></div>
+      <div class="card" style="background:#f3f7ff"><h3><i data-lucide="lightbulb" style="color:var(--gold)"></i></h3><p>เลือกชนิดผิด ค่าจะเพี้ยน เช่น เก็บ 3.14 ใน int จะเหลือ 3</p></div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="calculator"></i> ตัวดำเนินการ (Operators)</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">บวก ลบ คูณ หาร และเศษ</h2>
+        <p class="exline"><b>%</b> (mod) = เศษจากการหาร — มีประโยชน์มาก เช่น เช็คเลขคู่/คี่</p>
+        <p class="exline muted">ระวัง: <code style="font-family:monospace">int / int</code> จะปัดเศษทิ้ง (7 / 2 = 3)</p>
+        <p class="exline">ลำดับการคำนวณ: <b>* / %</b> ทำก่อน <b>+ −</b> (เหมือนคณิตศาสตร์) ใช้วงเล็บ ( ) บังคับลำดับได้</p>
+      </div>
+      <div>
+        <div class="code big"><span class="m">7</span> <span class="o">+</span> <span class="m">2</span>  =  <span class="m">9</span>
+<span class="m">7</span> <span class="o">-</span> <span class="m">2</span>  =  <span class="m">5</span>
+<span class="m">7</span> <span class="o">*</span> <span class="m">2</span>  =  <span class="m">14</span>
+<span class="m">7</span> <span class="o">/</span> <span class="m">2</span>  =  <span class="m">3</span>   <span class="c">// ปัดเศษ</span>
+<span class="m">7</span> <span class="o">%</span> <span class="m">2</span>  =  <span class="m">1</span>   <span class="c">// เศษ</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="git-branch"></i> เงื่อนไข if / else</div>
+    <div class="two">
+      <div>
+        <h2 style="font-size:4.6vh">ให้โปรแกรม “ตัดสินใจ”</h2>
+        <p class="exline">ถ้าเงื่อนไข <b>จริง</b> → ทำในปีกกาแรก, ถ้า <b>เท็จ</b> → ทำในส่วน else</p>
+        <p class="exline muted">เครื่องหมายเทียบ: &gt; &lt; &gt;= &lt;= <b>==</b> (เท่ากับ) <b>!=</b> (ไม่เท่ากับ)</p>
+        <p class="exline">ข้อควรระวัง: <b>==</b> (เปรียบเทียบว่าเท่ากันไหม) ต่างจาก <b>=</b> (กำหนดค่า) — มือใหม่มักสับสน</p>
+      </div>
+      <div>
+        <div class="code" style="font-size:2.15vh"><span class="k">#include</span> <span class="c">&lt;iostream&gt;</span>
+<span class="k">using namespace</span> std;
+<span class="k">int</span> main() {
+    <span class="k">int</span> score = <span class="m">45</span>;
+    <span class="k">if</span> (score &gt;= <span class="m">50</span>) {
+        cout &lt;&lt; <span class="s">"ผ่าน"</span>;
+    } <span class="k">else</span> {
+        cout &lt;&lt; <span class="s">"ไม่ผ่าน"</span>;
+    }
+    <span class="k">return</span> <span class="m">0</span>;
+}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="rocket"></i> ตัวอย่างรวม — โปรแกรมเช็กอายุ</div>
+    <div class="codewrap">
+      <div class="code"><span class="k">#include</span> <span class="c">&lt;iostream&gt;</span>
+<span class="k">using namespace</span> std;
+
+<span class="k">int</span> main() {
+    <span class="k">int</span> age;
+    cout &lt;&lt; <span class="s">"กรอกอายุ: "</span>;
+    cin &gt;&gt; age;
+    <span class="k">if</span> (age &gt;= <span class="m">18</span>)
+        cout &lt;&lt; <span class="s">"ผู้ใหญ่"</span>;
+    <span class="k">else</span>
+        cout &lt;&lt; <span class="s">"เยาวชน"</span>;
+    <span class="k">return</span> <span class="m">0</span>;
+}</div>
+      <div class="explist">
+        <div class="exp"><code>int age;</code><p>สร้างตัวแปรเก็บอายุ</p></div>
+        <div class="exp"><code>cin &gt;&gt; age;</code><p>รับค่าจากผู้ใช้</p></div>
+        <div class="exp"><code>if (age &gt;= 18)</code><p>ตรวจเงื่อนไขแล้วเลือกผลลัพธ์</p></div>
+        <div class="exp" style="background:#e7faf1;border-color:#aee7ce"><code>รวม cin + if-else + cout</code><p>นี่คือสิ่งที่เราจะฝึกวันนี้!</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker"><i data-lucide="circle-check"></i> สรุปวันที่ 2</div>
+    <h2>วันนี้เราได้อะไรบ้าง?</h2>
+    <div class="grid">
+      <div class="card" style="display:flex;gap:2vh;align-items:center"><div class="ic" style="color:var(--blue);font-size:4.5vh"><i data-lucide="braces"></i></div><div><h3>Structure &amp; Syntax</h3><p>โครงโปรแกรม + กฎการเขียน</p></div></div>
+      <div class="card" style="display:flex;gap:2vh;align-items:center"><div class="ic" style="color:var(--purple);font-size:4.5vh"><i data-lucide="terminal"></i></div><div><h3>Input / Output</h3><p>cin รับค่า • cout แสดงผล</p></div></div>
+      <div class="card" style="display:flex;gap:2vh;align-items:center"><div class="ic" style="color:var(--coral);font-size:4.5vh"><i data-lucide="variable"></i></div><div><h3>ตัวแปร &amp; ชนิดข้อมูล</h3><p>int, float, char, string, bool</p></div></div>
+      <div class="card" style="display:flex;gap:2vh;align-items:center"><div class="ic" style="color:var(--green);font-size:4.5vh"><i data-lucide="git-branch"></i></div><div><h3>Operators &amp; if-else</h3><p>+ − * / % และการตัดสินใจ</p></div></div>
+    </div>
+  </section>
+
+  <section class="slide title-slide">
+    <div class="title-grid">
+      <div>
+        <div class="kicker"><i data-lucide="sunrise"></i> พรุ่งนี้เจอกัน</div>
+        <h1>พรุ่งนี้…<br>วนซ้ำ &amp; ข้อมูลชุด!</h1>
+        <p class="lead">Switch Case, การวนซ้ำ Loop (while/for) และ Array รอเราอยู่</p>
+        <div class="by">ขอบคุณทุกคน — แล้วเจอกันวันที่ 3<br><b>THNIC Academy × มหาวิทยาลัยราชภัฏสุรินทร์</b></div>
+      </div>
+      <div class="codewin">
+        <div class="tb"><span class="dot" style="background:#ff6058"></span><span class="dot" style="background:#ffbd2e"></span><span class="dot" style="background:#28c940"></span><span class="fn">next.cpp</span></div>
+        <pre><span class="k">for</span> (<span class="k">int</span> i=<span class="m">0</span>; i&lt;<span class="m">5</span>; i++) {
+    cout &lt;&lt; i &lt;&lt; <span class="s">" "</span>;
+}</pre>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="hintbar"><i data-lucide="keyboard"></i> ← → เลื่อนสไลด์ • กด F เต็มจอ • Ctrl+P เซฟ PDF</div>
+<div class="count" id="count">1 / 13</div>
+<div class="nav">
+  <button id="prev"><i data-lucide="arrow-left"></i></button>
+  <button id="next"><i data-lucide="arrow-right"></i></button>
+</div>
+<div class="bar"><i id="prog"></i></div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+if(window.lucide)lucide.createIcons();
+const slides=[...document.querySelectorAll(".slide")];
+let i=0;
+function show(n){
+  i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,k)=>s.classList.toggle("active",k===i));
+  document.getElementById("count").textContent=(i+1)+" / "+slides.length;
+  document.getElementById("prog").style.width=((i+1)/slides.length*100)+"%";
+}
+function nextS(){show(i+1)} function prevS(){show(i-1)}
+document.getElementById("next").onclick=nextS;
+document.getElementById("prev").onclick=prevS;
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"){e.preventDefault();nextS();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();prevS();}
+  else if(e.key==="Home")show(0); else if(e.key==="End")show(slides.length-1);
+  else if(e.key==="f"||e.key==="F"){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+document.querySelector(".deck").addEventListener("click",e=>{
+  if(e.target.closest(".nav"))return;
+  const x=e.clientX/window.innerWidth; if(x>0.35)nextS();else prevS();
+});
+show(0);
+</script>
+</body>
+</html>

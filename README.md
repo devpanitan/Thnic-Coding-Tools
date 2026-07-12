@@ -37,7 +37,7 @@
 ### เครื่องมือภายนอกฟรี (แนะนำใช้เสริม)
 - [Python Tutor (C++)](https://pythontutor.com/cpp.html) — รันโค้ด C++ เดินทีละบรรทัด
 - [VisuAlgo](https://visualgo.net/en) — ภาพเคลื่อนไหวอัลกอริทึม (วันโอลิมปิก)
-- [OnlineGDB](https://www.onlinegdb.com/online_c++_compiler) — เขียน/รัน C++ จริง
+- [OneCompiler](https://onecompiler.com/cpp) — เขียน/รัน C++ จริง
 
 ---
 
