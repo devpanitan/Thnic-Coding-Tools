@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>คู่มือครู — กิจกรรมโอลิมปิก The Human Dataset</title>
+<link rel="icon" type="image/png" href="srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"TH Sarabun PSK","Sarabun","Tahoma",sans-serif;color:#1a2238;background:#e9eef7;padding:18px}
+  .sheet{max-width:820px;margin:0 auto 16px;background:#fff;border-radius:14px;box-shadow:0 14px 40px rgba(20,30,60,.12);padding:30px 40px}
+  .top{display:flex;align-items:center;gap:14px;border-bottom:2.5px solid #19b877;padding-bottom:10px;margin-bottom:8px}
+  .top img{height:52px}
+  .top h1{font-size:22pt;color:#16224a;line-height:1.1}
+  .top .s{font-size:12pt;color:#5d6b8a}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;border:1.5px solid #cdd9ef;border-radius:11px;padding:12px 18px;margin:14px 0;background:#f7faff;font-size:13pt}
+  .meta b{color:#0d7a4f}
+  h2{font-size:15pt;color:#0d7a4f;margin:20px 0 7px;display:flex;align-items:center;gap:9px}
+  h2 .num{background:#19b877;color:#fff;width:1.55em;height:1.55em;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:.85em}
+  h3{font-size:13.5pt;color:#16224a;margin:12px 0 3px}
+  p,li{font-size:13pt;line-height:1.55}
+  ul,ol{margin:4px 0 4px 24px}
+  li{margin:2px 0}
+  .goal{background:#eafaf2;border:1.5px solid #a9e7c9;border-radius:11px;padding:11px 16px;margin:8px 0}
+  .goal b{color:#0d7a4f}
+  .round{border:1.5px solid #cdd9ef;border-radius:13px;padding:4px 18px 14px;margin:12px 0;background:#fbfdff}
+  .round .rh{font-size:14.5pt;font-weight:700;color:#16224a;border-bottom:1.5px dashed #cdd9ef;padding:10px 0 7px;margin-bottom:6px;display:flex;align-items:center;gap:9px}
+  .round .rh .b{background:#16224a;color:#fff;border-radius:7px;padding:2px 10px;font-size:11.5pt}
+  .say{background:#eef4ff;border-left:4px solid #4a7bd6;border-radius:0 9px 9px 0;padding:8px 14px;margin:7px 0;font-size:12.8pt;color:#22406e}
+  .say b{color:#16336b}
+  .score{background:#fff6dd;border:1.5px solid #ffe2a1;border-radius:9px;padding:7px 14px;margin:7px 0;font-size:12.8pt;color:#8a5e00}
+  .tip{background:#f3edff;border:1.5px solid #d8c9f5;border-radius:9px;padding:7px 14px;margin:7px 0;font-size:12.8pt;color:#5b3ba8}
+  .concept{display:inline-block;background:#16224a;color:#fff;border-radius:7px;padding:2px 11px;font-size:11.5pt;font-weight:700;margin-top:4px}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5pt}
+  th,td{border:1.2px solid #b9c6e6;padding:7px 8px;text-align:center}
+  th{background:#eafaf2;color:#0d7a4f}
+  td.l{text-align:left}
+  .learn td{text-align:left}
+  .learn th:first-child{width:34%}
+  .noprint{text-align:center;margin:14px auto;max-width:820px}
+  .noprint button{font-family:inherit;font-size:14pt;font-weight:700;background:#19b877;color:#fff;border:0;border-radius:10px;padding:10px 24px;cursor:pointer}
+  @media print{body{background:#fff;padding:0}.sheet{box-shadow:none;border-radius:0;max-width:100%;padding:0 6mm;margin:0}.noprint{display:none}.round,table,.round .rh{break-inside:avoid}@page{size:A4;margin:14mm}}
+</style>
+</head>
+<body>
+  <div class="noprint"><button onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button></div>
+
+  <div class="sheet">
+    <div class="top">
+      <img src="srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
+      <div>
+        <h1>คู่มือครู · กิจกรรมโอลิมปิกเชิงคำนวณ<br>“ห้องเรียนคือชุดข้อมูล” (The Human Dataset)</h1>
+        <div class="s">Introduction to Programming • THNIC Academy × มหาวิทยาลัยราชภัฏสุรินทร์</div>
+      </div>
+    </div>
+
+    <div class="meta">
+      <span><b>ระดับ:</b> ม.2–ม.6 (ผสมโรงเรียน)</span>
+      <span><b>ผู้เล่น:</b> ~41 คน แบ่ง 3–4 ทีมคละ</span>
+      <span><b>เวลา:</b> 45–60 นาที</span>
+      <span><b>สถานที่:</b> ลานโล่ง/ห้องโล่ง</span>
+      <span><b>รูปแบบ:</b> Unplugged (ไม่ใช้คอมพิวเตอร์)</span>
+    </div>
+
+    <div class="goal"><b>แนวคิดหลัก:</b> เด็กแต่ละคนถือการ์ดตัวเลข = 1 “จุดข้อมูล” ทั้งห้องรวมกันคือชุดข้อมูล 1 ชุด เราจะสั่งให้เด็ก “จัดการตัวเอง” ทีละด่าน — ค้นหา · จับกลุ่ม · เรียงลำดับ · ค้นแบบตัดครึ่ง — ซึ่งคืออัลกอริทึมจริงในคอมพิวเตอร์ ยากขึ้นทีละด่านแบบโอลิมปิก</div>
+
+    <h2><span class="num">1</span> จุดประสงค์การเรียนรู้</h2>
+    <ul>
+      <li>เข้าใจว่า “อัลกอริทึม” คือลำดับขั้นตอนแก้ปัญหา ผ่านการลงมือทำด้วยร่างกาย</li>
+      <li>รู้จักแนวคิดพื้นฐานของโจทย์โอลิมปิก: การค้นหา · การจับคู่ · เศษเหลือ (mod) · การเรียงลำดับ · Binary Search</li>
+      <li>ฝึกคิดเป็นขั้นตอน ทำงานเป็นทีม และสื่อสารภายใต้เวลาจำกัด</li>
+    </ul>
+
+    <h2><span class="num">2</span> อุปกรณ์และการเตรียม</h2>
+    <ul>
+      <li>การ์ดตัวเลข 1–44 (ไฟล์ “การ์ดตัวเลข_HumanDataset”) พิมพ์แล้วตัด แจกคนละใบ ให้ถือชูให้เห็นชัด</li>
+      <li>ป้าย/กระดาษให้ครูชู “เป้าหมาย” แต่ละรอบ · นกหวีดเริ่ม–หยุด · นาฬิกาจับเวลา</li>
+      <li>กระดาน/กระดาษให้คะแนน (ใช้ตารางท้ายคู่มือ) · ของรางวัลเล็ก ๆ สำหรับทีมชนะ</li>
+      <li><b>จัดทีม:</b> แบ่ง 3–4 ทีมคละโรงเรียน/ระดับชั้น ตั้งชื่อทีม แจกการ์ดคละเลขในแต่ละทีม</li>
+    </ul>
+
+    <h2><span class="num">3</span> ลำดับการเล่น (เล่นเป็นด่าน)</h2>
+
+    <div class="round">
+      <div class="rh"><span class="b">วอร์ม</span> แจกการ์ด &amp; ตั้งกติกา (5 นาที)</div>
+      <p>ให้ทุกคนถือการ์ดยืนกระจายในสนาม อธิบายภาพรวมสั้น ๆ</p>
+      <div class="say"><b>ครูพูด:</b> “ตอนนี้พวกเราทุกคนคือ ‘ข้อมูล’ คนละหนึ่งตัว เดี๋ยวครูจะสั่งให้ข้อมูลจัดการตัวเอง ใครทำถูกและเร็ว ทีมได้แต้ม พร้อมไหม!”</p>
+    </div>
+
+    <div class="round">
+      <div class="rh"><span class="b">ด่าน 1</span> เติมเต็มให้ครบ — จับคู่ (Two-Sum) · 8–10 นาที</div>
+      <h3>วิธีเล่น</h3>
+      <ol>
+        <li>ครูชูป้าย “เป้าหมาย = 10” แล้วเป่านกหวีด</li>
+        <li>ทุกคนวิ่งหาคนที่ตัวเลขบวกกับตัวเองได้ 10 (เช่น 3 จับ 7, 4 จับ 6)</li>
+        <li>เจอคู่แล้วจับมือ ยกการ์ดคู่ขึ้น แล้วนั่งลงพร้อมกัน</li>
+        <li>เล่น 2–3 รอบ เปลี่ยนเป้าหมายเป็น 15, 20 หรือเพิ่มความยาก “หา 3 คนรวมได้ 15”</li>
+      </ol>
+      <div class="say"><b>ครูพูด:</b> “ใครไม่มีคู่ไม่เป็นไรนะ — ในข้อมูลจริงบางตัวก็ไม่มีคู่พอดี นั่นคือคำตอบว่า ‘ไม่พบ’ เหมือนกัน”</div>
+      <div class="score"><b>ให้คะแนน:</b> คู่ที่ถูกต้อง +2 · คู่แรกที่นั่งลง +1 โบนัส (รวมแต้มเข้าทีมของทั้งสองคน)</div>
+      <div class="tip"><b>เกร็ด/ชวนคิด:</b> ถามเด็กว่า “ถ้าเราจำไว้ก่อนว่าใครถือเลขอะไร จะหาคู่ไวขึ้นไหม?” → นี่คือไอเดียของการทำ index/ตารางค้นหา (hashing)</div>
+      <span class="concept">แนวคิด: การค้นหา &amp; การจับคู่ (Searching / Two-Sum)</span>
+    </div>
+
+    <div class="round">
+      <div class="rh"><span class="b">ด่าน 2</span> จับกลุ่มตามเงื่อนไข — เศษเหลือ (Grouping / Mod) · 8–10 นาที</div>
+      <h3>วิธีเล่น</h3>
+      <ol>
+        <li>ครูสั่ง “จับกลุ่มตามเศษของการหาร 3” → คนที่เลขหาร 3 เหลือเศษ 0 / 1 / 2 แยกไปคนละมุม</li>
+        <li>กลุ่มที่สมาชิกครบถูกต้องและนั่งลงก่อน ได้แต้ม</li>
+        <li>เปลี่ยนเงื่อนไขเพิ่มความสนุก: “คู่/คี่” · “หารด้วย 5 ลงตัว” · “เลขที่มากกว่า 20”</li>
+      </ol>
+      <div class="say"><b>ครูพูด:</b> “เศษเหลือ (mod) เจอบ่อยมากในโจทย์โอลิมปิก เช่น จัดของเป็นวง แบ่งเวร หรือหาว่าเลขไหนซ้ำแบบวน”</div>
+      <div class="score"><b>ให้คะแนน:</b> กลุ่มที่ถูกครบ +3 · เร็วที่สุด +2 โบนัส · ถ้ามีคนหลงกลุ่ม −1</div>
+      <div class="tip"><b>ระวัง:</b> ตรวจให้ครบก่อนประกาศ — ให้แต่ละกลุ่มพูดพร้อมกันว่าเลขตัวเองเศษเท่าไร เพื่อพิสูจน์</div>
+      <span class="concept">แนวคิด: การจำแนกกลุ่ม &amp; Modulo (เศษเหลือ)</span>
+    </div>
+
+    <div class="round">
+      <div class="rh"><span class="b">ด่าน 3</span> เรียงแถวมนุษย์ — การเรียงลำดับ (Sorting) · 8–10 นาที</div>
+      <h3>วิธีเล่น</h3>
+      <ol>
+        <li>แต่ละทีมยืนสุ่ม ต้องเรียงตัวเองจาก <b>น้อยไปมาก</b> เป็นแถวเดียว</li>
+        <li>กติกาสำคัญ: <b>เทียบได้ทีละคู่เท่านั้น</b> (สองคนที่อยู่ติดกันยกการ์ดเทียบกัน แล้วสลับที่ถ้าผิดลำดับ)</li>
+        <li>ครู/ผู้ช่วยนับ “จำนวนครั้งที่สลับ” ของแต่ละทีม</li>
+        <li>ทีมที่เรียงถูกโดยใช้การสลับน้อยที่สุด (หรือเร็วที่สุด) ชนะ</li>
+      </ol>
+      <div class="say"><b>ครูพูด:</b> “ที่หนูเพิ่งทำคือ Bubble Sort! คอมพิวเตอร์ก็เทียบทีละคู่แบบนี้ — ยิ่งสลับน้อย ยิ่งเร็ว นี่คือเหตุผลที่เราสนใจว่า ‘อัลกอริทึมไหนใช้ก้าวน้อยกว่า’”</div>
+      <div class="score"><b>ให้คะแนน:</b> เรียงถูก +3 · สลับน้อยสุด +2 · เร็วสุด +1</div>
+      <div class="tip"><b>ต่อยอด:</b> เชื่อมเข้าบทเรียนว่า จำนวนก้าว = ความเร็วของโปรแกรม (พื้นฐานการวิเคราะห์ประสิทธิภาพ)</div>
+      <span class="concept">แนวคิด: การเรียงลำดับ &amp; การนับจำนวนก้าว</span>
+    </div>
+
+    <div class="round">
+      <div class="rh"><span class="b">ด่าน 4 · ไฮไลต์</span> ล่าเลขลับด้วยคน — Binary Search · 10–12 นาที</div>
+      <h3>วิธีเล่น</h3>
+      <ol>
+        <li>ให้ทีมที่เรียงเสร็จจากด่าน 3 ยืนเป็นแถวเรียงน้อยไปมาก (เลือก 15 คน หรือใช้การ์ด 1–15)</li>
+        <li>เลือก “นักล่า” 1 คนจากทีมตรงข้าม ครูกระซิบเลขลับให้เฉพาะกรรมการ</li>
+        <li>นักล่าถามได้ครั้งละ 1 คำถาม และถามได้แค่ <b>คนที่อยู่ตรงกลางช่วง</b> ว่า “เลขลับสูงหรือต่ำกว่าคุณ?”</li>
+        <li>เมื่อรู้ว่าสูง/ต่ำ ให้ครึ่งที่เป็นไปไม่ได้ <b>นั่งลง</b> (ตัดทิ้ง) แล้วถามคนกลางของช่วงที่เหลือต่อ</li>
+        <li>ทำซ้ำจนเจอ นับจำนวนคำถาม — ใครหาเจอด้วยคำถามน้อยสุดชนะ</li>
+      </ol>
+      <div class="say"><b>ครูพูด:</b> “ถ้ามั่วทีละคนต้องถามได้ถึง 15 ครั้ง แต่วิธีตัดครึ่งนี้ใช้ไม่เกิน 4 ครั้ง! นี่แหละ Binary Search ที่หนูเล่นในเกม 3D ล่าสมบัติ”</div>
+      <div class="score"><b>ให้คะแนน:</b> หาเจอ +3 · ใช้ ≤4 คำถาม +3 โบนัส · ทายวิธีถูกอธิบายได้ +1</div>
+      <div class="tip"><b>เชื่อมสื่อ:</b> ต่อด้วยสื่อดิจิทัล “เกม 3D ล่าสมบัติ”, “เกมทายเลขลับ” และ “สื่อ CT 4 เสาหลัก” ที่ใช้อัลกอริทึมเดียวกันเป๊ะ</div>
+      <span class="concept">แนวคิด: Binary Search (ค้นแบบตัดครึ่ง)</span>
+    </div>
+
+    <div class="round">
+      <div class="rh"><span class="b">สรุป</span> รวมแต้ม &amp; มอบรางวัล (5 นาที)</div>
+      <p>รวมคะแนนทุกด่าน ประกาศทีมแชมป์ แล้วปิดด้วยการเชื่อมโยง</p>
+      <div class="say"><b>ครูพูด:</b> “ทุกอย่างที่หนูวิ่งเล่นวันนี้ — จับคู่ จับกลุ่ม เรียงแถว ล่าเลขลับ — คือ ‘อัลกอริทึม’ ที่โปรแกรมเมอร์เขียนให้คอมพิวเตอร์ทำ ต่อไปเราจะเขียนมันเป็นโค้ดจริง!”</p>
+    </div>
+
+    <h2><span class="num">4</span> ตารางบันทึกคะแนน</h2>
+    <table>
+      <tr><th>ทีม</th><th>ด่าน 1<br>จับคู่</th><th>ด่าน 2<br>จับกลุ่ม</th><th>ด่าน 3<br>เรียงแถว</th><th>ด่าน 4<br>ล่าเลขลับ</th><th>รวม</th><th>อันดับ</th></tr>
+      <tr><td class="l">ทีม A</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="l">ทีม B</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="l">ทีม C</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="l">ทีม D</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    </table>
+
+    <h2><span class="num">5</span> สิ่งที่เด็กได้ (เชื่อมแนวคิดโอลิมปิก)</h2>
+    <table class="learn">
+      <tr><th>ด่าน</th><th>แนวคิดวิทยาการคอมพิวเตอร์ที่ได้</th></tr>
+      <tr><td class="l">1 · เติมเต็มให้ครบ</td><td class="l">การค้นหาและจับคู่ (Two-Sum) และไอเดียว่าการ “จำข้อมูลไว้ล่วงหน้า” ช่วยให้ค้นหาไวขึ้น (พื้นฐาน hashing)</td></tr>
+      <tr><td class="l">2 · จับกลุ่มเงื่อนไข</td><td class="l">การจำแนกกลุ่มและเศษเหลือ (mod) ที่ใช้บ่อยในโจทย์โอลิมปิกเรื่องการวน/แบ่งกลุ่ม</td></tr>
+      <tr><td class="l">3 · เรียงแถวมนุษย์</td><td class="l">การเรียงลำดับ (sorting) และการนับจำนวนก้าวเพื่อเทียบว่าอัลกอริทึมไหนคุ้มกว่า</td></tr>
+      <tr><td class="l">4 · ล่าเลขลับ</td><td class="l">Binary Search — ค้นแบบตัดครึ่งที่เร็วกว่ามาก ต่อยอดเข้าสื่อดิจิทัลของค่าย</td></tr>
+      <tr><td class="l">ทุกด่าน</td><td class="l">คิดเป็นลำดับขั้นตอน ทำงานเป็นทีม สื่อสารและตัดสินใจภายใต้เวลา</td></tr>
+    </table>
+
+    <h2><span class="num">6</span> เคล็ดลับคุมชั้น &amp; ความปลอดภัย</h2>
+    <ul>
+      <li>กำหนดพื้นที่ชัดเจน ห้ามวิ่งออกนอกเส้น เป่านกหวีดคือ “หยุดทันที”</li>
+      <li>มีผู้ช่วย 1–2 คนคอยนับเวลา/การสลับ และตรวจคำตอบแต่ละด่าน</li>
+      <li>ถ้าคนไม่ครบจำนวนคู่ ปรับชุดการ์ดที่แจก (ใช้ปุ่มเลือกช่วงเลขในไฟล์การ์ด) ให้เกิดคู่พอดี</li>
+      <li>ชมเชยความพยายามมากกว่าความเร็วอย่างเดียว เพื่อบรรยากาศสนุกไม่กดดัน</li>
+    </ul>
+  </div>
+</body>
+</html>

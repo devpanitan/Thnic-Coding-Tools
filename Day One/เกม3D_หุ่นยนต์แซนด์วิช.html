@@ -11,7 +11,7 @@
   :root{--blue:#1565C0;--purple:#6A3FC0;--green:#1B5E20;--coral:#C0392B;--gold:#B8860B;--ink:#1f2733;--muted:#5b6673;--line:#d7dbe2;}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%;overflow:hidden}
-  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);background:#C1C2C2}
+  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);background:#ffffff}
   #c{position:fixed;inset:0;display:block}
   svg.lucide{width:1em;height:1em;vertical-align:-.15em}
   .hud{position:fixed;inset:0;pointer-events:none;z-index:5;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(12px,2.2vh,20px) clamp(14px,3vw,32px)}
@@ -121,7 +121,7 @@ const clock=new THREE.Clock();
 const hex=c=>'#'+c.toString(16).padStart(6,'0');
 
 function init(){
-  scene=new THREE.Scene();scene.background=new THREE.Color(0xC1C2C2);scene.fog=new THREE.Fog(0xC1C2C2,26,80);
+  scene=new THREE.Scene();scene.background=new THREE.Color(0xffffff);scene.fog=new THREE.Fog(0xffffff,32,100);
   camera=new THREE.PerspectiveCamera(46,innerWidth/innerHeight,.1,300);camera.position.set(7,6.5,10);
   renderer=new THREE.WebGLRenderer({canvas:$("c"),antialias:true});
   renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,2));
@@ -132,7 +132,7 @@ function init(){
   scene.add(new THREE.HemisphereLight(0xffffff,0xb8bcc4,.9));
   const d=new THREE.DirectionalLight(0xffffff,.9);d.position.set(7,15,9);d.castShadow=true;d.shadow.mapSize.set(1024,1024);
   d.shadow.camera.left=-14;d.shadow.camera.right=14;d.shadow.camera.top=14;d.shadow.camera.bottom=-14;scene.add(d);
-  const grid=new THREE.GridHelper(8000,400,0xffffff,0xd2d8de);grid.material.opacity=.42;grid.material.transparent=true;grid.position.y=0.02;scene.add(grid);
+  const grid=new THREE.GridHelper(8000,400,0xb8bfca,0xdfe3ea);grid.material.opacity=.5;grid.material.transparent=true;grid.position.y=0.02;scene.add(grid);
   const sc=new THREE.Mesh(new THREE.PlaneGeometry(400,400),new THREE.ShadowMaterial({opacity:.18}));sc.rotation.x=-Math.PI/2;sc.receiveShadow=true;scene.add(sc);
   const plate=new THREE.Mesh(new THREE.CylinderGeometry(2.4,2.2,0.22,40),new THREE.MeshStandardMaterial({color:0xf3f5f8,roughness:.6}));
   plate.position.y=0.11;plate.receiveShadow=true;plate.castShadow=true;scene.add(plate);

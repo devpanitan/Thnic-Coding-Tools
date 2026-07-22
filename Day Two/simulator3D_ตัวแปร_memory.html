@@ -11,7 +11,7 @@
   :root{--blue:#1565C0;--purple:#6A3FC0;--green:#1B5E20;--coral:#C0392B;--gold:#B8860B;--ink:#1f2733;--muted:#5b6673;--line:#d7dbe2;}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%;overflow:hidden}
-  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);background:#C1C2C2}
+  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);background:#ffffff}
   #c{position:fixed;inset:0;display:block}
   svg.lucide{width:1em;height:1em;vertical-align:-.15em}
   .hud{position:fixed;inset:0;pointer-events:none;z-index:5;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(12px,2.2vh,20px) clamp(14px,3vw,32px)}
@@ -360,8 +360,8 @@ function makeSprite(text,{size=52,bg='rgba(255,255,255,.97)',fg='#1f2733',bd=nul
 
 function init(){
   scene=new THREE.Scene();
-  scene.background=new THREE.Color(0xC1C2C2);
-  scene.fog=new THREE.Fog(0xC1C2C2,42,150);
+  scene.background=new THREE.Color(0xffffff);
+  scene.fog=new THREE.Fog(0xffffff,55,190);
   camera=new THREE.PerspectiveCamera(46,innerWidth/innerHeight,.1,4000);
   camera.position.set(0,9,16);
   renderer=new THREE.WebGLRenderer({canvas:$("c"),antialias:true});
@@ -371,7 +371,7 @@ function init(){
   const d=new THREE.DirectionalLight(0xffffff,.85);d.position.set(9,16,10);d.castShadow=true;
   d.shadow.mapSize.set(1024,1024);d.shadow.camera.left=-20;d.shadow.camera.right=20;d.shadow.camera.top=20;d.shadow.camera.bottom=-20;scene.add(d);
   // grid floor
-  const grid=new THREE.GridHelper(8000,400,0xffffff,0xd2d8de);
+  const grid=new THREE.GridHelper(8000,400,0xb8bfca,0xdfe3ea);
   grid.material.opacity=.42;grid.material.transparent=true;grid.position.y=0.02;scene.add(grid);
   // shadow catcher
   const sc=new THREE.Mesh(new THREE.PlaneGeometry(400,400),new THREE.ShadowMaterial({opacity:.18}));

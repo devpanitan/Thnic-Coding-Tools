@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cin — การรับข้อมูลเข้าโปรแกรม</title>
+<link rel="icon" type="image/png" href="srru-logo.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root{--bg:#eef2f8;--card:#fff;--ink:#1e2740;--muted:#5b6478;--line:#e3e8f1;
+    --blue:#2f6fd6;--green:#22a565;--gold:#f59e0b;--purple:#7c5cff;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'LINE Seed Sans TH',system-ui,sans-serif;background:radial-gradient(1200px 600px at 50% -10%,#f7faff,var(--bg));color:var(--ink);min-height:100vh;padding:16px 14px 40px}
+  .wrap{max-width:1000px;margin:0 auto}
+  .head{text-align:center;margin-bottom:12px}
+  .head h1{font-size:24px;letter-spacing:-.4px}
+  .head .sub{color:var(--muted);font-size:14px;margin-top:3px}
+  .tip{background:#fffbe9;border:1.5px solid #ffe6a0;border-radius:12px;padding:9px 15px;font-size:13.5px;margin:12px 0;line-height:1.5}
+  .tip b{color:#a9750a}
+
+  .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;margin-bottom:12px}
+  select,.inp{font-family:inherit;font-size:14px;font-weight:700;border:1.5px solid var(--line);border-radius:11px;padding:9px 13px;color:var(--ink);background:#fff}
+  .inp{font-family:ui-monospace,Consolas,monospace;min-width:200px}
+  .btn{font-family:inherit;font-weight:800;font-size:14px;border:0;border-radius:11px;padding:9px 18px;cursor:pointer;color:#fff;display:inline-flex;align-items:center;gap:7px}
+  .btn.run{background:linear-gradient(135deg,var(--green),#199150)}
+  .btn.step{background:linear-gradient(135deg,var(--purple),#5b3fd6)}
+  .btn.ghost{background:#eef1f6;color:#48505c;border:1.5px solid var(--line)}
+
+  .main{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
+  @media(max-width:760px){.main{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:0 12px 30px rgba(40,50,80,.07)}
+  .panel h2{font-size:14px;color:var(--muted);margin-bottom:9px;display:flex;align-items:center;gap:7px}
+  .panel h2 i{width:16px;height:16px}
+
+  .code{background:#11203a;border-radius:12px;padding:12px 14px;font-family:ui-monospace,Consolas,monospace;font-size:13.5px;line-height:1.7;color:#e8eefc;overflow-x:auto}
+  .cl{white-space:pre;border-radius:5px;margin:0 -6px;padding:0 6px;transition:.15s}
+  .cl.on{background:rgba(245,158,11,.24)}
+  .k{color:#ff9bd0}.c{color:#8aa0c0;font-style:italic}.s{color:#9ad27f}.n{color:#ffd27f}.io{color:#5ad1ff;font-weight:700}
+
+  .io-in{margin-bottom:12px}
+  .toks{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;min-height:34px}
+  .tok{font-family:ui-monospace,monospace;font-weight:700;font-size:15px;background:#eef4ff;border:1.5px solid #cfe0ff;border-radius:9px;padding:5px 12px;color:#2f5fd0;transition:.2s}
+  .tok.next{border-color:var(--gold);background:#fff3d6;color:#a9750a;box-shadow:0 0 0 3px rgba(245,158,11,.18)}
+  .tok.used{opacity:.4;text-decoration:line-through}
+
+  .vars{display:flex;gap:10px;flex-wrap:wrap;min-height:66px}
+  .vbox{border:2px solid var(--blue);border-radius:12px;padding:7px 4px 6px;min-width:70px;text-align:center;background:#f5f9ff;transition:.2s}
+  .vbox.str{border-color:var(--green);background:#f2fbf6}
+  .vbox.hit{box-shadow:0 0 0 4px rgba(245,158,11,.28);border-color:var(--gold);transform:translateY(-3px)}
+  .vname{font-family:ui-monospace,monospace;font-size:12px;color:var(--muted);font-weight:700}
+  .vval{font-family:ui-monospace,monospace;font-size:22px;font-weight:800;color:var(--blue);min-height:26px}
+  .vbox.str .vval{color:var(--green);font-size:17px}
+  .vval.empty{color:#c3ccdb}
+
+  .out{background:#0f1a12;border:1.5px solid #1f3a28;border-radius:12px;padding:11px 14px;font-family:ui-monospace,monospace;font-size:16px;color:#8ef0b0;min-height:46px;white-space:pre-wrap;word-break:break-word}
+  .say{margin-top:12px;background:#eef4ff;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;padding:9px 13px;font-size:14px;font-weight:600;min-height:20px}
+  .say b{color:#1c4fa8}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>cin — การรับข้อมูลเข้าโปรแกรม</h1>
+    <div class="sub">พิมพ์ข้อมูลเอง แล้วดูค่าไหลจาก “input” เข้า “ตัวแปร” → คำนวณ → พิมพ์ออกทางจอ</div>
+  </div>
+
+  <div class="tip"><b>รู้หรือไม่:</b> <code>cin &gt;&gt; x;</code> อ่านค่าจากที่ผู้ใช้พิมพ์ ใส่ลงในตัวแปร <b>x</b> — โดย <b>เว้นวรรคหรือขึ้นบรรทัดใหม่ = ตัวคั่น</b> ระหว่างค่า และ cin อ่านทีละค่าจากซ้ายไปขวา (นี่คือประตูสู่โจทย์โอลิมปิกทุกข้อ — ต้องอ่าน input ให้เป็นก่อน)</div>
+
+  <div class="controls">
+    <select id="prog" onchange="pickProg(this.value)"></select>
+    <span style="font-weight:700;font-size:14px;color:var(--muted)">ข้อมูลเข้า (input):</span>
+    <input class="inp" id="stdin" oninput="prepare()">
+    <button class="btn run" onclick="runAll()"><i data-lucide="play"></i> รันโปรแกรม</button>
+    <button class="btn step" onclick="stepOne()"><i data-lucide="step-forward"></i> ทีละบรรทัด</button>
+    <button class="btn ghost" onclick="prepare()"><i data-lucide="rotate-ccw"></i> เริ่มใหม่</button>
+  </div>
+
+  <div class="main">
+    <div class="panel">
+      <h2><i data-lucide="code"></i> โค้ด C++ (รันได้จริงบน OneCompiler)</h2>
+      <div class="code" id="code"></div>
+    </div>
+    <div>
+      <div class="panel io-in">
+        <h2><i data-lucide="keyboard"></i> ข้อมูลเข้า — ที่ยังไม่ถูกอ่าน</h2>
+        <div class="toks" id="toks"></div>
+      </div>
+      <div class="panel io-in">
+        <h2><i data-lucide="box"></i> ตัวแปรในหน่วยความจำ</h2>
+        <div class="vars" id="vars"></div>
+      </div>
+      <div class="panel">
+        <h2><i data-lucide="monitor"></i> ผลลัพธ์ทางจอ (cout)</h2>
+        <div class="out" id="out"></div>
+      </div>
+    </div>
+  </div>
+  <div class="say" id="say">เลือกโปรแกรม พิมพ์ข้อมูลเข้า แล้วกด “ทีละบรรทัด” เพื่อดูการทำงาน</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+function icons(){if(window.lucide)lucide.createIcons();}
+
+// ---- โปรแกรมตัวอย่าง ----
+const PROGS={
+  echo:{ name:'1) รับ 1 เลข แล้วพิมพ์ออก', input:'42',
+    code:[
+      '<span class="k">#include</span> <span class="n">&lt;iostream&gt;</span>',
+      '<span class="k">using namespace</span> std;',
+      '',
+      '<span class="k">int</span> main() {',
+      '    <span class="k">int</span> x;',
+      '    <span class="io">cin</span> &gt;&gt; x;        <span class="c">// รับเลขจากผู้ใช้</span>',
+      '    <span class="io">cout</span> &lt;&lt; x;       <span class="c">// พิมพ์ออกจอ</span>',
+      '    <span class="k">return</span> <span class="n">0</span>;',
+      '}'],
+    steps:[
+      {li:4,say:'ประกาศตัวแปร <b>x</b> (ยังว่างอยู่)',act:s=>{s.vars=[{n:'x',v:null}]}},
+      {li:5,say:'<b>cin</b> อ่านค่าตัวแรกจาก input ใส่ลงใน <b>x</b>',act:s=>{s.vars[0].v=read(s);s.hit='x'}},
+      {li:6,say:'<b>cout</b> พิมพ์ค่าใน x ออกจอ',act:s=>{s.out+=val(s,'x')}},
+      {li:7,say:'จบโปรแกรม',act:s=>{}}
+    ]},
+  sum:{ name:'2) รับ 2 เลข พิมพ์ผลบวก', input:'5 3',
+    code:[
+      '<span class="k">#include</span> <span class="n">&lt;iostream&gt;</span>',
+      '<span class="k">using namespace</span> std;',
+      '',
+      '<span class="k">int</span> main() {',
+      '    <span class="k">int</span> a, b;',
+      '    <span class="io">cin</span> &gt;&gt; a &gt;&gt; b;   <span class="c">// รับ 2 เลข</span>',
+      '    <span class="k">int</span> s = a + b;   <span class="c">// บวกกัน</span>',
+      '    <span class="io">cout</span> &lt;&lt; s;       <span class="c">// พิมพ์ผลบวก</span>',
+      '    <span class="k">return</span> <span class="n">0</span>;',
+      '}'],
+    steps:[
+      {li:4,say:'ประกาศตัวแปร <b>a</b> และ <b>b</b> (ยังว่าง)',act:s=>{s.vars=[{n:'a',v:null},{n:'b',v:null}]}},
+      {li:5,say:'<b>cin</b> อ่าน 2 ค่าตามลำดับ ใส่ a แล้ว b',act:s=>{s.vars[0].v=read(s);s.vars[1].v=read(s);s.hit='b'}},
+      {li:6,say:'คำนวณ a + b เก็บผลลงในตัวแปร <b>s</b>',act:s=>{s.vars.push({n:'s',v:Number(s.vars[0].v)+Number(s.vars[1].v)});s.hit='s'}},
+      {li:7,say:'<b>cout</b> พิมพ์ค่า s ออกจอ',act:s=>{s.out+=val(s,'s')}},
+      {li:8,say:'จบโปรแกรม',act:s=>{}}
+    ]},
+  greet:{ name:'3) รับชื่อ แล้วทักทาย', input:'Somchai',
+    code:[
+      '<span class="k">#include</span> <span class="n">&lt;iostream&gt;</span>',
+      '<span class="k">#include</span> <span class="n">&lt;string&gt;</span>',
+      '<span class="k">using namespace</span> std;',
+      '',
+      '<span class="k">int</span> main() {',
+      '    <span class="k">string</span> name;',
+      '    <span class="io">cin</span> &gt;&gt; name;     <span class="c">// รับชื่อ</span>',
+      '    <span class="io">cout</span> &lt;&lt; <span class="s">"สวัสดี "</span> &lt;&lt; name;',
+      '    <span class="k">return</span> <span class="n">0</span>;',
+      '}'],
+    steps:[
+      {li:5,say:'ประกาศตัวแปรข้อความ <b>name</b> (ยังว่าง)',act:s=>{s.vars=[{n:'name',v:null,str:1}]}},
+      {li:6,say:'<b>cin</b> อ่านคำแรกจาก input ใส่ลงใน <b>name</b>',act:s=>{s.vars[0].v=read(s);s.hit='name'}},
+      {li:7,say:'<b>cout</b> พิมพ์ “สวัสดี ” ต่อด้วยค่าใน name',act:s=>{s.out+='สวัสดี '+val(s,'name')}},
+      {li:8,say:'จบโปรแกรม',act:s=>{}}
+    ]}
+};
+
+let cur='echo', state=null, sidx=0, running=false;
+
+function read(s){ // อ่าน token ถัดไป
+  if(s.ptr<s.tokens.length){const t=s.tokens[s.ptr];s.ptr++;return t;}
+  return '?';
+}
+function val(s,name){const v=s.vars.find(x=>x.n===name);return v&&v.v!=null?v.v:'';}
+
+function pickProg(k){cur=k;$('stdin').value=PROGS[k].input;prepare();}
+
+function renderCode(hi){
+  $('code').innerHTML=PROGS[cur].code.map((l,i)=>'<div class="cl'+(i===hi?' on':'')+'">'+(l||' ')+'</div>').join('');
+}
+function renderToks(){
+  const s=state;
+  $('toks').innerHTML=s.tokens.length? s.tokens.map((t,i)=>{
+    let c='tok';if(i<s.ptr)c+=' used';else if(i===s.ptr)c+=' next';
+    return '<span class="'+c+'">'+t+'</span>';
+  }).join('') : '<span style="color:#b0b8c8;font-size:13px">— ยังไม่ได้พิมพ์ข้อมูลเข้า —</span>';
+}
+function renderVars(){
+  const s=state;
+  $('vars').innerHTML=s.vars.length? s.vars.map(v=>{
+    const empty=v.v==null;
+    return '<div class="vbox'+(v.str?' str':'')+(s.hit===v.n?' hit':'')+'">'+
+      '<div class="vname">'+v.n+'</div>'+
+      '<div class="vval'+(empty?' empty':'')+'">'+(empty?'—':v.v)+'</div></div>';
+  }).join('') : '<span style="color:#b0b8c8;font-size:13px">— ยังไม่มีตัวแปร —</span>';
+}
+function renderOut(){$('out').textContent=state.out;}
+
+function prepare(){
+  running=false;sidx=0;
+  const toks=$('stdin').value.trim().split(/\s+/).filter(x=>x.length);
+  state={tokens:toks,ptr:0,vars:[],out:'',hit:null};
+  renderCode(-1);renderToks();renderVars();renderOut();
+  $('say').innerHTML='พร้อมแล้ว — กด “ทีละบรรทัด” หรือ “รันโปรแกรม” เพื่อเริ่ม';
+}
+
+function doStep(){
+  const steps=PROGS[cur].steps;
+  if(sidx>=steps.length)return false;
+  const st=steps[sidx];state.hit=null;st.act(state);
+  renderCode(st.li);renderToks();renderVars();renderOut();
+  $('say').innerHTML='<b>บรรทัดที่ทำงาน:</b> '+st.say;
+  sidx++;return true;
+}
+function stepOne(){if(running)return;if(sidx===0)prepareKeepInput();if(!doStep()){$('say').innerHTML='✓ จบโปรแกรมแล้ว — กด “เริ่มใหม่” เพื่อลองใหม่';renderCode(-1);}}
+function prepareKeepInput(){const toks=$('stdin').value.trim().split(/\s+/).filter(x=>x.length);state={tokens:toks,ptr:0,vars:[],out:'',hit:null};}
+async function runAll(){
+  if(running)return;prepareKeepInput();sidx=0;running=true;
+  const steps=PROGS[cur].steps;
+  while(sidx<steps.length){doStep();await new Promise(r=>setTimeout(r,950));}
+  running=false;renderCode(-1);$('say').innerHTML='✓ จบโปรแกรมแล้ว — ผลลัพธ์อยู่ในกล่อง “ผลลัพธ์ทางจอ”';
+}
+
+// init
+$('prog').innerHTML=Object.keys(PROGS).map(k=>'<option value="'+k+'">'+PROGS[k].name+'</option>').join('');
+$('stdin').value=PROGS[cur].input;
+prepare();icons();
+</script>
+</body>
+</html>
