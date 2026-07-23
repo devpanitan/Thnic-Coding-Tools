@@ -174,8 +174,8 @@ function next(){
 function end(){
   $("overlay").classList.add("show");
   let t,s;
-  if(scA>scB){t="🏆 ทีม A ชนะ!";s=`ทีม A ${scA} : ${scB} ทีม B`;}
-  else if(scB>scA){t="🏆 ทีม B ชนะ!";s=`ทีม B ${scB} : ${scA} ทีม A`;}
+  if(scA>scB){t="ทีม A ชนะ!";s=`ทีม A ${scA} : ${scB} ทีม B`;}
+  else if(scB>scA){t="ทีม B ชนะ!";s=`ทีม B ${scB} : ${scA} ทีม A`;}
   else{t="เสมอกัน!";s=`${scA} : ${scB} — สูสีมาก!`;}
   $("winTitle").textContent=t;$("winSub").textContent=s;icons();
 }

@@ -151,7 +151,7 @@
     <p class="lead">ปัญหา “ทายเลขลับให้ไวที่สุด” ดูยาก แต่ถ้า<b>แตกเป็นงานย่อย</b> จะทำทีละก้าวได้ กดปุ่มเพื่อค่อย ๆ แตกปัญหาออกมา</p>
 
     <div class="think">
-      <b>💡 ชวนคิด:</b> ถ้าเลขลับอยู่ระหว่าง 1–100 แล้ว “เดามั่ว” ไปเรื่อย ๆ โดยเฉลี่ยจะใช้กี่ครั้งกว่าจะเจอ?
+      <b><i data-lucide="lightbulb"></i> ชวนคิด:</b> ถ้าเลขลับอยู่ระหว่าง 1–100 แล้ว “เดามั่ว” ไปเรื่อย ๆ โดยเฉลี่ยจะใช้กี่ครั้งกว่าจะเจอ?
       <div class="opts">
         <button onclick="reveal(this,'q1')">~7 ครั้ง</button>
         <button onclick="reveal(this,'q1')">~50 ครั้ง</button>
@@ -196,7 +196,7 @@
       <tr><td>3</td><td>51–74</td><td>62</td><td>ต่ำไป</td><td class="same">หากลาง→เทียบ→ตัดครึ่ง</td></tr>
       <tr><td>4</td><td>63–74</td><td>68</td><td>ต่ำไป</td><td class="same">หากลาง→เทียบ→ตัดครึ่ง</td></tr>
       <tr><td>5</td><td>69–74</td><td>71</td><td>ต่ำไป</td><td class="same">หากลาง→เทียบ→ตัดครึ่ง</td></tr>
-      <tr><td>6</td><td>72–74</td><td>73</td><td>ถูกต้อง!</td><td class="same">เจอใน 6 ครั้ง 🎉</td></tr>
+      <tr><td>6</td><td>72–74</td><td>73</td><td>ถูกต้อง!</td><td class="same">เจอใน 6 ครั้ง</td></tr>
     </table>
     <div class="think" style="margin-top:14px"><b>สรุปเสา 2:</b> เจอแบบซ้ำ = โอกาสเขียนเป็น <b>loop</b> — ไม่ต้องเขียนคำสั่งเดิมซ้ำ ๆ หลายรอบ</div>
   </section>
@@ -271,7 +271,7 @@
 
     <span class="k">return</span> <span class="m">0</span>;
 }</div>
-    <p style="color:var(--muted);font-size:12.5px;margin-top:9px">💡 โค้ดนี้รันได้จริง — คัดลอกไปลองที่ <a href="https://onecompiler.com/cpp" target="_blank" style="color:#b6730a;font-weight:800">OneCompiler</a> แล้วลองเปลี่ยนค่า <b>secret</b> ดู</p>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:9px"><i data-lucide="lightbulb"></i> โค้ดนี้รันได้จริง — คัดลอกไปลองที่ <a href="https://onecompiler.com/cpp" target="_blank" style="color:#b6730a;font-weight:800">OneCompiler</a> แล้วลองเปลี่ยนค่า <b>secret</b> ดู</p>
   </section>
 
   <!-- ========= SUMMARY ========= -->
@@ -285,7 +285,7 @@
       <div class="sc"><b>คัดสำคัญ</b><small>เหลือ lo, hi, mid</small></div>
       <div class="sc"><b>ลำดับขั้น</b><small>= Binary Search</small></div>
     </div>
-    <p class="lead" style="text-align:center">ลองนำไปเล่นต่อกับเครื่องมืออื่น ๆ ของเรา 👇</p>
+    <p class="lead" style="text-align:center">ลองนำไปเล่นต่อกับเครื่องมืออื่น ๆ ของเรา</p>
     <div class="links" style="justify-content:center">
       <a href="เกม_ทายเลข_BinarySearch.html"><i data-lucide="gamepad-2"></i> เกมทายเลขลับ (แข่งเป็นทีม)</a>
       <a href="เกม3D_ล่าสมบัติ_BinarySearch.html"><i data-lucide="box"></i> เกม 3D ล่าสมบัติ</a>
@@ -310,7 +310,7 @@ function show(n){
   document.querySelectorAll('.card').forEach(c=>c.classList.toggle('on',+c.dataset.step===step));
   document.querySelectorAll('.pill').forEach((p,i)=>{const s=i+1;p.classList.toggle('on',s===step);p.classList.toggle('done',s<step);});
   $('prev').disabled=step===1;
-  $('next').innerHTML=step>=LAST?'จบแล้ว 🎉':'ถัดไป <i data-lucide="chevron-right"></i>';
+  $('next').innerHTML=step>=LAST?'จบแล้ว':'ถัดไป <i data-lucide="chevron-right"></i>';
   window.scrollTo({top:0,behavior:'smooth'});
   icons();
 }

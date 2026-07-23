@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ตัวแปร Global vs Local — ขอบเขต (Scope)</title>
+<link rel="icon" type="image/png" href="srru-logo.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root{--bg:#eef2f8;--card:#fff;--ink:#1e2740;--muted:#5b6478;--line:#e3e8f1;
+    --g:#2f6fd6;--m:#22a565;--b:#f59e0b;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'LINE Seed Sans TH',system-ui,sans-serif;background:radial-gradient(1300px 640px at 50% -10%,#f7faff,var(--bg));color:var(--ink);min-height:100vh;padding:20px 16px 44px}
+  .wrap{max-width:1120px;margin:0 auto}
+  .head{text-align:center;margin-bottom:12px}
+  .head h1{font-size:27px;letter-spacing:-.4px}
+  .head .sub{color:var(--muted);font-size:15px;margin-top:4px}
+
+  .bar{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;margin:12px 0}
+  select{font-family:inherit;font-size:15.5px;font-weight:800;border:1.5px solid var(--line);border-radius:12px;padding:10px 16px;color:var(--ink);background:#fff;cursor:pointer;box-shadow:0 8px 22px rgba(40,50,80,.07)}
+  .tip{background:#fffbe9;border:1.5px solid #ffe6a0;border-radius:13px;padding:11px 16px;font-size:15px;margin:6px 0 14px;line-height:1.55}
+  .tip b{color:#a9750a}
+
+  .main{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  @media(max-width:820px){.main{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:0 14px 34px rgba(40,50,80,.08)}
+  .panel h2{font-size:14px;color:var(--muted);margin-bottom:11px;display:flex;align-items:center;gap:8px}
+  .panel h2 i{width:18px;height:18px}
+
+  .code{background:#11203a;border-radius:13px;padding:16px 18px;font-family:ui-monospace,Consolas,monospace;font-size:16px;line-height:1.95;color:#e8eefc;overflow-x:auto}
+  .cl{white-space:pre;border-radius:6px;margin:0 -8px;padding:0 8px;cursor:pointer;transition:.12s}
+  .cl:hover{background:rgba(255,255,255,.07)}
+  .cl.on{background:rgba(245,158,11,.26);box-shadow:inset 4px 0 0 #f2a900}
+  .cl.fr{opacity:.5;cursor:default}
+  .cl.fr:hover{background:none}
+  .kk{color:#ff9bd0}.cc{color:#8aa0c0;font-style:italic}.nn{color:#ffd27f}.io{color:#5ad1ff}
+  .vG{color:#7fb6ff;font-weight:700}.vM{color:#8ff0b8;font-weight:700}.vB{color:#ffd27f;font-weight:700}
+  .chint{text-align:center;color:var(--muted);font-size:13.5px;margin-top:10px}
+
+  .scope{display:flex;flex-direction:column;gap:0}
+  .zone{border:2.5px solid;border-radius:16px;padding:14px 14px 15px;margin-top:14px;position:relative;transition:.2s}
+  .zone .zt{font-size:13px;font-weight:800;position:absolute;top:-11px;left:14px;background:#fff;padding:0 9px;border-radius:7px}
+  .zone.gG{border-color:var(--g)}.zone.gG .zt{color:var(--g)}
+  .zone.gM{border-color:var(--m)}.zone.gM .zt{color:var(--m)}
+  .zone.gB{border-color:var(--b)}.zone.gB .zt{color:var(--b)}
+  .zinner{margin:16px 0 2px 12px;display:flex;flex-wrap:wrap;gap:8px}
+  .zempty{margin:16px 0 2px 12px;font-size:13px;color:#aeb6c4;font-style:italic}
+  .chip{display:inline-flex;align-items:center;gap:9px;border-radius:12px;padding:9px 15px;font-family:ui-monospace,monospace;font-weight:800;font-size:17px;border:2.5px solid;transition:.2s}
+  .chip.cG{border-color:var(--g);color:var(--g);background:#eef4ff}
+  .chip.cM{border-color:var(--m);color:var(--m);background:#eafaf1}
+  .chip.cB{border-color:var(--b);color:#a5670a;background:#fff4e2}
+  .chip.dim{opacity:.26;filter:grayscale(.5);border-style:dashed}
+  .chip.shadow{opacity:.5;border-style:dashed}
+  .chip .st{font-size:12px;font-weight:800;margin-left:3px;padding:2px 8px;border-radius:7px}
+  .chip .st.ok{background:#e7faf0;color:#0d7a49}
+  .chip .st.no{background:#f1f3f7;color:#8a94a6}
+  .chip .st.sh{background:#fff0d6;color:#a5670a}
+
+  .say{margin-top:14px;background:#eef4ff;border-left:5px solid var(--g);border-radius:0 12px 12px 0;padding:12px 16px;font-size:15.5px;font-weight:600;min-height:24px;line-height:1.5}
+  .say b{color:#1c4fa8}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>ตัวแปร Global vs Local — ขอบเขต (Scope)</h1>
+    <div class="sub">คลิกที่บรรทัดโค้ด แล้วดูว่าตอนนั้น “มองเห็น” ตัวแปรไหนได้บ้าง</div>
+  </div>
+
+  <div class="bar">
+    <span style="font-weight:800;font-size:15px;color:var(--muted)">เลือกโจทย์:</span>
+    <select id="pick" onchange="loadSc(+this.value)"></select>
+  </div>
+
+  <div class="tip" id="tip"></div>
+
+  <div class="main">
+    <div class="panel">
+      <h2><i data-lucide="code"></i> โค้ด C++ (คลิกเลือกบรรทัด)</h2>
+      <div class="code" id="code"></div>
+      <div class="chint">คลิกบรรทัดที่มีสี เพื่อดูขอบเขตตัวแปร</div>
+    </div>
+    <div>
+      <div class="panel">
+        <h2><i data-lucide="layers"></i> ขอบเขตตัวแปรตอนนี้ (ตัวสว่าง = ใช้ได้)</h2>
+        <div class="scope" id="scope"></div>
+      </div>
+      <div class="say" id="say">เลือกโจทย์แล้วคลิกบรรทัดโค้ดเพื่อเริ่ม</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+function icons(){if(window.lucide)lucide.createIcons();}
+
+// ---------- 3 โจทย์ ----------
+// line = [html, clickable, [visibleIds], say, [shadowedIds]]
+const SC=[
+ {
+  name:'1) Global + Local (บล็อกซ้อน)',
+  tip:'<b>โจทย์ 1:</b> ตัวแปรที่ประกาศ <b>นอก main (Global)</b> ใช้ได้ทั้งโปรแกรม · ที่ประกาศ <b>ใน { } (Local)</b> ใช้ได้เฉพาะในบล็อกนั้น พอออกจากบล็อก ตัวแปรจะหายไป',
+  zones:[
+    {id:'G',label:'Global (นอก main)',cls:'gG',cc:'cG',vars:[{id:'score',txt:'score = 100'}]},
+    {id:'M',label:'int main() { }',cls:'gM',cc:'cM',vars:[{id:'x',txt:'x = 5'}]},
+    {id:'B',label:'บล็อก { }',cls:'gB',cc:'cB',vars:[{id:'y',txt:'y = 9'}]}
+  ],
+  lines:[
+    ['<span class="kk">#include</span> <span class="nn">&lt;iostream&gt;</span>',0],
+    ['<span class="kk">using namespace</span> std;',0],
+    ['',0],
+    ['<span class="kk">int</span> <span class="vG">score</span> = <span class="nn">100</span>;   <span class="cc">// Global</span>',1,['score'],'ประกาศ <b>score</b> เป็น Global (นอก main) → ใช้ได้ทั้งโปรแกรม'],
+    ['<span class="kk">int</span> main() {',1,['score'],'เข้า main() — ตอนนี้เห็นได้แค่ score (Global)'],
+    ['    <span class="kk">int</span> <span class="vM">x</span> = <span class="nn">5</span>;   <span class="cc">// Local ของ main</span>',1,['score','x'],'ประกาศ <b>x</b> เป็น Local ใน main → เห็น score กับ x'],
+    ['    {',1,['score','x'],'เปิดบล็อก { } ใหม่'],
+    ['        <span class="kk">int</span> <span class="vB">y</span> = <span class="nn">9</span>;   <span class="cc">// Local ของบล็อก</span>',1,['score','x','y'],'ประกาศ <b>y</b> ในบล็อก → ตอนนี้เห็นครบทั้ง 3'],
+    ['        <span class="io">cout</span> &lt;&lt; <span class="vG">score</span> &lt;&lt; <span class="vM">x</span> &lt;&lt; <span class="vB">y</span>;',1,['score','x','y'],'ในบล็อก: ใช้ได้ทั้ง score, x, y'],
+    ['    }   <span class="cc">// จบบล็อก — y หมดอายุ</span>',1,['score','x'],'ออกจากบล็อก → <b>y หายไป</b> ใช้ไม่ได้อีกแล้ว'],
+    ['    <span class="io">cout</span> &lt;&lt; <span class="vG">score</span> &lt;&lt; <span class="vM">x</span>;   <span class="cc">// y ใช้ไม่ได้</span>',1,['score','x'],'ตรงนี้เห็นแค่ score, x — ถ้าเรียก y จะ <b>error</b>'],
+    ['    <span class="kk">return</span> <span class="nn">0</span>;',1,['score','x'],'ก่อนจบ main — เห็น score, x'],
+    ['}',0]
+  ],
+  start:8
+ },
+ {
+  name:'2) ตัวแปรในบล็อกหายเมื่อจบบล็อก',
+  tip:'<b>โจทย์ 2:</b> ตัวแปร Local ที่ประกาศในบล็อก { } จะ “หมดอายุ” ทันทีที่ปิดบล็อก — เอาไปใช้ข้างนอกไม่ได้ (จะ error) แต่ Global ยังอยู่',
+  zones:[
+    {id:'G',label:'Global (นอก main)',cls:'gG',cc:'cG',vars:[{id:'total',txt:'total = 0'}]},
+    {id:'M',label:'int main() { }',cls:'gM',cc:'cM',vars:[]},
+    {id:'B',label:'บล็อก { }',cls:'gB',cc:'cB',vars:[{id:'temp',txt:'temp = 5'}]}
+  ],
+  lines:[
+    ['<span class="kk">#include</span> <span class="nn">&lt;iostream&gt;</span>',0],
+    ['<span class="kk">using namespace</span> std;',0],
+    ['',0],
+    ['<span class="kk">int</span> <span class="vG">total</span> = <span class="nn">0</span>;   <span class="cc">// Global</span>',1,['total'],'ประกาศ <b>total</b> เป็น Global'],
+    ['<span class="kk">int</span> main() {',1,['total'],'เข้า main() — เห็นแค่ total'],
+    ['    {',1,['total'],'เปิดบล็อก { }'],
+    ['        <span class="kk">int</span> <span class="vB">temp</span> = <span class="nn">5</span>;   <span class="cc">// Local ในบล็อก</span>',1,['total','temp'],'ประกาศ <b>temp</b> ในบล็อก → เห็น total กับ temp'],
+    ['        <span class="vG">total</span> = <span class="vG">total</span> + <span class="vB">temp</span>;',1,['total','temp'],'ใช้ temp บวกเข้า total ได้ (อยู่ในบล็อกเดียวกัน)'],
+    ['    }   <span class="cc">// จบบล็อก — temp หาย!</span>',1,['total'],'ปิดบล็อก → <b>temp หมดอายุ</b> หายไปจากหน่วยความจำ'],
+    ['    <span class="io">cout</span> &lt;&lt; <span class="vG">total</span>;   <span class="cc">// ใช้ total ได้</span>',1,['total'],'total ยังอยู่ (Global) → พิมพ์ได้ปกติ'],
+    ['    <span class="cc">// cout &lt;&lt; temp;  ← บรรทัดนี้จะ ERROR</span>',1,['total'],'ถ้าลองเรียก temp ตรงนี้ = <b>error</b> เพราะ temp หายไปแล้ว'],
+    ['    <span class="kk">return</span> <span class="nn">0</span>;',1,['total'],'จบ main'],
+    ['}',0]
+  ],
+  start:7
+ },
+ {
+  name:'3) ชื่อซ้ำ (Shadow) — ตัวในบังตัวนอก',
+  tip:'<b>โจทย์ 3:</b> ถ้ามีตัวแปรชื่อเดียวกันทั้ง Global และ Local ตัวใน (Local) จะ “บัง” ตัวนอกชั่วคราว — ในบล็อกจะใช้ตัวใน พอออกมาก็กลับไปใช้ตัวนอก',
+  zones:[
+    {id:'G',label:'Global',cls:'gG',cc:'cG',vars:[{id:'nG',txt:'n = 10'}]},
+    {id:'M',label:'int main() { }',cls:'gM',cc:'cM',vars:[]},
+    {id:'B',label:'บล็อก { }',cls:'gB',cc:'cB',vars:[{id:'nB',txt:'n = 99'}]}
+  ],
+  lines:[
+    ['<span class="kk">#include</span> <span class="nn">&lt;iostream&gt;</span>',0],
+    ['<span class="kk">using namespace</span> std;',0],
+    ['',0],
+    ['<span class="kk">int</span> <span class="vG">n</span> = <span class="nn">10</span>;   <span class="cc">// Global n</span>',1,['nG'],'ประกาศ Global <b>n = 10</b>'],
+    ['<span class="kk">int</span> main() {',1,['nG'],'เข้า main — มีแค่ Global n'],
+    ['    <span class="io">cout</span> &lt;&lt; <span class="vG">n</span>;   <span class="cc">// ใช้ Global n</span>',1,['nG'],'พิมพ์ n → ใช้ Global n = <b>10</b>'],
+    ['    {',1,['nG'],'เปิดบล็อก { }'],
+    ['        <span class="kk">int</span> <span class="vB">n</span> = <span class="nn">99</span>;   <span class="cc">// Local n (ชื่อซ้ำ!)</span>',1,['nB','nG'],'ประกาศ Local <b>n = 99</b> ชื่อซ้ำ → ตัวใน “บัง” Global n',['nG']],
+    ['        <span class="io">cout</span> &lt;&lt; <span class="vB">n</span>;   <span class="cc">// ใช้ Local n = 99</span>',1,['nB','nG'],'ในบล็อก พิมพ์ n → ได้ Local = <b>99</b> (Global ถูกบังไว้)',['nG']],
+    ['    }   <span class="cc">// จบบล็อก — Local n หาย</span>',1,['nG'],'ปิดบล็อก → Local n หาย เหลือ Global n'],
+    ['    <span class="io">cout</span> &lt;&lt; <span class="vG">n</span>;   <span class="cc">// กลับมาใช้ Global n</span>',1,['nG'],'พิมพ์ n → กลับไปใช้ Global = <b>10</b> อีกครั้ง'],
+    ['    <span class="kk">return</span> <span class="nn">0</span>;',1,['nG'],'จบ main'],
+    ['}',0]
+  ],
+  start:7
+ }
+];
+
+let cur=0;
+
+function renderScope(sc){
+  $('scope').innerHTML=nest(sc.zones,0);
+  icons();
+}
+function nest(zones,i){
+  if(i>=zones.length)return '';
+  const z=zones[i];
+  const chips = z.vars.length
+    ? '<div class="zinner">'+z.vars.map(v=>'<span class="chip '+z.cc+' dim" id="chip-'+v.id+'">'+v.txt+' <span class="st no">ยังไม่มี</span></span>').join('')+'</div>'
+    : '<div class="zempty">— ไม่มีตัวแปรของตัวเอง —</div>';
+  return '<div class="zone '+z.cls+'"><span class="zt">'+z.label+'</span>'+chips+nest(zones,i+1)+'</div>';
+}
+function renderCode(sc,curLine){
+  $('code').innerHTML=sc.lines.map((l,i)=>{
+    const cls='cl'+(l[1]?'':' fr')+(i===curLine?' on':'');
+    return '<div class="'+cls+'"'+(l[1]?' onclick="pick('+i+')"':'')+'>'+(l[0]||' ')+'</div>';
+  }).join('');
+}
+function setChip(sc,id,state){ // state: 'ok' | 'no' | 'sh'
+  const c=$('chip-'+id);if(!c)return;
+  c.classList.remove('dim','shadow');
+  const st=c.querySelector('.st');st.className='st '+state;
+  if(state==='no'){c.classList.add('dim');st.textContent='ใช้ไม่ได้';}
+  else if(state==='sh'){c.classList.add('shadow');st.textContent='ถูกบัง';}
+  else{st.textContent='ใช้ได้';}
+}
+function pick(i){
+  const sc=SC[cur],l=sc.lines[i];if(!l[1])return;
+  renderCode(sc,i);
+  const vis=l[2]||[], sh=l[4]||[];
+  sc.zones.forEach(z=>z.vars.forEach(v=>{
+    setChip(sc,v.id, sh.includes(v.id)?'sh' : (vis.includes(v.id)?'ok':'no'));
+  }));
+  $('say').innerHTML='<b>บรรทัดนี้:</b> '+(l[3]||'');
+}
+function loadSc(i){
+  cur=i;const sc=SC[i];
+  $('tip').innerHTML=sc.tip;
+  renderScope(sc);renderCode(sc,-1);
+  pick(sc.start);
+}
+
+$('pick').innerHTML=SC.map((s,i)=>'<option value="'+i+'">'+s.name+'</option>').join('');
+loadSc(0);icons();
+</script>
+</body>
+</html>

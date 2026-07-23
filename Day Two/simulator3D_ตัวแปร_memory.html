@@ -41,13 +41,13 @@
   .codepanel .k{color:#ff9bd0}.codepanel .n{color:#9ad27f}.codepanel .s{color:#ffd27f}.codepanel .c{color:#7fb0d8}
   .codepanel .ln.fr{color:#67769f}
   /* กล่องคำถาม + นับถอยหลัง */
-  #qbox{position:absolute;top:clamp(108px,18vh,196px);left:50%;transform:translateX(-50%);width:min(94vw,780px);text-align:center;display:none;pointer-events:auto;
-    background:rgba(255,255,255,.97);border:3px solid #ffd24d;border-radius:22px;padding:clamp(16px,2.6vh,26px) clamp(24px,3.5vw,44px);box-shadow:0 18px 46px rgba(40,50,70,.24)}
-  #qbox .ql{font-size:clamp(15px,2.2vh,20px);color:#8a5e00;font-weight:700}
-  #qbox .qt{font-size:clamp(18px,2.9vh,27px);color:#1f2733;font-weight:700;margin:10px 0;line-height:1.4}
-  #qbox .qtm{font-family:ui-monospace,monospace;font-size:clamp(42px,7.5vh,78px);font-weight:700;color:#C0392B;line-height:1}
+  #qbox{position:absolute;top:clamp(56px,7.5vh,82px);left:50%;transform:translateX(-50%);width:min(88vw,430px);text-align:center;display:none;pointer-events:auto;
+    background:rgba(255,255,255,.97);border:2px solid #ffd24d;border-radius:15px;padding:clamp(9px,1.4vh,14px) clamp(14px,2.2vw,24px);box-shadow:0 14px 34px rgba(40,50,70,.2)}
+  #qbox .ql{font-size:clamp(12px,1.6vh,14px);color:#8a5e00;font-weight:700}
+  #qbox .qt{font-size:clamp(13px,1.8vh,16px);color:#1f2733;font-weight:700;margin:5px 0;line-height:1.35}
+  #qbox .qtm{font-family:ui-monospace,monospace;font-size:clamp(26px,4vh,40px);font-weight:700;color:#C0392B;line-height:1}
   #qbox .qtm.low{color:#e11}
-  #qbox .qsk{margin-top:12px;font-family:inherit;font-size:clamp(14px,2vh,17px);font-weight:700;color:#fff;background:linear-gradient(135deg,#1565C0,#6A3FC0);border:0;border-radius:12px;padding:10px 24px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+  #qbox .qsk{margin-top:8px;font-family:inherit;font-size:clamp(12px,1.5vh,14px);font-weight:700;color:#fff;background:linear-gradient(135deg,#1565C0,#6A3FC0);border:0;border-radius:10px;padding:7px 18px;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
   /* จอเล็ก/มือถือ — จัดใหม่ไม่ให้ทับกัน */
   @media (max-width:820px){
     .top .tag{display:none} h1{font-size:17px}
@@ -56,7 +56,7 @@
     .ctrls{width:96vw;max-width:none}
     #democap{top:25vh;width:94vw;padding:12px 16px}
     #democap .cc{font-size:20px}#democap .cd{font-size:15px}#democap .cn{font-size:14px}
-    #qbox{top:24vh;width:94vw;padding:14px 16px}#qbox .qtm{font-size:46px}#qbox .qt{font-size:17px}
+    #qbox{top:11vh;width:92vw;padding:10px 14px}#qbox .qtm{font-size:32px}#qbox .qt{font-size:15px}
     .legend{display:none}
   }
   .panel{background:rgba(255,255,255,.86);border:1px solid #d3d8e0;border-radius:16px;padding:12px 15px;box-shadow:0 10px 30px rgba(40,50,70,.12);backdrop-filter:blur(8px);pointer-events:auto}
@@ -340,7 +340,7 @@ const SIZE={int:4,double:8,char:1,bool:1,string:'~'};
 const PERROW=5,SPX=2.6,SPZ=3.0;
 // camera (ลากหมุน + ซูม + auto-frame)
 let target=new THREE.Vector3(0,1,0),targetEnd=new THREE.Vector3(0,1,0);
-let radius=16,radiusEnd=16,theta=0,phi=1.05,dragging=false,px=0,py=0,mode='rot';
+let radius=16,radiusEnd=16,theta=0,phi=0.92,dragging=false,px=0,py=0,mode='rot';
 function updateCamera(){const sp=Math.sin(phi),cp=Math.cos(phi);
   camera.position.set(target.x+radius*sp*Math.sin(theta),target.y+radius*cp,target.z+radius*sp*Math.cos(theta));
   camera.lookAt(target);}
@@ -476,14 +476,14 @@ function clearAll(){
   $("reason").innerHTML='<div class="h"><i data-lucide="lightbulb"></i> ล้างหน่วยความจำแล้ว</div>ลองประกาศตัวแปรใหม่ดู';
   note("ล้างหน่วยความจำแล้ว","info");updateMainBtn();
 }
-function resetView(){theta=0;phi=1.05;frameCam(false);}
+function resetView(){theta=0;phi=0.92;frameCam(false);}
 function frameCam(instant){
   const box=new THREE.Box3();
   if(vars.length===0)box.setFromCenterAndSize(new THREE.Vector3(0,1,0),new THREE.Vector3(7,3,4));
   else vars.forEach(v=>box.expandByObject(v.mesh));
   const ctr=box.getCenter(new THREE.Vector3()),sz=box.getSize(new THREE.Vector3());
   const maxd=Math.max(sz.x,sz.y*1.4,sz.z,5);
-  targetEnd.copy(ctr);radiusEnd=maxd*1.75+7;
+  targetEnd.copy(ctr);radiusEnd=maxd*1.55+6;
   if(instant){target.copy(targetEnd);radius=radiusEnd;updateCamera();}
 }
 const PRESET={int:['age','15'],double:['price','3.14'],char:['grade','A'],string:['name','แนน'],bool:['isPass','true']};

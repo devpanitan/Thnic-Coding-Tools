@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ต่อโค้ดให้ติด — สไลด์ฉายโจทย์ (วันที่ 2)</title>
+<link rel="icon" type="image/png" href="../Day One/srru-logo.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root{--bg:#0f1830;--ink:#eef2fb;--muted:#9fb0cc;
+    --t:#3f8cff;--v:#22c07a;--n:#f7a23b;--c:#b98bff;--k:#ff6f6f;--line:#2a3a5c;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'LINE Seed Sans TH',system-ui,sans-serif;background:radial-gradient(1400px 700px at 50% -8%,#1b2c4f,#0f1830);color:var(--ink);min-height:100vh;overflow:hidden}
+  .slide{position:fixed;inset:0;display:none;flex-direction:column;padding:clamp(18px,3vh,40px) clamp(22px,4vw,64px)}
+  .slide.on{display:flex}
+  .top{display:flex;align-items:center;gap:14px;margin-bottom:clamp(10px,2vh,20px)}
+  .chip{background:#22345c;border:1px solid var(--line);border-radius:999px;padding:6px 16px;font-weight:800;font-size:clamp(14px,2vh,18px);color:#cfe0ff}
+  .top h1{font-size:clamp(22px,3.6vh,40px);font-weight:800;letter-spacing:-.5px}
+  .tag{margin-left:auto;background:#20345f;border:1px solid var(--line);color:#a9c2ff;border-radius:10px;padding:6px 14px;font-weight:700;font-size:clamp(12px,1.8vh,16px)}
+
+  .stmt{font-size:clamp(17px,2.7vh,28px);line-height:1.5;color:#dbe6fb;margin-bottom:clamp(10px,1.8vh,18px)}
+  .stmt b{color:#fff}
+  .io{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:clamp(12px,2vh,20px)}
+  .iobox{background:#15223d;border:1.5px solid var(--line);border-radius:14px;padding:clamp(8px,1.5vh,14px) clamp(14px,2vw,22px)}
+  .iobox .l{font-size:clamp(11px,1.5vh,14px);color:var(--muted);font-weight:700;margin-bottom:2px}
+  .iobox .val{font-family:ui-monospace,Consolas,monospace;font-size:clamp(18px,2.6vh,30px);font-weight:800}
+  .io .arrow{font-size:clamp(20px,3vh,34px);color:var(--muted)}
+  .iobox.in .val{color:#8fd0ff}.iobox.out .val{color:#8ff0b8}
+
+  .code{background:#0a1122;border:1.5px solid var(--line);border-radius:16px;padding:clamp(14px,2.6vh,30px) clamp(18px,2.5vw,34px);
+    font-family:ui-monospace,Consolas,monospace;font-size:clamp(20px,3.4vh,40px);line-height:1.9;flex:1;display:flex;flex-direction:column;justify-content:center;overflow:auto}
+  .kw{color:#ff9bd0}.io2{color:#5ad1ff}.st{color:#9ad27f}.nm{color:#ffd27f}.cm{color:#7f93b5;font-style:italic}
+  .gap{display:inline-block;min-width:1.9em;text-align:center;background:#1b2036;border:2px dashed #6b7fb0;border-radius:9px;padding:0 .3em;color:#8aa0c8;margin:0 .12em;transition:.2s}
+  .gap.f{border-style:solid;color:#0a1122;font-weight:800}
+  .gap.t{background:var(--t);border-color:var(--t);color:#fff}
+  .gap.v{background:var(--v);border-color:var(--v);color:#04231a}
+  .gap.n{background:var(--n);border-color:var(--n);color:#3a2200}
+  .gap.c{background:var(--c);border-color:var(--c);color:#fff}
+  .gap.k{background:var(--k);border-color:var(--k);color:#fff}
+
+  .term{margin-top:clamp(10px,1.6vh,16px);background:#04120a;border:1.5px solid #16351f;border-radius:14px;padding:clamp(10px,1.6vh,16px) clamp(14px,2vw,22px);font-family:ui-monospace,monospace;font-size:clamp(16px,2.4vh,26px);color:#8ef0b0;display:none}
+  .term.show{display:block}
+  .term .p{color:#6ea3ff}.term .u{color:#ffd27f}
+
+  .bar{display:flex;gap:12px;align-items:center;margin-top:clamp(12px,2vh,20px);flex-wrap:wrap}
+  .btn{font-family:inherit;font-weight:800;font-size:clamp(15px,2.1vh,20px);border:0;border-radius:12px;padding:clamp(9px,1.5vh,14px) clamp(16px,2vw,26px);cursor:pointer;color:#fff;display:inline-flex;align-items:center;gap:8px}
+  .btn.rev{background:linear-gradient(135deg,#f2a900,#e07d00)}
+  .btn.run{background:linear-gradient(135deg,#22c07a,#159a5b)}
+  .btn.oc{background:#22345c;border:1px solid var(--line);color:#cfe0ff}
+  .nav{margin-left:auto;display:flex;gap:10px}
+  .nav button{font-family:inherit;font-weight:800;font-size:clamp(15px,2.1vh,20px);background:#1a2b4d;color:#dbe6fb;border:1px solid var(--line);border-radius:12px;padding:clamp(9px,1.5vh,14px) clamp(14px,1.8vw,22px);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+  .nav button:disabled{opacity:.35;cursor:default}
+  .legend{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:12px;font-size:13px;color:var(--muted);flex-wrap:wrap;justify-content:center}
+  .legend span{display:inline-flex;align-items:center;gap:5px}
+  .legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+  svg{width:1em;height:1em;vertical-align:-.12em}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="legend">
+  <span><i style="background:var(--t)"></i>ชนิดข้อมูล</span>
+  <span><i style="background:var(--v)"></i>ตัวแปร</span>
+  <span><i style="background:var(--n)"></i>ค่า/ข้อความ</span>
+  <span><i style="background:var(--c)"></i>คำสั่ง/สัญลักษณ์</span>
+  <span><i style="background:var(--k)"></i>เงื่อนไข</span>
+</div>
+
+<script>
+const G=(a,c)=>'<span class="gap" data-a="'+a+'" data-c="'+c+'">▢</span>';
+const PROBS=[
+ { title:'สร้างตัวแปร + พิมพ์ค่า', tag:'ตัวแปร',
+   stmt:'สร้างตัวแปรจำนวนเต็มชื่อ <b>age</b> เก็บค่า <b>15</b> แล้วพิมพ์ออกจอ',
+   input:'(ไม่มี)', output:'15',
+   code:'<span class="kw">int</span> '+G('age','v')+' = '+G('15','n')+' ;\n<span class="io2">cout</span> &lt;&lt; '+G('age','v')+' ;',
+   term:'15' },
+
+ { title:'รับค่าเข้า (cin)', tag:'cin',
+   stmt:'รับจำนวนเต็ม <b>n</b> จากผู้ใช้ แล้วพิมพ์กลับออกไป',
+   input:'7', output:'7',
+   code:'<span class="kw">int</span> n;\n<span class="io2">cin</span> '+G('&gt;&gt;','c')+' n ;\n<span class="io2">cout</span> &lt;&lt; '+G('n','v')+' ;',
+   term:'<span class="p">input:</span> <span class="u">7</span>\n7' },
+
+ { title:'ต่อสตริง (ทักทาย)', tag:'string',
+   stmt:'รับชื่อ <b>name</b> แล้วพิมพ์ทักทาย เช่น <b>สวัสดี Somchai</b>',
+   input:'Somchai', output:'สวัสดี Somchai',
+   code:'<span class="kw">string</span> name;\n<span class="io2">cin</span> &gt;&gt; name ;\n<span class="io2">cout</span> &lt;&lt; '+G('"สวัสดี "','n')+' &lt;&lt; '+G('name','v')+' ;',
+   term:'<span class="p">input:</span> <span class="u">Somchai</span>\nสวัสดี Somchai' },
+
+ { title:'คำนวณผลบวก', tag:'operators',
+   stmt:'รับเลข 2 จำนวน <b>a</b> และ <b>b</b> เก็บผลบวกไว้ใน <b>sum</b> แล้วพิมพ์',
+   input:'3 5', output:'8',
+   code:'<span class="kw">int</span> a, b;  <span class="io2">cin</span> &gt;&gt; a &gt;&gt; b;\n<span class="kw">int</span> sum = '+G('a','v')+' '+G('+','c')+' '+G('b','v')+' ;\n<span class="io2">cout</span> &lt;&lt; sum ;',
+   term:'<span class="p">input:</span> <span class="u">3 5</span>\n8' },
+
+ { title:'เติมชิ้นที่ขาด — เศษหาร (%)', tag:'operators %',
+   stmt:'รับ <b>n</b> แล้วพิมพ์ <b>เศษ</b> จากการหารด้วย 2 (คู่=0, คี่=1) — เติมการ์ดในช่องว่าง',
+   input:'7', output:'1',
+   code:'<span class="kw">int</span> n;  <span class="io2">cin</span> &gt;&gt; n;\n<span class="io2">cout</span> &lt;&lt; n '+G('%','c')+' '+G('2','n')+' ;',
+   term:'<span class="p">input:</span> <span class="u">7</span>\n1  <span class="cm">// 7 หาร 2 เหลือเศษ 1 = เลขคี่</span>' },
+
+ { title:'เงื่อนไข if-else (เช็กอายุ)', tag:'if-else',
+   stmt:'รับ <b>age</b> ถ้า <b>≥ 18</b> พิมพ์ “ผู้ใหญ่” ไม่งั้นพิมพ์ “เด็ก”',
+   input:'20', output:'ผู้ใหญ่',
+   code:'<span class="kw">int</span> age;  <span class="io2">cin</span> &gt;&gt; age;\n<span class="kw">if</span> ( age '+G('&gt;=','k')+' '+G('18','n')+' )\n    <span class="io2">cout</span> &lt;&lt; '+G('"ผู้ใหญ่"','n')+' ;\n<span class="kw">else</span>\n    <span class="io2">cout</span> &lt;&lt; <span class="st">"เด็ก"</span> ;',
+   term:'<span class="p">input:</span> <span class="u">20</span>\nผู้ใหญ่  <span class="cm">// 20 &gt;= 18 เป็นจริง</span>' }
+];
+
+let idx=0;
+function build(){
+  document.getElementById('deck').innerHTML=PROBS.map((p,i)=>
+    '<div class="slide'+(i===0?' on':'')+'" data-i="'+i+'">'+
+      '<div class="top"><span class="chip">โจทย์ '+(i+1)+' / '+PROBS.length+'</span><h1>'+p.title+'</h1><span class="tag">'+p.tag+'</span></div>'+
+      '<div class="stmt">'+p.stmt+'</div>'+
+      '<div class="io"><div class="iobox in"><div class="l">ข้อมูลเข้า (input)</div><div class="val">'+p.input+'</div></div>'+
+        '<span class="arrow">→</span>'+
+        '<div class="iobox out"><div class="l">ต้องได้ (output)</div><div class="val">'+p.output+'</div></div></div>'+
+      '<div class="code" id="code'+i+'">'+p.code+'</div>'+
+      '<div class="term" id="term'+i+'"></div>'+
+      '<div class="bar">'+
+        '<button class="btn rev" onclick="reveal('+i+')"><i data-lucide="eye"></i> เฉลย</button>'+
+        '<button class="btn run" onclick="runIt('+i+')"><i data-lucide="play"></i> รันโค้ด</button>'+
+        '<a class="btn oc" href="https://onecompiler.com/cpp" target="_blank"><i data-lucide="external-link"></i> รันจริง OneCompiler</a>'+
+        '<div class="nav"><button onclick="go(-1)"><i data-lucide="chevron-left"></i> ก่อน</button>'+
+          '<button onclick="go(1)">ถัดไป <i data-lucide="chevron-right"></i></button></div>'+
+      '</div>'+
+    '</div>').join('');
+  icons();
+}
+function reveal(i){
+  document.querySelectorAll('#code'+i+' .gap').forEach(g=>{g.innerHTML=g.dataset.a;g.className='gap f '+g.dataset.c;});
+}
+function runIt(i){
+  reveal(i);
+  const t=document.getElementById('term'+i);
+  t.classList.add('show');
+  t.innerHTML='<span class="p">$ ./program</span>\n'+PROBS[i].term;
+}
+function show(){document.querySelectorAll('.slide').forEach(s=>s.classList.toggle('on',+s.dataset.i===idx));icons();}
+function go(d){idx=Math.max(0,Math.min(PROBS.length-1,idx+d));show();}
+addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+const icons=()=>{if(window.lucide)lucide.createIcons();};
+build();
+</script>
+</body>
+</html>

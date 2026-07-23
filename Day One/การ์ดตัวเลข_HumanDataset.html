@@ -56,7 +56,7 @@ function build(){
   for(let n=a;n<=b;n++){
     if(idx%6===0){page=document.createElement('div');page.className='page';deck.appendChild(page);}
     const c=document.createElement('div');c.className='card';
-    c.innerHTML='<span class="cor l">'+n+'</span><span class="num">'+n+'</span><span class="cor r">'+n+'</span><span class="cap">THE HUMAN DATASET · SRRU</span>';
+    c.innerHTML='<span class="cor l">'+n+'</span><span class="num">'+n+'</span><span class="cor r">'+n+'</span>';
     page.appendChild(c);idx++;
   }
   // เติมช่องว่างหน้าสุดท้ายให้กริดสวย

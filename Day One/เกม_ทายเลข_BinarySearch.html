@@ -100,7 +100,7 @@
 <body>
   <div class="head">
     <img src="srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
-    <h1>🔍 เกมล่าเลขลับ</h1>
+    <h1><i data-lucide="search"></i> เกมล่าเลขลับ</h1>
     <span class="tag">คอมซ่อนเลขลับไว้ — ทายให้เจอด้วยจำนวนครั้งน้อยที่สุด! (คิดแบบ Binary Search • แกนจากข้อสอบ TOI: find)</span>
   </div>
 
@@ -179,7 +179,7 @@ function renderRange(){
     const el=document.createElement("div");
     el.className="pin "+p.dir;
     el.style.left=((p.val-MIN)/total*100)+"%";
-    const arrow=p.dir==="lo"?"↑":p.dir==="hi"?"↓":"🎯";
+    const arrow=p.dir==="lo"?"↑":p.dir==="hi"?"↓":"✓";
     el.innerHTML='<div class="v">'+p.val+' '+arrow+'</div><div class="stick"></div>';
     track.appendChild(el);
   });
@@ -207,7 +207,7 @@ function doGuess(){
     done=true; lo=hi=g; pins.push({val:g,dir:"win"}); renderRange();
     const op=optimal(MAX-MIN+1);
     $("fb").className="fb win";
-    $("fb").innerHTML='<i data-lucide="party-popper"></i> เจอแล้ว! เลขลับคือ '+g+' — ใช้ไป <b style="margin:0 6px">'+count+'</b> ครั้ง '+(count<=op?' เยี่ยมมาก! 👏':' (ลองแบ่งครึ่งให้ ≤ '+op+' ครั้ง)');
+    $("fb").innerHTML='<i data-lucide="party-popper"></i> เจอแล้ว! เลขลับคือ '+g+' — ใช้ไป <b style="margin:0 6px">'+count+'</b> ครั้ง '+(count<=op?' เยี่ยมมาก!':' (ลองแบ่งครึ่งให้ ≤ '+op+' ครั้ง)');
     lastCount=count; cheer(); icons(); return;
   }
   if(g<target){ lo=Math.max(lo,g+1); pins.push({val:g,dir:"lo"});

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>การ์ดต่อโค้ด — กิจกรรม “ต่อโค้ดให้ติด” (วันที่ 2)</title>
+<link rel="icon" type="image/png" href="../Day One/srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--t:#3f8cff;--v:#1f9d57;--n:#e07d00;--c:#7c53d6;--k:#d94b4b;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"TH Sarabun PSK","Sarabun","Tahoma",sans-serif;background:#e9eef7;color:#16224a;padding:16px}
+  .bar{max-width:900px;margin:0 auto 14px;text-align:center}
+  .bar h1{font-size:22pt}
+  .bar p{color:#5d6b8a;font-size:13pt;margin-top:2px}
+  .bar .note{background:#fff6dd;border:1.5px solid #ffe2a1;border-radius:10px;padding:8px 14px;font-size:12.5pt;color:#8a5e00;margin-top:10px;display:inline-block;text-align:left}
+  .ctrl{margin-top:10px}
+  .ctrl button{font-family:inherit;font-size:14pt;font-weight:800;background:#19b877;color:#fff;border:0;border-radius:10px;padding:9px 22px;cursor:pointer}
+
+  .page{max-width:900px;margin:0 auto 16px;background:#fff;border-radius:10px;padding:8mm;display:grid;grid-template-columns:1fr 1fr 1fr;gap:5mm;box-shadow:0 10px 30px rgba(20,30,60,.1)}
+  .card{border:3px solid #ccc;border-radius:12px;min-height:34mm;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:6mm 4mm;background:#fff;break-inside:avoid}
+  .card .cat{position:absolute;top:2.5mm;left:0;right:0;text-align:center;font-size:10pt;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.75}
+  .card .tok{font-family:"Consolas",ui-monospace,monospace;font-weight:800;font-size:30pt;line-height:1;text-align:center;word-break:break-word}
+  .card.t{border-color:var(--t)} .card.t .cat,.card.t .tok{color:var(--t)}
+  .card.v{border-color:var(--v)} .card.v .cat,.card.v .tok{color:var(--v)}
+  .card.n{border-color:var(--n)} .card.n .cat,.card.n .tok{color:var(--n)}
+  .card.c{border-color:var(--c)} .card.c .cat,.card.c .tok{color:var(--c)}
+  .card.k{border-color:var(--k)} .card.k .cat,.card.k .tok{color:var(--k)}
+  .card .tok.sm{font-size:19pt}
+
+  @media print{
+    body{background:#fff;padding:0}
+    .bar,.ctrl{display:none}
+    .page{box-shadow:none;border-radius:0;margin:0;padding:8mm;page-break-after:always}
+    @page{size:A4 portrait;margin:0}
+  }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <h1>การ์ดต่อโค้ด — กิจกรรม “ต่อโค้ดให้ติด”</h1>
+    <p>วันที่ 2 (ตัวแปร · cin · ต่อสตริง · operators · if-else) — ปรินต์ 1 ชุดต่อ 1 ทีม (แนะนำ 6 ชุด)</p>
+    <div class="note"><b>วิธีใช้:</b> ปรินต์ → ตัดตามการ์ด → ติด <b>กาวดินน้ำมัน (blu-tack)</b> หรือเทปกาวย่นหลังการ์ด (ถ้ามีกระดานแม่เหล็ก ใช้แม่เหล็กติดหลังได้) · แยกสี: <span style="color:var(--t);font-weight:700">ฟ้า=ชนิดข้อมูล</span> · <span style="color:var(--v);font-weight:700">เขียว=ตัวแปร</span> · <span style="color:var(--n);font-weight:700">ส้ม=ค่า/ข้อความ</span> · <span style="color:var(--c);font-weight:700">ม่วง=คำสั่ง/สัญลักษณ์</span> · <span style="color:var(--k);font-weight:700">แดง=เงื่อนไข</span></div>
+    <div class="ctrl"><button onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button></div>
+  </div>
+  <div id="deck"></div>
+
+<script>
+const CATNAME={t:'ชนิดข้อมูล',v:'ตัวแปร',n:'ค่า/ข้อความ',c:'คำสั่ง',k:'เงื่อนไข'};
+// [token, category, count]
+const DECK=[
+  ['int','t',2],['double','t',1],['string','t',1],['char','t',1],['bool','t',1],
+  ['a','v',2],['b','v',2],['n','v',2],['sum','v',1],['name','v',2],['age','v',2],['price','v',1],['x','v',1],
+  ['0','n',1],['1','n',1],['2','n',1],['5','n',1],['10','n',1],['15','n',1],['18','n',1],['100','n',1],
+  ['"สวัสดี "','n',1],['"ผลรวม = "','n',1],['"ผู้ใหญ่"','n',1],['"เด็ก"','n',1],['true','n',1],["'A'",'n',1],
+  ['cin','c',2],['cout','c',3],['>>','c',3],['<<','c',4],['=','c',2],['+','c',2],['-','c',1],['*','c',1],['/','c',1],['%','c',1],[';','c',6],['(','c',2],[')','c',2],
+  ['if','k',2],['else','k',2],['>','k',1],['<','k',1],['>=','k',1],['<=','k',1],['==','k',1]
+];
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function build(){
+  const cards=[];
+  DECK.forEach(([tok,cat,n])=>{for(let k=0;k<n;k++)cards.push([tok,cat]);});
+  const deck=document.getElementById('deck');deck.innerHTML='';
+  let page=null;
+  cards.forEach((c,i)=>{
+    if(i%12===0){page=document.createElement('div');page.className='page';deck.appendChild(page);}
+    const el=document.createElement('div');el.className='card '+c[1];
+    const sm=c[0].length>5?' sm':'';
+    el.innerHTML='<span class="cat">'+CATNAME[c[1]]+'</span><span class="tok'+sm+'">'+esc(c[0])+'</span>';
+    page.appendChild(el);
+  });
+  while(cards.length%12!==0){const e=document.createElement('div');e.className='card';e.style.border='3px dashed #e4e9f2';page.appendChild(e);cards.push(0);}
+}
+build();
+</script>
+</body>
+</html>

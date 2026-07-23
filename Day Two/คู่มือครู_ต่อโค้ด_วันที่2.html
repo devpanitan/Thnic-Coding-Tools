@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>คู่มือครู — กิจกรรม “ต่อโค้ดให้ติด” (วันที่ 2)</title>
+<link rel="icon" type="image/png" href="../Day One/srru-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"TH Sarabun PSK","Sarabun","Tahoma",sans-serif;color:#1a2238;background:#e9eef7;padding:18px}
+  .sheet{max-width:820px;margin:0 auto 16px;background:#fff;border-radius:14px;box-shadow:0 14px 40px rgba(20,30,60,.12);padding:30px 40px}
+  .top{display:flex;align-items:center;gap:14px;border-bottom:2.5px solid #19b877;padding-bottom:10px;margin-bottom:8px}
+  .top img{height:52px}
+  .top h1{font-size:22pt;color:#16224a;line-height:1.1}
+  .top .s{font-size:12pt;color:#5d6b8a}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;border:1.5px solid #cdd9ef;border-radius:11px;padding:12px 18px;margin:14px 0;background:#f7faff;font-size:13pt}
+  .meta b{color:#0d7a4f}
+  h2{font-size:15pt;color:#0d7a4f;margin:18px 0 6px;display:flex;align-items:center;gap:9px}
+  h2 .num{background:#19b877;color:#fff;width:1.55em;height:1.55em;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:.85em}
+  p,li{font-size:13pt;line-height:1.55}
+  ul,ol{margin:4px 0 4px 24px}
+  li{margin:2px 0}
+  .goal{background:#eafaf2;border:1.5px solid #a9e7c9;border-radius:11px;padding:11px 16px;margin:8px 0}
+  .goal b{color:#0d7a4f}
+  .say{background:#eef4ff;border-left:4px solid #4a7bd6;border-radius:0 9px 9px 0;padding:8px 14px;margin:7px 0;font-size:12.8pt;color:#22406e}
+  .tip{background:#f3edff;border:1.5px solid #d8c9f5;border-radius:9px;padding:7px 14px;margin:7px 0;font-size:12.8pt;color:#5b3ba8}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5pt}
+  th,td{border:1.2px solid #b9c6e6;padding:7px 9px;vertical-align:top;text-align:left}
+  th{background:#eafaf2;color:#0d7a4f;text-align:center}
+  code{font-family:"Consolas",ui-monospace,monospace;background:#eef2f8;border-radius:5px;padding:1px 6px;color:#16336b;font-size:12pt}
+  .noprint{text-align:center;margin:14px auto;max-width:820px}
+  .noprint button{font-family:inherit;font-size:14pt;font-weight:700;background:#19b877;color:#fff;border:0;border-radius:10px;padding:10px 24px;cursor:pointer}
+  @media print{body{background:#fff;padding:0}.sheet{box-shadow:none;border-radius:0;max-width:100%;padding:0 6mm;margin:0}.noprint{display:none}table,.say,.goal{break-inside:avoid}@page{size:A4;margin:14mm}}
+</style>
+</head>
+<body>
+  <div class="noprint"><button onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button></div>
+
+  <div class="sheet">
+    <div class="top">
+      <img src="../Day One/srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
+      <div>
+        <h1>คู่มือครู · กิจกรรม “ต่อโค้ดให้ติด” (Code Assembly)</h1>
+        <div class="s">Introduction to Programming • วันที่ 2 (Operators &amp; if-else) • THNIC × SRRU</div>
+      </div>
+    </div>
+
+    <div class="meta">
+      <span><b>ผู้เล่น:</b> ~44 คน แบ่ง 6 ทีม (ทีมละ 7–8)</span>
+      <span><b>เวลา:</b> 45–50 นาที</span>
+      <span><b>รูปแบบ:</b> Unplugged + ฉายโปรเจกเตอร์</span>
+      <span><b>ผนัง/จอ:</b> ฝั่งหน้าเดียว</span>
+    </div>
+
+    <div class="goal"><b>แนวคิดหลัก:</b> คอมพิวเตอร์ทำงานตาม “คำสั่งที่เราต่อเรียงกัน” — เด็กหยิบการ์ดชิ้นส่วนโค้ด (ตัวแปร/ค่า/คำสั่ง) มาต่อเป็นบรรทัดโปรแกรมที่ถูกต้อง เพื่อแก้โจทย์ที่ฉายไว้หน้าห้อง (ไม่มีลูป — เน้นตัวแปร · cin · ต่อสตริง · operators · if-else)</div>
+
+    <h2><span class="num">1</span> อุปกรณ์</h2>
+    <ul>
+      <li>ไฟล์ <b>“สไลด์ฉายโจทย์_ต่อโค้ด”</b> ฉายบนโปรเจกเตอร์ (มีปุ่มเฉลย + ปุ่มรันจำลอง + ลิงก์ OneCompiler)</li>
+      <li>ไฟล์ <b>“การ์ดต่อโค้ด_วันที่2”</b> พิมพ์ <b>6 ชุด</b> (1 ชุด/ทีม) ตัดแล้วติดกาวดินน้ำมัน/เทปหลังการ์ด</li>
+      <li>โต๊ะประจำทีม · กระดาน/แถบผนังหน้าห้องไว้ “แปะคำตอบ” · นาฬิกาจับเวลา · กระดาษให้คะแนน</li>
+    </ul>
+
+    <h2><span class="num">2</span> การจัดห้อง (ผนังหน้าเดียว)</h2>
+    <p>ผนังหน้า = ฉาย “โจทย์” ให้ทุกคนเห็น และเว้นแถบล่างของภาพเป็น <b>“โซนแปะคำตอบ”</b> · แต่ละทีมต่อการ์ดที่ <b>โต๊ะตัวเอง</b> (แข่งพร้อมกัน) แล้วส่งนักวิ่งเอาแถบการ์ดมาแปะที่ผนังหน้าเพื่อส่งคำตอบ</p>
+
+    <h2><span class="num">3</span> ลำดับการเล่น (ต่อ 1 โจทย์)</h2>
+    <ol>
+      <li>ครูฉายโจทย์ (โจทย์ + ตัวอย่าง input→output + โครงโค้ดที่มีช่องว่าง)</li>
+      <li>ทุกทีมช่วยกันหยิบการ์ดที่โต๊ะ ต่อเป็นบรรทัดโค้ดให้ถูก</li>
+      <li>ทีมที่เสร็จ → ส่งนักวิ่งเอาการ์ดมาแปะที่ “โซนคำตอบ” บนผนังหน้า</li>
+      <li>ครูตรวจ — ถ้าถูก: ทีมนั้นได้แต้ม แล้วครูกดปุ่ม <b>เฉลย</b> + <b>รันโค้ด</b> บนสไลด์ให้ทุกคนเห็นผลลัพธ์</li>
+      <li>ถ้ายังผิด: บอก “ยังไม่ถูก” ทีมนั้นแก้ต่อ ทีมอื่นยังชิงได้</li>
+      <li>เล่นครบ 6 โจทย์ → รวมแต้ม ประกาศทีมชนะ</li>
+    </ol>
+    <div class="say"><b>ครูพูดเปิด:</b> “คอมพิวเตอร์ไม่ได้ฉลาดเอง มันทำตามคำสั่งที่เราเรียงให้เป๊ะ ๆ วันนี้พวกหนูจะเป็นคนเรียงคำสั่งเอง!”</div>
+    <div class="tip"><b>จังหวะพิเศษ:</b> 1–2 โจทย์ท้าย ๆ กดลิงก์ OneCompiler เอาโค้ดที่เด็กต่อมาพิมพ์รันจริง ให้เห็นว่า “โค้ดที่หนูต่อ ทำงานจริงบนคอมได้!”</div>
+
+    <h2><span class="num">4</span> โจทย์และเฉลย (สำหรับครู)</h2>
+    <table>
+      <tr><th style="width:16%">โจทย์</th><th>เฉลย (การ์ดที่ต้องเติม)</th><th style="width:20%">input → output</th></tr>
+      <tr><td>1. ตัวแปร + พิมพ์</td><td><code>int age = 15 ; cout &lt;&lt; age ;</code> (เติม: <b>age , 15 , age</b>)</td><td>— → <b>15</b></td></tr>
+      <tr><td>2. รับค่า cin</td><td><code>cin &gt;&gt; n ; cout &lt;&lt; n ;</code> (เติม: <b>&gt;&gt; , n</b>)</td><td>7 → <b>7</b></td></tr>
+      <tr><td>3. ต่อสตริง</td><td><code>cout &lt;&lt; "สวัสดี " &lt;&lt; name ;</code> (เติม: <b>"สวัสดี " , name</b>)</td><td>Somchai → <b>สวัสดี Somchai</b></td></tr>
+      <tr><td>4. คำนวณผลบวก</td><td><code>int sum = a + b ;</code> (เติม: <b>a , + , b</b>)</td><td>3 5 → <b>8</b></td></tr>
+      <tr><td>5. เศษหาร %</td><td><code>cout &lt;&lt; n % 2 ;</code> (เติม: <b>% , 2</b>)</td><td>7 → <b>1</b> (คี่)</td></tr>
+      <tr><td>6. if-else เช็กอายุ</td><td><code>if ( age &gt;= 18 ) cout &lt;&lt; "ผู้ใหญ่" ;</code> (เติม: <b>&gt;= , 18 , "ผู้ใหญ่"</b>)</td><td>20 → <b>ผู้ใหญ่</b></td></tr>
+    </table>
+
+    <h2><span class="num">5</span> การให้คะแนน</h2>
+    <ul>
+      <li>ทีมแรกที่ต่อถูก +3 · ทีมถัดไปที่ถูก +2 · ถูกทุกทีม (แต่ช้ากว่า) +1</li>
+      <li>โบนัส: อธิบายได้ว่าโค้ดทำงานยังไง +1</li>
+      <li>รวมแต้มทั้ง 6 โจทย์ → ทีมคะแนนสูงสุดชนะ</li>
+    </ul>
+
+    <h2><span class="num">6</span> เคล็ดลับ</h2>
+    <ul>
+      <li>ฉายโครงโค้ดให้ช่องว่างอยู่สูงระดับเอื้อมถึง · โซนคำตอบอยู่ต่ำกว่าตัวหนังสือ (เงาคนไม่บังข้อความ)</li>
+      <li>ถ้ามีกระดานแม่เหล็กหน้าห้อง ใช้การ์ดติดแม่เหล็กจะเร็วและไม่ทิ้งคราบ</li>
+      <li>เริ่มจากโจทย์ 1–2 (สั้น) ให้เด็กจับจังหวะก่อน แล้วค่อยไปข้อยาว</li>
+      <li>เชื่อมโยง: การ์ดสี = หมวดเดียวกับ “เกมจับคู่ชนิดข้อมูล” (ฟ้า=ชนิด เขียว=ตัวแปร ฯลฯ)</li>
+    </ul>
+  </div>
+</body>
+</html>
