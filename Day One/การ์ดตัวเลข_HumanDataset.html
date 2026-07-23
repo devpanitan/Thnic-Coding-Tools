@@ -5,43 +5,60 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>การ์ดตัวเลข — กิจกรรม The Human Dataset</title>
 <link rel="icon" type="image/png" href="srru-logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:"TH Sarabun PSK","Sarabun","Tahoma",sans-serif;background:#e9eef7;color:#16224a;padding:16px}
-  .bar{max-width:900px;margin:0 auto 14px;text-align:center}
-  .bar h1{font-size:22pt}
-  .bar p{color:#5d6b8a;font-size:13pt;margin-top:2px}
-  .ctrl{margin-top:10px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
-  .ctrl label{font-size:13pt;font-weight:700}
-  .ctrl input{font-family:inherit;font-size:13pt;width:70px;padding:5px 8px;border:1.5px solid #b9c6e6;border-radius:8px;text-align:center}
-  .ctrl button{font-family:inherit;font-size:14pt;font-weight:800;background:#19b877;color:#fff;border:0;border-radius:10px;padding:9px 20px;cursor:pointer}
-  .ctrl button.sec{background:#5d6b8a}
+  :root{
+    --ink:#12151a;
+    --paper:#ffffff;
+    --rule:#c9d0d9;
+    --soft:#f0f3f7;
+    --muted:#59626f;
+    --accent:#2f2a9e;
+    --amber:#a35405; --amber-bg:#fef1d6;
+    --green:#0f7a4a; --green-bg:#e2f5ea;
+    --red:#b0191b;  --red-bg:#fde2e2;
+    --hl:#ffee9c;
+    --font:'LINE Seed Sans TH','LINESeedSansTH',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:var(--font)}
+  body{background:var(--paper);color:var(--ink);padding:16px}
+  .ic{width:1em;height:1em;flex:0 0 auto;vertical-align:-.12em;stroke-width:2.2}
+  .bar{max-width:900px;margin:0 auto 14px;text-align:center;border-bottom:4px solid var(--ink);padding-bottom:14px}
+  .bar h1{font-size:25px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:9px}
+  .bar h1 .ic{color:var(--accent);stroke-width:2.4}
+  .bar p{color:var(--muted);font-size:16px;margin-top:4px}
+  .ctrl{margin-top:12px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+  .ctrl label{font-size:16px;font-weight:700}
+  .ctrl input{font-family:var(--font);font-size:16px;width:70px;padding:5px 8px;border:2.5px solid var(--ink);border-radius:9px;text-align:center;background:#fff;color:var(--ink)}
+  .ctrl button{font-family:var(--font);font-size:17px;font-weight:700;background:var(--ink);color:#fff;border:3px solid var(--ink);border-radius:9px;padding:8px 20px;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+  .ctrl button.sec{background:#fff;color:var(--ink)}
+  .ctrl button.sec:hover{background:var(--soft)}
 
-  .page{max-width:900px;margin:0 auto 16px;background:#fff;border-radius:10px;padding:10mm;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:6mm;box-shadow:0 10px 30px rgba(20,30,60,.1)}
-  .card{border:2.5px dashed #9fb0d4;border-radius:14px;min-height:78mm;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:6mm;background:#fff}
-  .card .num{font-size:150pt;font-weight:800;line-height:.9;color:#12224e}
-  .card .cap{position:absolute;bottom:6mm;font-size:11pt;color:#8a96b0;font-weight:700;letter-spacing:.5px}
-  .card .cor{position:absolute;top:5mm;font-size:15pt;font-weight:800;color:#c3ccdf}
+  .page{max-width:900px;margin:0 auto 16px;background:#fff;border:3px solid var(--ink);border-radius:13px;padding:10mm;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:6mm}
+  .card{border:2.5px dashed var(--ink);border-radius:14px;min-height:78mm;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:6mm;background:#fff}
+  .card .num{font-size:150pt;font-weight:800;line-height:.9;color:var(--ink)}
+  .card .cap{position:absolute;bottom:6mm;font-size:11pt;color:var(--muted);font-weight:700;letter-spacing:.5px}
+  .card .cor{position:absolute;top:5mm;font-size:15pt;font-weight:800;color:#9aa3ae}
   .card .cor.l{left:7mm}.card .cor.r{right:7mm;bottom:5mm;top:auto}
 
   @media print{
     body{background:#fff;padding:0}
     .bar,.ctrl{display:none}
-    .page{box-shadow:none;border-radius:0;margin:0;padding:8mm;page-break-after:always;min-height:auto;height:100vh}
+    .page{border:0;box-shadow:none;border-radius:0;margin:0;padding:8mm;page-break-after:always;min-height:auto;height:100vh}
     @page{size:A4 portrait;margin:0}
   }
 </style>
 </head>
 <body>
   <div class="bar">
-    <h1>การ์ดตัวเลข — กิจกรรม “ห้องเรียนคือชุดข้อมูล”</h1>
+    <h1><i class="ic" data-lucide="layout-grid"></i> การ์ดตัวเลข — กิจกรรม “ห้องเรียนคือชุดข้อมูล”</h1>
     <p>The Human Dataset · Introduction to Programming · THNIC × SRRU — พิมพ์ 6 ใบ/หน้า แล้วตัดตามเส้นประ</p>
     <div class="ctrl">
       <label>ตั้งแต่ <input id="from" type="number" value="1" min="1"></label>
       <label>ถึง <input id="to" type="number" value="44" min="1"></label>
-      <button onclick="build()">สร้างการ์ด</button>
-      <button class="sec" onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button>
+      <button onclick="build()"><i class="ic" data-lucide="layers"></i> สร้างการ์ด</button>
+      <button class="sec" onclick="window.print()"><i class="ic" data-lucide="printer"></i> พิมพ์ / บันทึก PDF</button>
     </div>
   </div>
   <div id="deck"></div>
@@ -60,9 +77,10 @@ function build(){
     page.appendChild(c);idx++;
   }
   // เติมช่องว่างหน้าสุดท้ายให้กริดสวย
-  while(idx%6!==0){const e=document.createElement('div');e.className='card';e.style.border='2.5px dashed #e4e9f2';page.appendChild(e);idx++;}
+  while(idx%6!==0){const e=document.createElement('div');e.className='card';e.style.border='2.5px dashed #c9d0d9';page.appendChild(e);idx++;}
 }
 build();
+if(window.lucide)lucide.createIcons();
 </script>
 </body>
 </html>

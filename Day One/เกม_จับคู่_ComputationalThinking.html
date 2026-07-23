@@ -5,37 +5,59 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SRRU | เกมจับคู่ Computational Thinking</title>
 <link rel="icon" type="image/png" href="srru-logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
 <style>
-  :root{--blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--gold:#f2a900;--ink:#16224a;--muted:#5d6b8a;--line:#dbe6f7;}
-  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#12151a;
+    --paper:#ffffff;
+    --rule:#c9d0d9;
+    --soft:#f0f3f7;
+    --muted:#59626f;
+    --accent:#2f2a9e;
+    --amber:#a35405; --amber-bg:#fef1d6;
+    --green:#0f7a4a; --green-bg:#e2f5ea;
+    --red:#b0191b;  --red-bg:#fde2e2;
+    --hl:#ffee9c;
+    --font:'LINE Seed Sans TH','LINESeedSansTH',sans-serif;
+    --line:var(--rule);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:var(--font)}
   html,body{height:100%}
-  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);height:100vh;overflow:hidden;
-    background:radial-gradient(900px 500px at 10% -10%,#d4e6ff 0,transparent 60%),radial-gradient(800px 500px at 100% 0,#ffe6f7 0,transparent 55%),linear-gradient(160deg,#eef4ff,#fdf3fb);
+  body{color:var(--ink);height:100vh;overflow:hidden;background:var(--paper);
     display:flex;flex-direction:column;gap:clamp(10px,2vh,18px);padding:clamp(12px,2.5vh,24px) clamp(14px,4vw,40px)}
   svg.lucide{width:1em;height:1em;vertical-align:-.15em}
-  .head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:4px solid var(--ink);padding-bottom:clamp(10px,1.8vh,14px)}
   .head img{height:clamp(34px,5vh,48px)}
-  h1{font-size:clamp(20px,3vh,28px);font-weight:700}
+  h1{font-size:clamp(20px,3vh,26px);font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
+  h1 svg.lucide{color:var(--accent)}
   .head .tag{color:var(--muted);font-size:clamp(13px,1.7vh,16px);flex:1;min-width:200px}
-  .score{font-weight:700;font-size:clamp(15px,2.2vh,19px);background:#fff;border:2px solid var(--line);border-radius:12px;padding:7px 16px}
-  .card{background:#fff;border:2px solid var(--line);border-radius:20px;box-shadow:0 12px 30px rgba(31,43,72,.1);
+  .score{font-weight:800;font-size:clamp(15px,2.2vh,19px);background:#fff;border:3px solid var(--ink);border-radius:11px;padding:6px 16px}
+  .card{background:#fff;border:3px solid var(--ink);border-radius:13px;
     flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:clamp(16px,3vh,32px);gap:clamp(14px,2.5vh,26px)}
-  .qno{color:var(--purple);font-weight:700;font-size:clamp(14px,1.9vh,17px)}
-  .q{font-size:clamp(22px,4vh,38px);font-weight:700;line-height:1.3;max-width:18ch}
+  .qno{color:var(--accent);font-weight:800;font-size:clamp(14px,1.9vh,17px)}
+  .q{font-size:clamp(22px,4vh,38px);font-weight:800;line-height:1.3;max-width:18ch}
   .opts{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,1.8vh,16px);width:min(720px,92%)}
-  .opt{font-family:inherit;font-size:clamp(16px,2.4vh,22px);font-weight:700;padding:clamp(12px,2vh,20px);border-radius:16px;border:3px solid var(--line);background:#f7faff;color:var(--ink);cursor:pointer;transition:.15s;display:flex;flex-direction:column;gap:3px;align-items:center}
+  .opt{font:inherit;font-size:clamp(16px,2.4vh,22px);font-weight:700;padding:clamp(12px,2vh,20px);border-radius:9px;border:2.5px solid transparent;background:var(--soft);color:#39414d;cursor:pointer;transition:.12s;display:flex;flex-direction:column;gap:3px;align-items:center}
   .opt small{font-weight:500;color:var(--muted);font-size:.7em}
-  .opt:hover{border-color:var(--purple);transform:translateY(-3px)}
-  .opt.correct{background:#e7faf1;border-color:var(--green);color:#0c6b46}
-  .opt.wrong{background:#ffece6;border-color:var(--coral);color:#b03b1d}
+  .opt:hover{border-color:var(--ink)}
+  .opt.correct{background:var(--green);border-color:var(--green);color:#fff}
+  .opt.correct small{color:#d8efe3}
+  .opt.wrong{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+  .opt.wrong small{color:var(--red)}
   .opt:disabled{cursor:default}
+  .opt:disabled:hover{border-color:transparent}
+  .opt.correct:hover{border-color:var(--green)}
+  .opt.wrong:hover{border-color:var(--red)}
+  .opt:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
   .fb{font-size:clamp(16px,2.4vh,22px);font-weight:700;min-height:1.4em}
-  .fb.ok{color:var(--green)}.fb.no{color:var(--coral)}
-  .btn{font-family:inherit;font-size:clamp(15px,2.2vh,18px);font-weight:700;padding:12px 26px;border:0;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;display:inline-flex;gap:8px;align-items:center}
-  .btn.ghost{background:#eef4ff;color:#2f4a7d;border:2px solid var(--line)}
+  .fb.ok{color:var(--green)}.fb.no{color:var(--red)}
+  .btn{font:inherit;font-size:clamp(15px,2.2vh,18px);font-weight:700;padding:11px 26px;border:3px solid var(--ink);border-radius:9px;cursor:pointer;background:var(--ink);color:#fff;display:inline-flex;gap:8px;align-items:center}
+  .btn:hover{background:#2a2f38}
+  .btn.ghost{background:#fff;color:var(--ink)}
+  .btn.ghost:hover{background:var(--soft)}
   .btn:disabled{opacity:.4;cursor:default}
+  .btn:disabled:hover{background:var(--ink)}
+  .btn.ghost:disabled:hover{background:#fff}
   .row{display:flex;gap:12px}
   .confetti{position:fixed;top:-10px;width:10px;height:16px;z-index:50;border-radius:2px;pointer-events:none}
   .mascot{position:fixed;left:clamp(8px,2vw,32px);bottom:clamp(6px,2vh,22px);width:clamp(108px,16vh,168px);height:auto;z-index:4;transform-origin:center bottom;animation:dance 1.3s ease-in-out infinite}
@@ -53,7 +75,7 @@
 <body>
   <div class="head">
     <img src="srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
-    <h1>จับคู่ Computational Thinking</h1>
+    <h1><i data-lucide="puzzle"></i> จับคู่ Computational Thinking</h1>
     <span class="tag">อ่านสถานการณ์ แล้วเลือกว่าใช้ “เสาหลัก” ไหน — เล่นทั้งห้องแย่งกันตอบได้</span>
     <span class="score" id="score">คะแนน 0</span>
   </div>
@@ -61,19 +83,19 @@
   <div class="card" id="card"></div>
 
   <svg class="mascot" id="mascot" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
-    <line x1="110" y1="20" x2="110" y2="42" stroke="#7a5cff" stroke-width="5"/>
-    <circle cx="110" cy="15" r="9" fill="#ffd24d" stroke="#7a5cff" stroke-width="3"/>
-    <g class="armL"><rect x="24" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="34" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
-    <g class="armR"><rect x="176" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="186" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
-    <rect x="48" y="42" width="124" height="96" rx="28" fill="#eef2ff" stroke="#7a5cff" stroke-width="5"/>
+    <line x1="110" y1="20" x2="110" y2="42" stroke="#2f2a9e" stroke-width="5"/>
+    <circle cx="110" cy="15" r="9" fill="#ffd977" stroke="#2f2a9e" stroke-width="3"/>
+    <g class="armL"><rect x="24" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#2f2a9e" stroke-width="3"/><circle cx="34" cy="176" r="12" fill="#fff" stroke="#2f2a9e" stroke-width="3"/></g>
+    <g class="armR"><rect x="176" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#2f2a9e" stroke-width="3"/><circle cx="186" cy="176" r="12" fill="#fff" stroke="#2f2a9e" stroke-width="3"/></g>
+    <rect x="48" y="42" width="124" height="96" rx="28" fill="#eef2ff" stroke="#2f2a9e" stroke-width="5"/>
     <ellipse cx="74" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
     <ellipse cx="146" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
-    <g><circle cx="88" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="88" cy="84" r="7" fill="#2f7bf6"/>
-    <circle cx="132" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="132" cy="84" r="7" fill="#2f7bf6"/></g>
-    <rect x="88" y="110" width="44" height="16" rx="8" fill="#19b877"/>
-    <rect x="64" y="148" width="92" height="58" rx="16" fill="#fff" stroke="#7a5cff" stroke-width="4"/>
+    <g><circle cx="88" cy="84" r="15" fill="#fff" stroke="#2f2a9e" stroke-width="3"/><circle cx="88" cy="84" r="7" fill="#2f2a9e"/>
+    <circle cx="132" cy="84" r="15" fill="#fff" stroke="#2f2a9e" stroke-width="3"/><circle cx="132" cy="84" r="7" fill="#2f2a9e"/></g>
+    <rect x="88" y="110" width="44" height="16" rx="8" fill="#0f7a4a"/>
+    <rect x="64" y="148" width="92" height="58" rx="16" fill="#fff" stroke="#2f2a9e" stroke-width="4"/>
     <rect x="80" y="164" width="60" height="28" rx="8" fill="#e6f0ff"/>
-    <path d="M80 178 H140 M98 168 V188" stroke="#2f7bf6" stroke-width="3"/>
+    <path d="M80 178 H140 M98 168 V188" stroke="#2f2a9e" stroke-width="3"/>
   </svg>
 
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
@@ -132,7 +154,7 @@ function end(){
   document.getElementById("again").onclick=()=>{i=0;score=0;render();};
   icons();burst();
 }
-function burst(){const cs=["#2f7bf6","#7a5cff","#19b877","#f2a900","#ff6a3d"];
+function burst(){const cs=["#2f2a9e","#0f7a4a","#a35405","#b0191b","#ffd977"];
   for(let k=0;k<80;k++){const c=document.createElement("div");c.className="confetti";c.style.left=Math.random()*100+"vw";c.style.background=cs[k%cs.length];document.body.appendChild(c);
     const d=1600+Math.random()*1400;c.animate([{transform:"translateY(0) rotate(0)",opacity:1},{transform:`translateY(105vh) rotate(${Math.random()*720}deg)`,opacity:.2}],{duration:d,easing:"cubic-bezier(.3,.6,.4,1)"});setTimeout(()=>c.remove(),d);}}
 render();icons();

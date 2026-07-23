@@ -5,42 +5,68 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SRRU | ใบฝึก Hello World</title>
 <link rel="icon" type="image/png" href="srru-logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:"TH Sarabun PSK","Sarabun","Tahoma",sans-serif;color:#1a2238;background:#e9eef7;padding:18px}
-  .sheet{max-width:800px;margin:0 auto;background:#fff;border-radius:14px;box-shadow:0 14px 40px rgba(20,30,60,.12);padding:28px 36px}
-  .top{display:flex;align-items:center;gap:13px;border-bottom:2.5px solid #2f7bf6;padding-bottom:9px;margin-bottom:6px}
+  :root{
+    --ink:#12151a;
+    --paper:#ffffff;
+    --rule:#c9d0d9;
+    --soft:#f0f3f7;
+    --muted:#59626f;
+    --accent:#2f2a9e;
+    --amber:#a35405; --amber-bg:#fef1d6;
+    --green:#0f7a4a; --green-bg:#e2f5ea;
+    --red:#b0191b;  --red-bg:#fde2e2;
+    --hl:#ffee9c;
+    --font:'LINE Seed Sans TH','LINESeedSansTH',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:var(--font)}
+  body{color:var(--ink);background:var(--paper);padding:18px}
+  .ic{width:1em;height:1em;flex:0 0 auto;vertical-align:-.12em;stroke-width:2.2}
+  .sheet{max-width:800px;margin:0 auto;background:#fff;border:3px solid var(--ink);border-radius:13px;padding:26px 34px}
+  .top{display:flex;align-items:center;gap:13px;border-bottom:4px solid var(--ink);padding-bottom:9px;margin-bottom:6px}
   .top img{height:48px}
-  .top h1{font-size:21pt;color:#16224a}
-  .top .s{font-size:12pt;color:#5d6b8a}
-  .info{border:1.5px solid #cdd9ef;border-radius:11px;padding:11px 16px;margin:12px 0 14px;background:#f7faff}
+  .top h1{font-size:20pt;font-weight:800;letter-spacing:-.01em;color:var(--ink);display:flex;align-items:center;gap:8px}
+  .top h1 .ic{color:var(--accent);stroke-width:2.4}
+  .top .s{font-size:12pt;color:var(--muted)}
+  .info{border:2.5px solid var(--ink);border-radius:11px;padding:11px 16px;margin:12px 0 14px;background:#fff}
   .info .r{display:flex;gap:26px;flex-wrap:wrap}
-  .info .r span{flex:1;min-width:210px;font-size:13pt;border-bottom:1px dotted #8a96b0;padding:6px 2px}
-  .info .mh{font-weight:700;font-size:13pt;margin:10px 0 4px;color:#16224a}
+  .info .r span{flex:1;min-width:210px;font-size:13pt;border-bottom:1.5px dotted var(--muted);padding:6px 2px}
+  .info .mh{font-weight:700;font-size:13pt;margin:10px 0 4px;color:var(--ink)}
   .info .mem{display:flex;flex-direction:column;gap:11px}
-  .info .mem .l{font-size:13pt;border-bottom:1px dotted #8a96b0;padding:5px 2px}
-  h2{font-size:14pt;color:#1a4f8a;margin:14px 0 5px}
+  .info .mem .l{font-size:13pt;border-bottom:1.5px dotted var(--muted);padding:5px 2px}
+  h2{font-size:14pt;font-weight:800;color:var(--accent);margin:14px 0 5px;display:flex;align-items:center;gap:7px}
   p,li{font-size:13pt;line-height:1.4}
-  .code{font-family:"Consolas",ui-monospace,monospace;background:#11203a;color:#e8eefc;border-radius:9px;padding:10px 14px;font-size:12pt;line-height:1.45;white-space:pre;margin:5px 0}
-  .code .k{color:#ff9bd0}.code .s{color:#ffd27f}
-  .task{border:1.5px solid #cdd9ef;border-radius:11px;padding:10px 15px;margin:9px 0;background:#f7faff;break-inside:avoid}
-  .task .h{font-weight:700;color:#16224a;font-size:13.5pt;margin-bottom:3px}
-  .out{font-family:ui-monospace,monospace;background:#eef4ff;border:1px dashed #9bb4e0;border-radius:7px;padding:4px 11px;font-size:12pt;color:#244;display:inline-block;margin-top:3px}
+  b{background:var(--hl);padding:0 4px;font-weight:700}
+  .code{font-family:ui-monospace,Consolas,monospace;background:var(--ink);color:#fff;border-radius:9px;padding:10px 14px;font-size:12pt;line-height:1.45;white-space:pre;margin:5px 0}
+  .code .k{color:#ffd977}.code .s{color:#7cc4ff}
+  .task{border:2.5px solid var(--ink);border-radius:11px;padding:10px 15px;margin:9px 0;background:#fff;break-inside:avoid}
+  .task .h{font-weight:700;color:var(--ink);font-size:13.5pt;margin-bottom:3px;display:flex;align-items:center;gap:7px}
+  .task .h .ic{color:var(--accent)}
+  .out{font-family:ui-monospace,Consolas,monospace;background:var(--soft);border:1.5px dashed var(--ink);border-radius:7px;padding:4px 11px;font-size:12pt;color:var(--ink);display:inline-block;margin-top:3px}
   .lines{margin-top:8px}
-  .lines div{border-bottom:1px solid #c4cfe2;height:26px}
-  .tip{background:#fff6dd;border:1.5px solid #ffe2a1;border-radius:9px;padding:7px 13px;font-size:12.5pt;color:#8a5e00;margin-top:7px}
+  .lines div{border-bottom:1.5px solid var(--rule);height:26px}
+  .tip{background:var(--amber-bg);border-left:6px solid var(--amber);border-radius:0 9px 9px 0;padding:7px 13px;font-size:12.5pt;color:var(--amber);font-weight:700;margin-top:7px;display:flex;align-items:flex-start;gap:7px}
+  .tip .ic{margin-top:.22em}
   .noprint{text-align:center;margin:14px auto;max-width:800px}
-  .noprint button{font-family:inherit;font-size:14pt;font-weight:700;background:#2f7bf6;color:#fff;border:0;border-radius:10px;padding:10px 22px;cursor:pointer}
-  @media print{ body{background:#fff;padding:0} .sheet{box-shadow:none;border-radius:0;max-width:100%;padding:0 5mm} .noprint{display:none} @page{size:A4;margin:13mm} }
+  .noprint button{font-family:var(--font);font-size:14pt;font-weight:700;background:var(--ink);color:#fff;border:3px solid var(--ink);border-radius:9px;padding:9px 22px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+  @media print{
+    body{background:#fff;padding:0}
+    .sheet{border:none;border-radius:0;max-width:100%;padding:0 5mm}
+    .noprint{display:none}
+    .code{background:#fff;color:var(--ink);border:2.5px solid var(--ink)}
+    .code .k{color:var(--accent);font-weight:700}.code .s{color:var(--green)}
+    @page{size:A4;margin:13mm}
+  }
 </style>
 </head>
 <body>
-  <div class="noprint"><button onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button></div>
+  <div class="noprint"><button onclick="window.print()"><i class="ic" data-lucide="printer"></i> พิมพ์ / บันทึก PDF</button></div>
   <div class="sheet">
     <div class="top">
       <img src="srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
-      <div><h1>ใบฝึก: โปรแกรมแรก Hello World</h1>
+      <div><h1><i class="ic" data-lucide="code"></i> ใบฝึก: โปรแกรมแรก Hello World</h1>
       <div class="s">Introduction to Programming • THNIC Academy × SRRU • วันที่ 1</div></div>
     </div>
     <div class="info">
@@ -49,7 +75,7 @@
       <div class="mem"><div class="l">1)</div><div class="l">2)</div><div class="l">3)</div></div>
     </div>
 
-    <h2>โค้ดตัวอย่าง (พิมพ์ตามให้เหมือน แล้วกด Run)</h2>
+    <h2><i class="ic" data-lucide="file-code"></i> โค้ดตัวอย่าง (พิมพ์ตามให้เหมือน แล้วกด Run)</h2>
     <div class="code"><span class="k">#include</span> &lt;iostream&gt;
 <span class="k">using namespace</span> std;
 
@@ -59,11 +85,11 @@
 }</div>
     <p>ใช้เว็บ online compiler (เช่น OneCompiler) — ไม่ต้องติดตั้งโปรแกรม</p>
 
-    <h2>โจทย์ฝึก</h2>
+    <h2><i class="ic" data-lucide="pencil"></i> โจทย์ฝึก</h2>
 
     <div class="task"><div class="h">1) พิมพ์ตามโค้ดด้านบนแล้วรัน</div>
       ผลลัพธ์ที่ควรได้: <span class="out">Hello World!</span>
-      <div class="tip">เครื่องหมาย ; ท้ายบรรทัดห้ามลืม!</div></div>
+      <div class="tip"><i class="ic" data-lucide="lightbulb"></i><span>เครื่องหมาย ; ท้ายบรรทัดห้ามลืม!</span></div></div>
 
     <div class="task"><div class="h">2) เปลี่ยนข้อความให้เป็นชื่อตัวเอง</div>
       เช่น ให้พิมพ์ว่า <span class="out">สวัสดีครับ ผมชื่อ ...</span><br>
@@ -83,9 +109,10 @@
       ลบเครื่องหมาย <b>;</b> ออก 1 จุด แล้วกด Run — จดข้อความ error ที่เจอ แล้วแก้กลับให้ถูก
       <div class="lines"><div></div><div></div><div></div></div></div>
 
-    <div class="task"><div class="h">★ โจทย์ท้าทาย</div>
+    <div class="task"><div class="h"><i class="ic" data-lucide="star"></i> โจทย์ท้าทาย</div>
       ทำให้โปรแกรมพิมพ์ชื่อตัวเอง <b>5 ครั้ง</b> (ใครรู้เรื่อง “การวนซ้ำ” ลองใช้ for ดู — เดี๋ยวเรียนวันที่ 3!)
       <div class="lines"><div></div><div></div><div></div><div></div><div></div></div></div>
   </div>
+<script>if(window.lucide)lucide.createIcons();</script>
 </body>
 </html>
