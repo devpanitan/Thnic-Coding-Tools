@@ -8,90 +8,114 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
-  :root{--bg:#eef2f8;--card:#fff;--ink:#1e2740;--muted:#5b6478;--line:#e3e8f1;
-    --t:#22a565;--f:#d94b4b;--blue:#2f6fd6;--purple:#7c5cff;--gold:#f59e0b;}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'LINE Seed Sans TH',system-ui,sans-serif;background:radial-gradient(1300px 640px at 50% -10%,#f7faff,var(--bg));color:var(--ink);min-height:100vh;padding:20px 16px 44px}
-  .wrap{max-width:1040px;margin:0 auto}
-  .head{text-align:center;margin-bottom:12px}
-  .head h1{font-size:26px;letter-spacing:-.4px}
-  .head .sub{color:var(--muted);font-size:15px;margin-top:4px}
-  .tip{background:#fffbe9;border:1.5px solid #ffe6a0;border-radius:13px;padding:11px 16px;font-size:15px;margin:8px 0 14px;line-height:1.55}
-  .tip b{color:#a9750a}
+  :root{
+    --ink:#12151a;--paper:#fff;--rule:#c9d0d9;--soft:#f0f3f7;--muted:#59626f;
+    --accent:#2f2a9e;--amber:#a35405;--amber-bg:#fef1d6;
+    --green:#0f7a4a;--green-bg:#e2f5ea;--red:#b0191b;--red-bg:#fde2e2;--hl:#ffee9c;
+    --font:'LINE Seed Sans TH','LINESeedSansTH',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:var(--font)}
+  body{background:var(--paper);color:var(--ink);font-size:18px;line-height:1.5}
+  .ic{width:1em;height:1em;flex:0 0 auto;vertical-align:-.12em;stroke-width:2.2}
+  header{border-bottom:4px solid var(--ink);padding:14px 26px}
+  h1{font-size:25px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
+  h1 .ic{font-size:26px;color:var(--accent);stroke-width:2.4}
+  h1 small{font-size:15px;font-weight:400;color:var(--muted)}
+  main{padding:20px 26px 40px;max-width:1120px;margin:0 auto}
 
-  .main{display:grid;grid-template-columns:.85fr 1.15fr;gap:16px;align-items:start}
-  @media(max-width:800px){.main{grid-template-columns:1fr}}
-  .panel{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:0 14px 34px rgba(40,50,80,.08)}
-  .panel h2{font-size:14px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-  .panel h2 i{width:18px;height:18px}
+  .tip{border:3px solid var(--ink);border-radius:13px;background:var(--amber-bg);padding:12px 16px;font-size:16px;margin-bottom:18px;line-height:1.55}
+  .tip b{color:var(--amber)}
+  .grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:20px;align-items:start}
+  @media(max-width:820px){.grid{grid-template-columns:1fr}}
+  .panel{border:3px solid var(--ink);border-radius:13px;overflow:hidden;background:#fff}
+  .panel+.panel{margin-top:16px}
+  .panel__h{background:var(--ink);color:#fff;font-size:15px;font-weight:700;letter-spacing:.02em;padding:9px 15px;display:flex;align-items:center;gap:8px}
+  .panel__h .ic{font-size:18px}
+  .panel__b{padding:15px 16px}
 
-  .sw{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#f6f8fc;border:1.5px solid var(--line);border-radius:13px;padding:12px 16px;margin-bottom:12px}
-  .sw .nm{font-family:ui-monospace,monospace;font-weight:800;font-size:20px}
-  .toggle{border:0;border-radius:11px;padding:10px 20px;font-family:inherit;font-weight:800;font-size:16px;cursor:pointer;color:#fff;min-width:110px;transition:.15s}
-  .toggle.on{background:linear-gradient(135deg,var(--t),#159a5b)}
-  .toggle.off{background:linear-gradient(135deg,var(--f),#b3271f)}
+  .sw{display:flex;align-items:center;justify-content:space-between;gap:12px;border:2.5px solid var(--rule);border-radius:12px;padding:12px 16px;margin-bottom:12px}
+  .sw .nm{font-family:ui-monospace,monospace;font-weight:800;font-size:22px;color:var(--accent)}
+  .toggle{border:2.5px solid var(--ink);border-radius:11px;padding:10px 18px;font-family:var(--font);font-weight:800;font-size:16px;cursor:pointer;min-width:128px;transition:.12s}
+  .toggle.on{background:var(--green);color:#fff;border-color:var(--green)}
+  .toggle.off{background:var(--red);color:#fff;border-color:var(--red)}
 
   .results{display:flex;flex-direction:column;gap:12px}
-  .res{display:flex;align-items:center;gap:14px;border:2px solid var(--line);border-radius:14px;padding:13px 16px;transition:.2s}
-  .res .ex{font-family:ui-monospace,monospace;font-weight:800;font-size:21px;min-width:112px}
-  .res .desc{font-size:14px;color:var(--muted);flex:1;line-height:1.4}
-  .res .val{font-family:ui-monospace,monospace;font-weight:800;font-size:19px;border-radius:10px;padding:6px 16px;color:#fff}
-  .res.tt{border-color:#a8ddba;background:#f2fbf6}.res.tt .val{background:var(--t)}
-  .res.ff{border-color:#f0b8b8;background:#fdf3f3}.res.ff .val{background:var(--f)}
+  .res{display:flex;align-items:center;gap:14px;border:2.5px solid var(--rule);border-radius:12px;padding:13px 16px;transition:.15s}
+  .res .ex{font-family:ui-monospace,monospace;font-weight:800;font-size:22px;min-width:118px}
+  .res .desc{font-size:14.5px;color:var(--muted);flex:1;line-height:1.4}
+  .res .val{font-family:ui-monospace,monospace;font-weight:800;font-size:19px;border-radius:9px;padding:6px 16px;color:#fff}
+  .res.tt{border-color:var(--green);background:var(--green-bg)}.res.tt .val{background:var(--green)}
+  .res.ff{border-color:var(--red);background:var(--red-bg)}.res.ff .val{background:var(--red)}
 
-  .code{background:#11203a;border-radius:12px;padding:14px 16px;font-family:ui-monospace,Consolas,monospace;font-size:14.5px;line-height:1.8;color:#e8eefc;white-space:pre;overflow-x:auto}
-  .kk{color:#ff9bd0}.cc{color:#8aa0c0;font-style:italic}.io{color:#5ad1ff}.bt{color:#8ff0b8;font-weight:700}.bf{color:#ff9b9b;font-weight:700}
+  .code{border:2.5px solid var(--ink);border-radius:12px;padding:14px 16px;font-family:ui-monospace,Consolas,monospace;font-size:16px;line-height:1.9;white-space:pre;overflow-x:auto;background:#fbfcfe}
+  .kk{color:var(--accent);font-weight:800}.cc{color:var(--muted);font-style:italic}.io{color:#0b5cad;font-weight:700}
+  .bt{color:var(--green);font-weight:800}.bf{color:var(--red);font-weight:800}
 
-  .ex2{margin-top:14px;background:#f1f5ff;border:1.5px solid #d6e2fb;border-radius:14px;padding:14px 16px}
-  .ex2 h3{font-size:15px;color:#3b57d6;margin-bottom:9px;display:flex;align-items:center;gap:7px}
-  .ex2 h3 i{width:17px;height:17px}
-  .cond{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
-  .cbtn{border:1.5px solid var(--line);border-radius:11px;padding:9px 14px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;background:#fff;transition:.15s}
-  .cbtn.yes{border-color:var(--t);background:#eafaf1;color:#0d7a49}
-  .cbtn.no{border-color:var(--f);background:#fdeaea;color:#b3271f}
-  .verdict{font-weight:800;font-size:17px;border-radius:11px;padding:11px 15px;text-align:center;color:#fff}
-  .verdict.ok{background:var(--t)}.verdict.deny{background:var(--f)}
+  .tbl{width:100%;border-collapse:collapse;margin-top:6px;font-family:ui-monospace,monospace;font-size:15px}
+  .tbl th,.tbl td{border:2px solid var(--ink);padding:6px 8px;text-align:center;font-weight:700}
+  .tbl th{background:var(--ink);color:#fff}
+  .tbl td.T{background:var(--green-bg);color:var(--green)}.tbl td.F{background:var(--red-bg);color:var(--red)}
+  .tbl tr.hi td{outline:3px solid var(--hl);outline-offset:-3px}
+
+  .ex2{border:3px solid var(--ink);border-radius:13px;margin-top:16px;overflow:hidden}
+  .ex2 .h{background:var(--accent);color:#fff;font-weight:700;font-size:15px;padding:9px 15px;display:flex;align-items:center;gap:7px}
+  .ex2 .b{padding:14px 16px}
+  .cond{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .cbtn{border:2.5px solid var(--ink);border-radius:11px;padding:10px 15px;font-family:var(--font);font-weight:700;font-size:15px;cursor:pointer;background:#fff;transition:.12s}
+  .cbtn.yes{border-color:var(--green);background:var(--green-bg);color:var(--green)}
+  .cbtn.no{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+  .verdict{font-weight:800;font-size:18px;border-radius:11px;padding:12px 15px;text-align:center;color:#fff;border:3px solid}
+  .verdict.ok{background:var(--green);border-color:var(--green)}.verdict.deny{background:var(--red);border-color:var(--red)}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="head">
-    <h1>ตัวดำเนินการตรรกะ (Logical Operators)</h1>
-    <div class="sub">กด A / B ให้เป็นจริง (true) หรือเท็จ (false) แล้วดูผลของ && , || , !</div>
-  </div>
+<header>
+  <h1><i class="ic" data-lucide="binary"></i> ตัวดำเนินการตรรกะ <small>— &amp;&amp; || ! (Logical Operators)</small></h1>
+</header>
+<main>
+  <div class="tip"><b>3 ตัวที่ต้องรู้:</b> <b>&amp;&amp;</b> (และ) จริงทั้งคู่ถึงจริง · <b>||</b> (หรือ) จริงตัวใดตัวหนึ่งก็จริง · <b>!</b> (ไม่/นิเสธ) สลับจริง↔เท็จ — กด A / B ด้านล่างเพื่อทดลอง</div>
 
-  <div class="tip"><b>3 ตัวที่ต้องรู้:</b> <b>&amp;&amp;</b> (และ) จริงทั้งคู่ถึงจริง · <b>||</b> (หรือ) จริงตัวใดตัวหนึ่งก็จริง · <b>!</b> (ไม่/นิเสธ) สลับจริง↔เท็จ</div>
-
-  <div class="main">
-    <div class="panel">
-      <h2><i data-lucide="toggle-left"></i> ตั้งค่า A และ B</h2>
-      <div class="sw"><span class="nm">A</span><button class="toggle" id="tA" onclick="tog('A')"></button></div>
-      <div class="sw"><span class="nm">B</span><button class="toggle" id="tB" onclick="tog('B')"></button></div>
-      <div class="code" id="code"></div>
+  <div class="grid">
+    <div>
+      <div class="panel">
+        <div class="panel__h"><i class="ic" data-lucide="toggle-left"></i> ตั้งค่า A และ B</div>
+        <div class="panel__b">
+          <div class="sw"><span class="nm">A</span><button class="toggle" id="tA" onclick="tog('A')"></button></div>
+          <div class="sw"><span class="nm">B</span><button class="toggle" id="tB" onclick="tog('B')"></button></div>
+          <div class="code" id="code"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel__h"><i class="ic" data-lucide="table"></i> ตารางค่าความจริง (แถวปัจจุบัน = ไฮไลต์)</div>
+        <div class="panel__b" id="tblwrap"></div>
+      </div>
     </div>
 
     <div>
       <div class="panel">
-        <h2><i data-lucide="equal"></i> ผลลัพธ์ (จริง=เขียว · เท็จ=แดง)</h2>
-        <div class="results">
-          <div class="res" id="rAnd"><span class="ex">A &amp;&amp; B</span><span class="desc">“และ” — จริงเมื่อ <b>ทั้งคู่</b> จริง</span><span class="val"></span></div>
-          <div class="res" id="rOr"><span class="ex">A || B</span><span class="desc">“หรือ” — จริงเมื่อ <b>อย่างน้อยหนึ่ง</b> จริง</span><span class="val"></span></div>
-          <div class="res" id="rNotA"><span class="ex">!A</span><span class="desc">“ไม่” — สลับค่าของ A</span><span class="val"></span></div>
+        <div class="panel__h"><i class="ic" data-lucide="equal"></i> ผลลัพธ์ (จริง=เขียว · เท็จ=แดง)</div>
+        <div class="panel__b">
+          <div class="results">
+            <div class="res" id="rAnd"><span class="ex">A &amp;&amp; B</span><span class="desc">“และ” — จริงเมื่อ <b>ทั้งคู่</b> จริง</span><span class="val"></span></div>
+            <div class="res" id="rOr"><span class="ex">A || B</span><span class="desc">“หรือ” — จริงเมื่อ <b>อย่างน้อยหนึ่ง</b> จริง</span><span class="val"></span></div>
+            <div class="res" id="rNotA"><span class="ex">!A</span><span class="desc">“ไม่” — สลับค่าของ A</span><span class="val"></span></div>
+          </div>
         </div>
       </div>
 
       <div class="ex2">
-        <h3><i data-lucide="ticket"></i> ตัวอย่างจริง: เข้าเครื่องเล่นได้ไหม?</h3>
-        <div class="sub" style="font-size:13.5px;color:var(--muted);margin-bottom:9px">เงื่อนไข: <code style="font-family:ui-monospace,monospace;color:#2f6fd6;font-weight:700">สูงพอ &amp;&amp; อายุถึง</code> (ต้องจริงทั้งคู่)</div>
-        <div class="cond">
-          <button class="cbtn" id="cH" onclick="togC('H')">สูง ≥ 120 ซม.</button>
-          <button class="cbtn" id="cAge" onclick="togC('Age')">อายุ ≥ 8 ปี</button>
+        <div class="h"><i class="ic" data-lucide="ticket"></i> ตัวอย่างจริง: เข้าเครื่องเล่นได้ไหม? (เงื่อนไข: สูงพอ &amp;&amp; อายุถึง)</div>
+        <div class="b">
+          <div class="cond">
+            <button class="cbtn" id="cH" onclick="togC('H')"></button>
+            <button class="cbtn" id="cAge" onclick="togC('Age')"></button>
+          </div>
+          <div class="verdict" id="verdict"></div>
         </div>
-        <div class="verdict" id="verdict"></div>
       </div>
     </div>
   </div>
-</div>
+</main>
 
 <script>
 const $=id=>document.getElementById(id);
@@ -104,6 +128,17 @@ function setBtn(id,val){const b=$(id);b.className='toggle '+(val?'on':'off');b.t
 function setRes(id,val){const r=$(id);r.className='res '+(val?'tt':'ff');r.querySelector('.val').textContent=val?'true':'false';}
 function bcol(v){return v?'<span class="bt">true</span>':'<span class="bf">false</span>';}
 
+function truthTable(){
+  const rows=[[true,true],[true,false],[false,true],[false,false]];
+  let h='<table class="tbl"><tr><th>A</th><th>B</th><th>A &amp;&amp; B</th><th>A || B</th><th>!A</th></tr>';
+  rows.forEach(([a,b])=>{
+    const hi=(a===A&&b===B)?' class="hi"':'';
+    const c=v=>'<td class="'+(v?'T':'F')+'">'+(v?'T':'F')+'</td>';
+    h+='<tr'+hi+'>'+c(a)+c(b)+c(a&&b)+c(a||b)+c(!a)+'</tr>';
+  });
+  return h+'</table>';
+}
+
 function render(){
   setBtn('tA',A);setBtn('tB',B);
   setRes('rAnd',A&&B);setRes('rOr',A||B);setRes('rNotA',!A);
@@ -112,11 +147,11 @@ function render(){
     '<span class="io">cout</span> &lt;&lt; (A &amp;&amp; B);  <span class="cc">// '+((A&&B)?'true':'false')+'  (และ)</span>\n'+
     '<span class="io">cout</span> &lt;&lt; (A || B);  <span class="cc">// '+((A||B)?'true':'false')+'  (หรือ)</span>\n'+
     '<span class="io">cout</span> &lt;&lt; (!A);     <span class="cc">// '+((!A)?'true':'false')+'  (ไม่)</span>';
-  // ตัวอย่างจริง
+  $('tblwrap').innerHTML=truthTable();
   $('cH').className='cbtn '+(H?'yes':'no');$('cH').textContent=(H?'✓ ':'✕ ')+'สูง ≥ 120 ซม.';
   $('cAge').className='cbtn '+(Age?'yes':'no');$('cAge').textContent=(Age?'✓ ':'✕ ')+'อายุ ≥ 8 ปี';
   const pass=H&&Age;const vd=$('verdict');vd.className='verdict '+(pass?'ok':'deny');
-  vd.innerHTML=pass?'เข้าเล่นได้! (สูงพอ && อายุถึง = true)':'ยังเข้าไม่ได้ — ต้องจริงทั้งสองเงื่อนไข';
+  vd.innerHTML=pass?'เข้าเล่นได้! (สูงพอ && อายุถึง = true)':'ยังเข้าไม่ได้ — ต้องจริงทั้งสองเงื่อนไข (&&)';
   icons();
 }
 render();
