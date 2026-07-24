@@ -3,71 +3,92 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SRRU | Simulator if / else</title>
+<title>SRRU | Simulator if / else / else if</title>
 <link rel="icon" type="image/png" href="../Day One/srru-logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
 <style>
   :root{--blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--gold:#f2a900;--ink:#16224a;--muted:#5d6b8a;--line:#dbe6f7;}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
-  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);height:100vh;overflow:hidden;
+  body{font-family:"LINE Seed Sans TH","Tahoma",system-ui,sans-serif;color:var(--ink);height:100vh;overflow:hidden;
     background:radial-gradient(900px 500px at 10% -10%,#d4e6ff 0,transparent 60%),radial-gradient(800px 500px at 100% 0,#ffe6f7 0,transparent 55%),linear-gradient(160deg,#eef4ff,#fdf3fb);
-    display:flex;flex-direction:column;gap:clamp(8px,1.6vh,15px);padding:clamp(10px,2vh,20px) clamp(12px,2.5vw,28px)}
+    display:flex;flex-direction:column;gap:clamp(8px,1.6vh,14px);padding:clamp(10px,2vh,18px) clamp(12px,2.5vw,26px)}
   svg.lucide{width:1em;height:1em;vertical-align:-.15em}
   .head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-  .head img{height:clamp(32px,4.5vh,46px)}
-  h1{font-size:clamp(18px,2.7vh,26px);font-weight:700}
-  .head .tag{color:var(--muted);font-size:clamp(12px,1.6vh,15px);flex:1;min-width:200px}
+  .head img{height:clamp(30px,4.3vh,44px)}
+  h1{font-size:clamp(17px,2.6vh,25px);font-weight:700}
+  .head .tag{color:var(--muted);font-size:clamp(12px,1.5vh,15px);flex:1;min-width:180px}
   .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:#fff;border:2px solid var(--line);border-radius:14px;padding:9px 13px;box-shadow:0 8px 22px rgba(47,123,246,.08);font-size:15px}
   .bar label{color:var(--muted);font-weight:600}
-  select,input{font-family:ui-monospace,monospace;font-size:16px;padding:7px 10px;border-radius:9px;border:2px solid var(--line);background:#f7faff;color:var(--ink);outline:none;width:90px}
-  .go{font-family:inherit;font-size:15px;font-weight:700;padding:9px 18px;border:0;border-radius:11px;cursor:pointer;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;display:inline-flex;gap:7px;align-items:center}
-  .main{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(12px,2vw,24px)}
-  .panel{background:#fff;border:2px solid var(--line);border-radius:16px;padding:clamp(14px,2.2vh,20px);box-shadow:0 8px 22px rgba(31,43,72,.07);display:flex;flex-direction:column;min-height:0}
-  .code{font-family:ui-monospace,monospace;font-size:clamp(15px,2.3vh,21px);line-height:1.9;background:#0f1b38;border-radius:12px;padding:16px 18px;color:#e8eefc;flex:1}
+  .mb{font-family:inherit;font-size:14px;font-weight:700;padding:8px 14px;border-radius:10px;border:2px solid var(--line);background:#f7faff;color:var(--muted);cursor:pointer}
+  .mb.on{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border-color:transparent}
+  .sep{width:1px;height:26px;background:var(--line)}
+  select,input{font-family:ui-monospace,monospace;font-size:16px;padding:7px 10px;border-radius:9px;border:2px solid var(--line);background:#f7faff;color:var(--ink);outline:none;width:82px}
+  .go{font-family:inherit;font-size:15px;font-weight:700;padding:9px 18px;border:0;border-radius:11px;cursor:pointer;background:linear-gradient(135deg,var(--green),#0f9c63);color:#fff;display:inline-flex;gap:7px;align-items:center}
+  .go:disabled{opacity:.5;cursor:default}
+  .main{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(12px,2vw,22px)}
+  .panel{background:#fff;border:2px solid var(--line);border-radius:16px;padding:clamp(14px,2.2vh,20px);box-shadow:0 8px 22px rgba(31,43,72,.07);display:flex;flex-direction:column;min-height:0;overflow:auto}
+  .code{font-family:ui-monospace,monospace;font-size:clamp(14px,2.15vh,20px);line-height:1.85;background:#0f1b38;border-radius:12px;padding:15px 16px;color:#e8eefc;flex:1}
   .code .ln{padding:1px 10px;border-radius:6px;white-space:pre}
   .code .ln.on{background:#1f6b46;outline:2px solid #28c940}
-  .code .ln.off{opacity:.4}
+  .code .ln.cur{background:#4d3f0a;outline:2px solid #ffd24d}
+  .code .ln.off{opacity:.32}
   .code .ln.fr{color:#7184b0}
-  .explain{margin-top:14px;background:#eef4ff;border:2px solid var(--line);border-radius:12px;padding:10px 15px;font-size:clamp(13px,1.8vh,16px);color:#3a4a6e;line-height:1.4;max-width:560px}
+  .code .k{color:#ff9bd0}.code .s{color:#ffd27f}.code .m{color:#9ad27f}
+  .explain{margin-top:12px;background:#eef4ff;border:2px solid var(--line);border-radius:12px;padding:10px 14px;font-size:clamp(12.5px,1.7vh,15px);color:#3a4a6e;line-height:1.45}
   .explain b{color:#16224a}
-  .mascot{position:fixed;right:clamp(8px,2vw,28px);bottom:clamp(6px,1.5vh,16px);width:clamp(82px,11vh,118px);height:auto;z-index:6;transform-origin:center bottom;animation:dance 1.4s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.15))}
-  @keyframes dance{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-10px) rotate(5deg)}}
-  .mascot .armL,.mascot .armR{transform-box:fill-box;transform-origin:center top}
-  .mascot .armL{animation:dL .6s ease-in-out infinite}.mascot .armR{animation:dR .6s ease-in-out infinite}
-  @keyframes dL{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(24deg)}}
-  @keyframes dR{0%,100%{transform:rotate(30deg)}50%{transform:rotate(-24deg)}}
-  .mascot.cheer{animation:mcheer .8s ease}
-  @keyframes mcheer{0%{transform:translateY(0)}30%{transform:translateY(-30px) scale(1.1)}60%{transform:translateY(0)}80%{transform:translateY(-12px)}100%{transform:translateY(0)}}
-  .code .k{color:#ff9bd0}.code .s{color:#ffd27f}.code .m{color:#9ad27f}.code .o{color:#ffb86b}
+
+  /* if/else flow */
   .flow{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
-  .diamond{background:#fff3da;border:3px solid var(--gold);border-radius:16px;padding:14px 26px;font-family:ui-monospace,monospace;font-size:clamp(18px,2.8vh,26px);font-weight:700;color:#8a5e00;text-align:center}
-  .arrows{display:flex;gap:clamp(20px,5vw,70px);width:100%;justify-content:center}
-  .branch{flex:1;max-width:280px;text-align:center}
-  .lbl{font-weight:700;font-size:clamp(14px,2vh,18px);margin-bottom:6px}
+  .diamond{background:#fff3da;border:3px solid var(--gold);border-radius:16px;padding:13px 24px;font-family:ui-monospace,monospace;font-size:clamp(17px,2.6vh,25px);font-weight:700;color:#8a5e00;text-align:center}
+  .conn{font-size:2.2vh;color:#9aa6c8}
+  .arrows{display:flex;gap:clamp(18px,5vw,60px);width:100%;justify-content:center}
+  .branch{flex:1;max-width:260px;text-align:center}
+  .lbl{font-weight:700;font-size:clamp(13px,1.9vh,17px);margin-bottom:6px}
   .lbl.t{color:var(--green)}.lbl.f{color:var(--coral)}
-  .res{border:3px solid var(--line);border-radius:16px;padding:14px;background:#f7faff;font-family:ui-monospace,monospace;font-size:clamp(14px,2vh,18px);transition:.3s;opacity:.5}
+  .res{border:3px solid var(--line);border-radius:16px;padding:13px;background:#f7faff;font-family:ui-monospace,monospace;font-size:clamp(13px,1.9vh,17px);transition:.3s;opacity:.5}
   .res.win-t{border-color:var(--green);background:#e7faf1;opacity:1;transform:translateY(-4px);box-shadow:0 12px 26px -8px var(--green)}
   .res.win-f{border-color:var(--coral);background:#ffece6;opacity:1;transform:translateY(-4px);box-shadow:0 12px 26px -8px var(--coral)}
-  .verdict{font-size:clamp(16px,2.5vh,22px);font-weight:700;text-align:center;min-height:1.6em}
+  .verdict{font-size:clamp(15px,2.4vh,21px);font-weight:700;text-align:center;min-height:1.5em;margin-top:6px}
   .verdict .t{color:var(--green)}.verdict .f{color:var(--coral)}
-  .conn{font-size:2.4vh;color:#9aa6c8}
+
+  /* grade ladder */
+  .gradebox{flex:1;display:flex;flex-direction:column;gap:9px;justify-content:center}
+  .predict{background:#f3edff;border:2px solid #d8c9f5;border-radius:12px;padding:10px 14px;font-size:14px}
+  .predict b{color:#5b3ba8}
+  .pbtns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+  .pbtn{font-family:inherit;font-weight:800;font-size:16px;border:2px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:8px 18px;cursor:pointer;min-width:52px}
+  .pbtn.sel{border-color:var(--purple);background:#efeaff;color:#5b3ba8}
+  .pbtn.right{border-color:var(--green);background:#e7faf1;color:#0c6b46}
+  .pbtn.wrong{border-color:var(--coral);background:#ffece6;color:#b03b1d}
+  .ladder{display:flex;flex-direction:column;gap:8px}
+  .lrow{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:11px;padding:10px 14px;font-family:ui-monospace,monospace;font-size:clamp(14px,2vh,17px);transition:.2s;background:#f7faff}
+  .lrow .st{margin-left:auto;font-family:"LINE Seed Sans TH",sans-serif;font-size:13px;font-weight:700;color:var(--muted)}
+  .lrow.check{border-color:var(--gold);background:#fff8e6}
+  .lrow.fail{opacity:.42}
+  .lrow.fail .st{color:var(--coral)}
+  .lrow.pass{border-color:var(--green);background:#e7faf1;color:#0c6b46}
+  .lrow.pass .st{color:var(--green)}
 </style>
 </head>
 <body>
   <div class="head">
     <img src="../Day One/srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
-    <h1>เงื่อนไข if / else</h1>
-    <span class="tag">ใส่ค่าและเงื่อนไข กด “รัน” ดูว่าโปรแกรมเดินไปทางจริง (true) หรือเท็จ (false)</span>
+    <h1>เงื่อนไข if / else / else if</h1>
+    <span class="tag">โปรแกรมเดิน<b>ทีละบรรทัด</b> ดูว่าเลือกทำทางไหน</span>
   </div>
 
   <div class="bar">
-    <label>ค่า&nbsp;</label><span style="font-family:ui-monospace;font-weight:700">score =</span><input id="x" value="45">
-    <label>เงื่อนไข:</label><span style="font-family:ui-monospace;font-weight:700">score</span>
-    <select id="op"><option>&gt;=</option><option>&gt;</option><option>&lt;</option><option>&lt;=</option><option>==</option><option>!=</option></select>
-    <input id="n" value="50">
-    <button class="go" id="run"><i data-lucide="play"></i> รัน</button>
+    <button class="mb on" id="mIf" onclick="setMode('ifelse')">if / else (2 ทาง)</button>
+    <button class="mb" id="mGr" onclick="setMode('grade')">else if — ตัดเกรด (หลายทาง)</button>
+    <span class="sep"></span>
+    <span style="font-family:ui-monospace;font-weight:700">score =</span><input id="x" value="45">
+    <span id="ifCtrls">
+      <label>&nbsp;เงื่อนไข:</label><span style="font-family:ui-monospace;font-weight:700">score</span>
+      <select id="op"><option>&gt;=</option><option>&gt;</option><option>&lt;</option><option>&lt;=</option><option>==</option><option>!=</option></select>
+      <input id="n" value="50">
+    </span>
+    <button class="go" id="run" onclick="run()"><i data-lucide="play"></i> รัน</button>
   </div>
 
   <div class="main">
@@ -75,7 +96,7 @@
       <div class="code" id="code"></div>
     </div>
     <div class="panel">
-      <div class="flow">
+      <div class="flow" id="flowBox">
         <div class="diamond" id="cond">score &gt;= 50 ?</div>
         <div class="conn">▼</div>
         <div class="arrows">
@@ -83,67 +104,145 @@
           <div class="branch"><div class="lbl f">เท็จ (false)</div><div class="res" id="resF">cout &lt;&lt; "ไม่ผ่าน";</div></div>
         </div>
         <div class="verdict" id="verdict"></div>
-        <div class="explain"><b>if = ถ้า…</b> ถ้าเงื่อนไขในวงเล็บเป็น <b>จริง</b> → ทำคำสั่งในปีกกาแรก, ถ้า <b>เท็จ</b> → ข้ามไปทำในส่วน <b>else</b> แทน (โปรแกรมเลือกทำอย่างใดอย่างหนึ่งเท่านั้น)</div>
+        <div class="explain"><b>if = ถ้า…</b> ถ้าเงื่อนไขในวงเล็บเป็น <b>จริง</b> → ทำในปีกกาแรก, ถ้า <b>เท็จ</b> → ข้ามไปทำ <b>else</b> (เลือกทำอย่างใดอย่างหนึ่ง)</div>
+      </div>
+
+      <div class="gradebox" id="gradeBox" style="display:none">
+        <div class="predict" id="predict"></div>
+        <div class="ladder" id="ladder"></div>
+        <div class="verdict" id="gverdict"></div>
+        <div class="explain"><b>else if = ตรวจต่อเป็นชั้น ๆ</b> โปรแกรมเช็คจาก<b>บนลงล่าง</b> เจอเงื่อนไข<b>อันแรกที่จริง</b>ก็ทำแล้ว<b>หยุด</b> ไม่ตรวจอันที่เหลือ (เพราะฉะนั้น score 95 ได้ A ไม่ใช่ B แม้ 95 ≥ 70 ก็จริง)</div>
       </div>
     </div>
   </div>
-
-  <svg class="mascot" id="mascot" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
-    <line x1="110" y1="20" x2="110" y2="42" stroke="#7a5cff" stroke-width="5"/><circle cx="110" cy="15" r="9" fill="#ffd24d" stroke="#7a5cff" stroke-width="3"/>
-    <g class="armL"><rect x="24" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="34" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
-    <g class="armR"><rect x="176" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="186" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
-    <rect x="48" y="42" width="124" height="96" rx="28" fill="#eef2ff" stroke="#7a5cff" stroke-width="5"/>
-    <ellipse cx="74" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/><ellipse cx="146" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
-    <circle cx="88" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="88" cy="84" r="7" fill="#2f7bf6"/>
-    <circle cx="132" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="132" cy="84" r="7" fill="#2f7bf6"/>
-    <rect x="88" y="110" width="44" height="16" rx="8" fill="#19b877"/>
-    <rect x="64" y="148" width="92" height="58" rx="16" fill="#fff" stroke="#7a5cff" stroke-width="4"/><rect x="80" y="164" width="60" height="28" rx="8" fill="#e6f0ff"/><path d="M80 178 H140 M98 168 V188" stroke="#2f7bf6" stroke-width="3"/>
-  </svg>
 
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
 const $=id=>document.getElementById(id);
 const icons=()=>{if(window.lucide)lucide.createIcons();};
 const OPS={">=":(a,b)=>a>=b,">":(a,b)=>a>b,"<":(a,b)=>a<b,"<=":(a,b)=>a<=b,"==":(a,b)=>a===b,"!=":(a,b)=>a!==b};
-function cheer(){const m=$("mascot");if(m){m.classList.remove("cheer");void m.offsetWidth;m.classList.add("cheer");setTimeout(()=>m.classList.remove("cheer"),800);}}
-function renderCode(active){
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+let mode='ifelse',running=false,predict=null;
+
+/* ---------- if/else ---------- */
+function renderIf(active){
   const op=$("op").value, n=$("n").value||"?", x=$("x").value||"?";
-  const coutT=active==="t"?"on":(active?"off":""), coutF=active==="f"?"on":(active?"off":"");
+  const cT=active==="t"?"on":(active?"off":""), cF=active==="f"?"on":(active?"off":"");
   const L=[
-    [`<span class="k">#include</span> <span class="c">&lt;iostream&gt;</span>`,"fr"],
-    [`<span class="k">using namespace</span> std;`,"fr"],
     [`<span class="k">int</span> main() {`,"fr"],
     [`    <span class="k">int</span> score = <span class="m">${x}</span>;`,"fr"],
     [`    <span class="k">if</span> (score ${op} <span class="m">${n}</span>) {`,"fr"],
-    [`        cout &lt;&lt; <span class="s">"ผ่าน"</span>;`,coutT],
+    [`        cout &lt;&lt; <span class="s">"ผ่าน"</span>;`,cT],
     [`    } <span class="k">else</span> {`,"fr"],
-    [`        cout &lt;&lt; <span class="s">"ไม่ผ่าน"</span>;`,coutF],
+    [`        cout &lt;&lt; <span class="s">"ไม่ผ่าน"</span>;`,cF],
     [`    }`,"fr"],
     [`    <span class="k">return</span> <span class="m">0</span>;`,"fr"],
     [`}`,"fr"],
   ];
   $("code").innerHTML=L.map(([h,c])=>`<div class="ln ${c}">${h}</div>`).join("");
 }
-function refresh(){
-  $("cond").textContent=`score ${$("op").value} ${$("n").value||"?"} ?`;
-  renderCode(null);
-  $("resT").className="res";$("resF").className="res";$("verdict").innerHTML="";
-}
-function run(){
+async function runIf(){
   const x=parseFloat($("x").value),n=parseFloat($("n").value),op=$("op").value;
   if(isNaN(x)||isNaN(n)){$("verdict").textContent="กรุณาใส่ตัวเลข";return;}
+  running=true;$("run").disabled=true;
+  $("cond").textContent=`score ${op} ${n} ?`;renderIf(null);
+  $("resT").className="res";$("resF").className="res";$("verdict").innerHTML="";
+  const L=$("code").querySelectorAll(".ln");
+  const cur=i=>{L.forEach(l=>l.classList.remove("cur"));if(i>=0&&L[i])L[i].classList.add("cur");};
+  cur(1);$("verdict").innerHTML=`ประกาศ <b>score = ${x}</b>`;await wait(950);
+  cur(2);$("verdict").innerHTML=`ตรวจเงื่อนไข: <b>${x} ${op} ${n}</b> …`;await wait(1100);
   const res=OPS[op](x,n);
-  renderCode(res?"t":"f");
-  $("resT").className="res"+(res?" win-t":"");
-  $("resF").className="res"+(!res?" win-f":"");
-  $("verdict").innerHTML=`${x} ${op} ${n} → `+(res?`<span class="t">จริง ✓ พิมพ์ "ผ่าน"</span>`:`<span class="f">เท็จ ✗ พิมพ์ "ไม่ผ่าน"</span>`);
-  cheer();
+  if(res){cur(3);L[3].classList.add("on");L[5].classList.add("off");$("resT").className="res win-t";
+    $("verdict").innerHTML=`<b>${x} ${op} ${n}</b> = <span class="t">จริง ✓</span> → พิมพ์ <b>"ผ่าน"</b>`;}
+  else{cur(5);L[5].classList.add("on");L[3].classList.add("off");$("resF").className="res win-f";
+    $("verdict").innerHTML=`<b>${x} ${op} ${n}</b> = <span class="f">เท็จ ✗</span> → ข้ามไป else พิมพ์ <b>"ไม่ผ่าน"</b>`;}
+  await wait(1250);cur(7);await wait(650);cur(-1);
+  running=false;$("run").disabled=false;
 }
-$("run").onclick=run;
-["op","n","x"].forEach(id=>$(id).addEventListener("input",refresh));
+
+/* ---------- else if (grade) ---------- */
+const GC=[
+  s=>[`<span class="k">int</span> score = <span class="m">${s}</span>;`,'fr'],
+  ()=>[`<span class="k">if</span> (score &gt;= <span class="m">80</span>) {`,'c0'],
+  ()=>[`    cout &lt;&lt; <span class="s">"A"</span>;`,'b0'],
+  ()=>[`} <span class="k">else if</span> (score &gt;= <span class="m">70</span>) {`,'c1'],
+  ()=>[`    cout &lt;&lt; <span class="s">"B"</span>;`,'b1'],
+  ()=>[`} <span class="k">else if</span> (score &gt;= <span class="m">50</span>) {`,'c2'],
+  ()=>[`    cout &lt;&lt; <span class="s">"C"</span>;`,'b2'],
+  ()=>[`} <span class="k">else</span> {`,'c3'],
+  ()=>[`    cout &lt;&lt; <span class="s">"F"</span>;`,'b3'],
+  ()=>[`}`,'fr'],
+];
+const THRESH=[[80,'A'],[70,'B'],[50,'C']];
+function gradeOf(s){for(const[t,g]of THRESH)if(s>=t)return g;return 'F';}
+function renderGrade(states){
+  const s=$("x").value||"?";
+  $("code").innerHTML=GC.map((f,i)=>{const[h]=f(s);const st=states&&states[i]?states[i]:'';return `<div class="ln ${st}">${h}</div>`;}).join("");
+}
+function renderLadder(idx,pass){ // idx = row being/last checked (0..3), pass true if that row matched
+  const rows=[['score &gt;= 80','A'],['score &gt;= 70','B'],['score &gt;= 50','C'],['อื่น ๆ (else)','F']];
+  $("ladder").innerHTML=rows.map((r,i)=>{
+    let c='lrow',st='รอตรวจ';
+    if(i<idx){c+=' fail';st='เท็จ ✗';}
+    else if(i===idx){if(pass){c+=' pass';st='จริง ✓ → '+r[1];}else{c+=' check';st='กำลังตรวจ…';}}
+    else{st='ยังไม่ถึง';}
+    return `<div class="${c}">${r[0]} <span style="opacity:.6">→ "${r[1]}"</span><span class="st">${st}</span></div>`;
+  }).join("");
+}
+function renderPredict(){
+  const s=$("x").value||"?";
+  let btns=['A','B','C','F'].map(g=>`<button class="pbtn" data-g="${g}" onclick="pick('${g}')">${g}</button>`).join("");
+  $("predict").innerHTML=`<b>ชวนคิด:</b> score = ${s} จะได้เกรดอะไร? (ทายก่อนกดรัน)<div class="pbtns">${btns}</div>`;
+  predict=null;
+}
+function pick(g){if(running)return;predict=g;$("predict").querySelectorAll(".pbtn").forEach(b=>b.classList.toggle('sel',b.dataset.g===g));}
+
+async function runGrade(){
+  const s=parseFloat($("x").value);
+  if(isNaN(s)){$("gverdict").textContent="กรุณาใส่ตัวเลข";return;}
+  running=true;$("run").disabled=true;
+  const st=new Array(GC.length).fill('');
+  renderGrade(st);renderLadder(-1,false);$("gverdict").innerHTML="";
+  const codeLn=()=>$("code").querySelectorAll(".ln");
+  const cur=i=>{const L=codeLn();L.forEach(l=>l.classList.remove('cur'));if(L[i])L[i].classList.add('cur');};
+  st[0]='cur';renderGrade(st);$("gverdict").innerHTML=`ประกาศ <b>score = ${s}</b>`;await wait(850);
+  const condLine=[1,3,5], bodyLine=[2,4,6];
+  let done=-1;
+  for(let i=0;i<3;i++){
+    st.fill('');st[condLine[i]]='cur';renderGrade(st);renderLadder(i,false);
+    const ok=s>=THRESH[i][0];
+    $("gverdict").innerHTML=`ตรวจ <b>score &gt;= ${THRESH[i][0]}</b> : ${s} &gt;= ${THRESH[i][0]} = `+(ok?'<span class="t">จริง ✓</span>':'<span class="f">เท็จ ✗</span>');
+    await wait(950);
+    if(ok){st.fill('');st[condLine[i]]='on';st[bodyLine[i]]='on';renderGrade(st);renderLadder(i,true);done=i;break;}
+  }
+  if(done<0){st.fill('');st[7]='on';st[8]='on';renderGrade(st);renderLadder(3,true);}
+  const g=gradeOf(s);
+  let msg=`ผลลัพธ์: ได้เกรด <b style="font-size:1.3em">${g}</b>`;
+  if(predict){const right=predict===g;
+    $("predict").querySelectorAll(".pbtn").forEach(b=>{if(b.dataset.g===g)b.classList.add('right');else if(b.dataset.g===predict)b.classList.add('wrong');});
+    msg+= right? '  <span class="t">— ทายถูก!</span>' : `  <span class="f">— ทายว่า ${predict} แต่ได้ ${g}</span>`;}
+  $("gverdict").innerHTML=msg;
+  running=false;$("run").disabled=false;
+}
+
+/* ---------- shared ---------- */
+function run(){if(running)return;mode==='grade'?runGrade():runIf();}
+function reset(){
+  if(mode==='ifelse'){renderIf(null);$("cond").textContent=`score ${$("op").value} ${$("n").value||"?"} ?`;$("resT").className="res";$("resF").className="res";$("verdict").innerHTML="";}
+  else{renderGrade(null);renderLadder(-1,false);$("gverdict").innerHTML="";renderPredict();}
+}
+function setMode(m){
+  if(running)return;mode=m;
+  $("mIf").classList.toggle('on',m==='ifelse');$("mGr").classList.toggle('on',m==='grade');
+  $("ifCtrls").style.display=m==='ifelse'?'':'none';
+  $("flowBox").style.display=m==='ifelse'?'':'none';
+  $("gradeBox").style.display=m==='grade'?'':'none';
+  $("x").value=m==='grade'?'75':'45';
+  reset();icons();
+}
+["op","n","x"].forEach(id=>$(id).addEventListener("input",()=>{if(!running)reset();}));
 $("x").addEventListener("keydown",e=>{if(e.key==="Enter")run();});
-$("n").addEventListener("keydown",e=>{if(e.key==="Enter")run();});
-refresh();icons();
+reset();icons();
 </script>
 </body>
 </html>
