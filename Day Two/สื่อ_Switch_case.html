@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Switch Case — เลือกทำตามค่า</title>
+<link rel="icon" type="image/png" href="../Day One/srru-logo.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root{--bg:#eef2f8;--card:#fff;--ink:#1e2740;--muted:#5b6478;--line:#e3e8f1;
+    --blue:#2f6fd6;--green:#22a565;--gold:#f59e0b;--purple:#7c5cff;--red:#d94b4b;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'LINE Seed Sans TH',system-ui,sans-serif;background:radial-gradient(1300px 640px at 50% -10%,#f7faff,var(--bg));color:var(--ink);min-height:100vh;padding:20px 16px 44px}
+  .wrap{max-width:960px;margin:0 auto}
+  .head{text-align:center;margin-bottom:12px}
+  .head h1{font-size:26px;letter-spacing:-.4px}
+  .head .sub{color:var(--muted);font-size:15px;margin-top:4px}
+  .tip{background:#fffbe9;border:1.5px solid #ffe6a0;border-radius:13px;padding:11px 16px;font-size:15px;margin:8px 0 14px;line-height:1.55}
+  .tip b{color:#a9750a}
+
+  .ctrl{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+  .ctrl .l{font-weight:800;font-size:15px;color:var(--muted)}
+  select,.btn{font-family:inherit;font-weight:800;font-size:15px;border-radius:12px;padding:10px 16px;cursor:pointer}
+  select{border:1.5px solid var(--line);background:#fff;color:var(--ink)}
+  .btn{border:0;color:#fff;display:inline-flex;align-items:center;gap:7px}
+  .btn.run{background:linear-gradient(135deg,var(--green),#159a5b)}
+  .btn.ghost{background:#eef1f6;color:#48505c;border:1.5px solid var(--line)}
+
+  .main{display:grid;grid-template-columns:1fr;gap:14px}
+  .panel{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 20px;box-shadow:0 14px 34px rgba(40,50,80,.08)}
+  .panel h2{font-size:14px;color:var(--muted);margin-bottom:11px;display:flex;align-items:center;gap:8px}
+  .panel h2 i{width:18px;height:18px}
+  .code{font-family:ui-monospace,Consolas,monospace;font-size:16px;line-height:1.95}
+  .cl{white-space:pre;border-radius:6px;margin:0 -8px;padding:1px 8px;transition:.18s}
+  .cl.on{background:#fff2cf;box-shadow:inset 4px 0 0 var(--gold)}
+  .cl.hit{background:#e3f7ec;box-shadow:inset 4px 0 0 var(--green)}
+  .cl.skip{opacity:.4}
+  .kk{color:#c0398a;font-weight:700}.cc{color:#8aa0c0;font-style:italic}.ss{color:#1f9d57}.nn{color:#c26a00}.io{color:#0b5cad;font-weight:700}
+  .arrow{color:var(--gold);font-weight:800}
+
+  .out{margin-top:14px;background:#0f1a12;border:1.5px solid #1f3a28;border-radius:12px;padding:12px 16px;font-family:ui-monospace,monospace;font-size:17px;color:#8ef0b0;min-height:48px;white-space:pre-wrap}
+  .say{margin-top:12px;background:#eef4ff;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;padding:11px 15px;font-size:15px;font-weight:600;min-height:22px;line-height:1.5}
+  .say b{color:#1c4fa8}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>Switch Case — เลือกทำตามค่า</h1>
+    <div class="sub">เลือกค่า แล้วกด “รัน” ดูว่าโปรแกรมกระโดดไป case ไหน · <b>break</b> ทำให้ออกจาก switch</div>
+  </div>
+
+  <div class="tip"><b>Switch</b> = เลือกทำตามค่าของตัวแปร (เหมือน if-else หลายชั้น แต่อ่านง่ายกว่า) · เจอ <b>case</b> ที่ตรง → ทำ → เจอ <b>break</b> → ออก · ถ้าไม่ตรงเลย → ทำ <b>default</b></div>
+
+  <div class="ctrl">
+    <span class="l">เลือกวัน (day):</span>
+    <select id="val">
+      <option value="1">1</option><option value="2">2</option>
+      <option value="3" selected>3</option><option value="6">6</option>
+      <option value="7">7</option><option value="9">9 (ไม่มี case)</option>
+    </select>
+    <button class="btn run" onclick="run()"><i data-lucide="play"></i> รัน (ทีละขั้น)</button>
+    <button class="btn ghost" onclick="reset()"><i data-lucide="rotate-ccw"></i> รีเซ็ต</button>
+  </div>
+
+  <div class="panel">
+    <h2><i data-lucide="code"></i> โค้ด C++</h2>
+    <div class="code" id="code"></div>
+    <div class="out" id="out"></div>
+    <div class="say" id="say">เลือกค่า day แล้วกด “รัน” เพื่อดูการทำงาน</div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+function icons(){if(window.lucide)lucide.createIcons();}
+
+// แต่ละบรรทัด: [html, kind, caseVal?, out?, say?]
+// kind: 'fr'=เฟรม, 'case'=บรรทัด case, 'body'=คำสั่งพิมพ์, 'brk'=break, 'def'=default
+const L=[
+ ['<span class="kk">int</span> day = <span class="nn" id="dv">3</span>;','fr'],
+ ['<span class="kk">switch</span> (day) {','fr'],
+ ['  <span class="kk">case</span> <span class="nn">1</span>: <span class="io">cout</span> &lt;&lt; <span class="ss">"จันทร์"</span>; <span class="kk">break</span>;','case',1,'จันทร์'],
+ ['  <span class="kk">case</span> <span class="nn">2</span>: <span class="io">cout</span> &lt;&lt; <span class="ss">"อังคาร"</span>; <span class="kk">break</span>;','case',2,'อังคาร'],
+ ['  <span class="kk">case</span> <span class="nn">3</span>: <span class="io">cout</span> &lt;&lt; <span class="ss">"พุธ"</span>; <span class="kk">break</span>;','case',3,'พุธ'],
+ ['  <span class="kk">case</span> <span class="nn">6</span>: <span class="io">cout</span> &lt;&lt; <span class="ss">"เสาร์"</span>; <span class="kk">break</span>;','case',6,'เสาร์'],
+ ['  <span class="kk">case</span> <span class="nn">7</span>: <span class="io">cout</span> &lt;&lt; <span class="ss">"อาทิตย์"</span>; <span class="kk">break</span>;','case',7,'อาทิตย์'],
+ ['  <span class="kk">default</span>: <span class="io">cout</span> &lt;&lt; <span class="ss">"ไม่พบวัน"</span>;','def',null,'ไม่พบวัน'],
+ ['}','fr']
+];
+let running=false;
+
+function renderCode(states){ // states: array of class per line
+  $('code').innerHTML=L.map((l,i)=>'<div class="cl'+(states&&states[i]?' '+states[i]:'')+'">'+l[0]+'</div>').join('');
+  const dv=document.getElementById('dv');if(dv)dv.textContent=$('val').value;
+  icons();
+}
+function reset(){running=false;renderCode(null);$('out').textContent='';$('say').innerHTML='เลือกค่า day แล้วกด “รัน”';}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+async function run(){
+  if(running)return;running=true;
+  const v=+$('val').value;const st=new Array(L.length).fill('');
+  $('out').textContent='';
+  renderCode(st);$('say').innerHTML='<b>เริ่ม:</b> switch อ่านค่า day = '+v+' แล้วไล่หา case ที่ตรง';await wait(800);
+  // ไล่ทีละ case
+  let matched=-1;
+  for(let i=2;i<=7;i++){
+    st.fill('');st[i]='on';renderCode(st);
+    const cv=L[i][2];
+    $('say').innerHTML='ตรวจ <b>case '+cv+'</b> : day('+v+') '+(v===cv?'== ':'≠ ')+cv+(v===cv?' → ตรง!':' → ไม่ตรง ข้าม');
+    await wait(650);
+    if(v===cv){matched=i;break;}
+    st[i]='skip';
+  }
+  if(matched>=0){
+    st[matched]='hit';renderCode(st);
+    $('out').textContent=L[matched][3];
+    $('say').innerHTML='<b>case '+L[matched][2]+' ตรง</b> → พิมพ์ "'+L[matched][3]+'" แล้วเจอ <b>break</b> → ออกจาก switch';
+  }else{
+    st[7]='hit';renderCode(st);
+    $('out').textContent=L[7][3];
+    $('say').innerHTML='ไม่มี case ไหนตรงกับ '+v+' เลย → ทำ <b>default</b> พิมพ์ "'+L[7][3]+'"';
+  }
+  running=false;
+}
+reset();
+$('val').addEventListener('change',()=>{if(!running)reset();});
+</script>
+</body>
+</html>

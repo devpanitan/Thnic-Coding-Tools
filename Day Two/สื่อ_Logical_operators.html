@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ตัวดำเนินการตรรกะ — &amp;&amp; || !</title>
+<link rel="icon" type="image/png" href="../Day One/srru-logo.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root{--bg:#eef2f8;--card:#fff;--ink:#1e2740;--muted:#5b6478;--line:#e3e8f1;
+    --t:#22a565;--f:#d94b4b;--blue:#2f6fd6;--purple:#7c5cff;--gold:#f59e0b;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'LINE Seed Sans TH',system-ui,sans-serif;background:radial-gradient(1300px 640px at 50% -10%,#f7faff,var(--bg));color:var(--ink);min-height:100vh;padding:20px 16px 44px}
+  .wrap{max-width:1040px;margin:0 auto}
+  .head{text-align:center;margin-bottom:12px}
+  .head h1{font-size:26px;letter-spacing:-.4px}
+  .head .sub{color:var(--muted);font-size:15px;margin-top:4px}
+  .tip{background:#fffbe9;border:1.5px solid #ffe6a0;border-radius:13px;padding:11px 16px;font-size:15px;margin:8px 0 14px;line-height:1.55}
+  .tip b{color:#a9750a}
+
+  .main{display:grid;grid-template-columns:.85fr 1.15fr;gap:16px;align-items:start}
+  @media(max-width:800px){.main{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:0 14px 34px rgba(40,50,80,.08)}
+  .panel h2{font-size:14px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .panel h2 i{width:18px;height:18px}
+
+  .sw{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#f6f8fc;border:1.5px solid var(--line);border-radius:13px;padding:12px 16px;margin-bottom:12px}
+  .sw .nm{font-family:ui-monospace,monospace;font-weight:800;font-size:20px}
+  .toggle{border:0;border-radius:11px;padding:10px 20px;font-family:inherit;font-weight:800;font-size:16px;cursor:pointer;color:#fff;min-width:110px;transition:.15s}
+  .toggle.on{background:linear-gradient(135deg,var(--t),#159a5b)}
+  .toggle.off{background:linear-gradient(135deg,var(--f),#b3271f)}
+
+  .results{display:flex;flex-direction:column;gap:12px}
+  .res{display:flex;align-items:center;gap:14px;border:2px solid var(--line);border-radius:14px;padding:13px 16px;transition:.2s}
+  .res .ex{font-family:ui-monospace,monospace;font-weight:800;font-size:21px;min-width:112px}
+  .res .desc{font-size:14px;color:var(--muted);flex:1;line-height:1.4}
+  .res .val{font-family:ui-monospace,monospace;font-weight:800;font-size:19px;border-radius:10px;padding:6px 16px;color:#fff}
+  .res.tt{border-color:#a8ddba;background:#f2fbf6}.res.tt .val{background:var(--t)}
+  .res.ff{border-color:#f0b8b8;background:#fdf3f3}.res.ff .val{background:var(--f)}
+
+  .code{background:#11203a;border-radius:12px;padding:14px 16px;font-family:ui-monospace,Consolas,monospace;font-size:14.5px;line-height:1.8;color:#e8eefc;white-space:pre;overflow-x:auto}
+  .kk{color:#ff9bd0}.cc{color:#8aa0c0;font-style:italic}.io{color:#5ad1ff}.bt{color:#8ff0b8;font-weight:700}.bf{color:#ff9b9b;font-weight:700}
+
+  .ex2{margin-top:14px;background:#f1f5ff;border:1.5px solid #d6e2fb;border-radius:14px;padding:14px 16px}
+  .ex2 h3{font-size:15px;color:#3b57d6;margin-bottom:9px;display:flex;align-items:center;gap:7px}
+  .ex2 h3 i{width:17px;height:17px}
+  .cond{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+  .cbtn{border:1.5px solid var(--line);border-radius:11px;padding:9px 14px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;background:#fff;transition:.15s}
+  .cbtn.yes{border-color:var(--t);background:#eafaf1;color:#0d7a49}
+  .cbtn.no{border-color:var(--f);background:#fdeaea;color:#b3271f}
+  .verdict{font-weight:800;font-size:17px;border-radius:11px;padding:11px 15px;text-align:center;color:#fff}
+  .verdict.ok{background:var(--t)}.verdict.deny{background:var(--f)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>ตัวดำเนินการตรรกะ (Logical Operators)</h1>
+    <div class="sub">กด A / B ให้เป็นจริง (true) หรือเท็จ (false) แล้วดูผลของ && , || , !</div>
+  </div>
+
+  <div class="tip"><b>3 ตัวที่ต้องรู้:</b> <b>&amp;&amp;</b> (และ) จริงทั้งคู่ถึงจริง · <b>||</b> (หรือ) จริงตัวใดตัวหนึ่งก็จริง · <b>!</b> (ไม่/นิเสธ) สลับจริง↔เท็จ</div>
+
+  <div class="main">
+    <div class="panel">
+      <h2><i data-lucide="toggle-left"></i> ตั้งค่า A และ B</h2>
+      <div class="sw"><span class="nm">A</span><button class="toggle" id="tA" onclick="tog('A')"></button></div>
+      <div class="sw"><span class="nm">B</span><button class="toggle" id="tB" onclick="tog('B')"></button></div>
+      <div class="code" id="code"></div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <h2><i data-lucide="equal"></i> ผลลัพธ์ (จริง=เขียว · เท็จ=แดง)</h2>
+        <div class="results">
+          <div class="res" id="rAnd"><span class="ex">A &amp;&amp; B</span><span class="desc">“และ” — จริงเมื่อ <b>ทั้งคู่</b> จริง</span><span class="val"></span></div>
+          <div class="res" id="rOr"><span class="ex">A || B</span><span class="desc">“หรือ” — จริงเมื่อ <b>อย่างน้อยหนึ่ง</b> จริง</span><span class="val"></span></div>
+          <div class="res" id="rNotA"><span class="ex">!A</span><span class="desc">“ไม่” — สลับค่าของ A</span><span class="val"></span></div>
+        </div>
+      </div>
+
+      <div class="ex2">
+        <h3><i data-lucide="ticket"></i> ตัวอย่างจริง: เข้าเครื่องเล่นได้ไหม?</h3>
+        <div class="sub" style="font-size:13.5px;color:var(--muted);margin-bottom:9px">เงื่อนไข: <code style="font-family:ui-monospace,monospace;color:#2f6fd6;font-weight:700">สูงพอ &amp;&amp; อายุถึง</code> (ต้องจริงทั้งคู่)</div>
+        <div class="cond">
+          <button class="cbtn" id="cH" onclick="togC('H')">สูง ≥ 120 ซม.</button>
+          <button class="cbtn" id="cAge" onclick="togC('Age')">อายุ ≥ 8 ปี</button>
+        </div>
+        <div class="verdict" id="verdict"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+function icons(){if(window.lucide)lucide.createIcons();}
+let A=true,B=false,H=true,Age=false;
+
+function tog(v){if(v==='A')A=!A;else B=!B;render();}
+function togC(v){if(v==='H')H=!H;else Age=!Age;render();}
+function setBtn(id,val){const b=$(id);b.className='toggle '+(val?'on':'off');b.textContent=val?'true (จริง)':'false (เท็จ)';}
+function setRes(id,val){const r=$(id);r.className='res '+(val?'tt':'ff');r.querySelector('.val').textContent=val?'true':'false';}
+function bcol(v){return v?'<span class="bt">true</span>':'<span class="bf">false</span>';}
+
+function render(){
+  setBtn('tA',A);setBtn('tB',B);
+  setRes('rAnd',A&&B);setRes('rOr',A||B);setRes('rNotA',!A);
+  $('code').innerHTML=
+    '<span class="kk">bool</span> A = '+bcol(A)+', B = '+bcol(B)+';\n\n'+
+    '<span class="io">cout</span> &lt;&lt; (A &amp;&amp; B);  <span class="cc">// '+((A&&B)?'true':'false')+'  (และ)</span>\n'+
+    '<span class="io">cout</span> &lt;&lt; (A || B);  <span class="cc">// '+((A||B)?'true':'false')+'  (หรือ)</span>\n'+
+    '<span class="io">cout</span> &lt;&lt; (!A);     <span class="cc">// '+((!A)?'true':'false')+'  (ไม่)</span>';
+  // ตัวอย่างจริง
+  $('cH').className='cbtn '+(H?'yes':'no');$('cH').textContent=(H?'✓ ':'✕ ')+'สูง ≥ 120 ซม.';
+  $('cAge').className='cbtn '+(Age?'yes':'no');$('cAge').textContent=(Age?'✓ ':'✕ ')+'อายุ ≥ 8 ปี';
+  const pass=H&&Age;const vd=$('verdict');vd.className='verdict '+(pass?'ok':'deny');
+  vd.innerHTML=pass?'เข้าเล่นได้! (สูงพอ && อายุถึง = true)':'ยังเข้าไม่ได้ — ต้องจริงทั้งสองเงื่อนไข';
+  icons();
+}
+render();
+</script>
+</body>
+</html>
