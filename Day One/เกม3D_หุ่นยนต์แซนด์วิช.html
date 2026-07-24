@@ -5,49 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>หุ่นยนต์ทำแซนด์วิช 3D — โปรแกรม = ลำดับคำสั่ง</title>
 <link rel="icon" type="image/png" href="srru-logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
 <style>
-  :root{--blue:#1565C0;--purple:#6A3FC0;--green:#1B5E20;--coral:#C0392B;--gold:#B8860B;--ink:#1f2733;--muted:#5b6673;--line:#d7dbe2;}
+  :root{--ink:#12151a;--paper:#ffffff;--rule:#c9d0d9;--soft:#f0f3f7;--muted:#59626f;--accent:#2f2a9e;--amber:#a35405;--amber-bg:#fef1d6;--green:#0f7a4a;--green-bg:#e2f5ea;--red:#b0191b;--red-bg:#fde2e2;--hl:#ffee9c;--font:'LINE Seed Sans TH','LINESeedSansTH',sans-serif;}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%;overflow:hidden}
-  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);background:#ffffff}
+  body{font-family:var(--font);color:var(--ink);background:var(--paper)}
   #c{position:fixed;inset:0;display:block}
   svg.lucide{width:1em;height:1em;vertical-align:-.15em}
   .hud{position:fixed;inset:0;pointer-events:none;z-index:5;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(12px,2.2vh,20px) clamp(14px,3vw,32px)}
-  .top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;pointer-events:auto}
+  .top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;pointer-events:auto;background:#fff;border:3px solid var(--ink);border-radius:13px;padding:9px 16px}
   .top img{height:clamp(26px,4vh,40px)}
-  h1{font-size:clamp(16px,2.4vh,24px);font-weight:700}
+  h1{font-size:clamp(16px,2.4vh,24px);font-weight:800;display:flex;align-items:center;gap:8px}
+  h1 svg{color:var(--accent)}
   .top .tag{color:var(--muted);font-size:clamp(11px,1.5vh,14px);flex:1;min-width:170px}
-  .panel{background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(40,50,70,.12);backdrop-filter:blur(8px);pointer-events:auto}
-  .prog{position:absolute;top:clamp(60px,9.5vh,92px);left:clamp(14px,3vw,32px);width:min(42vw,300px);max-height:52vh;padding:12px 14px;overflow:auto}
-  .prog h2{font-size:14px;color:var(--muted);font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:7px}
-  .prog .empty{color:#9aa4b2;font-size:14px}
-  .step{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:700;padding:6px 9px;border-radius:9px;border:1px solid #e2e6ee;margin-bottom:5px;background:#fff;transition:.15s}
-  .step .no{width:22px;height:22px;border-radius:50%;background:var(--muted);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
+  .panel{background:#fff;border:3px solid var(--ink);border-radius:13px;pointer-events:auto}
+  .prog{position:absolute;top:clamp(76px,11.5vh,110px);left:clamp(14px,3vw,32px);width:min(42vw,300px);max-height:52vh;padding:0;overflow:auto}
+  .prog h2{font-size:14px;color:#fff;background:var(--ink);font-weight:700;padding:8px 13px;display:flex;align-items:center;gap:7px;position:sticky;top:0;z-index:1}
+  .prog .empty{color:var(--muted);font-size:14px}
+  #steps{padding:9px 11px 11px}
+  .step{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:700;padding:6px 9px;border-radius:9px;border:2px solid var(--rule);margin-bottom:5px;background:#fff;transition:.15s}
+  .step .no{width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
   .step .sw{width:15px;height:15px;border-radius:4px;flex:none}
-  .step.on{border-color:var(--gold);background:#fff8e6;box-shadow:inset 3px 0 0 var(--gold)}
-  .step .fn{font-family:ui-monospace,Consolas,monospace;font-size:14px;font-weight:600;color:#2a3550}
-  .step.on .fn{color:#a8730a}
-  #goal{font-size:13px;font-weight:600;color:#48505c;background:#f4f6fb;border:1px solid var(--line);border-radius:10px;padding:7px 11px;margin-bottom:9px;line-height:1.7}
-  #goal b{color:#2e9e4a}
+  .step.on{border-color:var(--amber);background:var(--amber-bg);box-shadow:inset 4px 0 0 var(--amber)}
+  .step .fn{font-family:ui-monospace,Consolas,monospace;font-size:14px;font-weight:600;color:var(--ink)}
+  .step.on .fn{color:var(--amber)}
+  #goal{font-size:13px;font-weight:600;color:#39414d;background:var(--soft);border-left:5px solid var(--accent);border-radius:0 9px 9px 0;padding:7px 11px;margin:9px 11px 0;line-height:1.7}
+  #goal b{color:var(--green)}
   .gsw{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin:0 3px 0 2px}
-  #mpick{font-family:inherit;font-size:14px;font-weight:700;color:#2a3550;background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:12px;padding:9px 14px;cursor:pointer;box-shadow:0 8px 22px rgba(40,50,70,.1)}
-  .fb{position:absolute;top:clamp(60px,10vh,110px);left:50%;transform:translateX(-50%);width:min(90vw,560px);text-align:center;
-    background:rgba(255,255,255,.94);border:2px solid var(--line);border-radius:18px;padding:12px 22px;box-shadow:0 12px 32px rgba(40,50,70,.16);font-size:clamp(15px,2.2vh,20px);font-weight:700;pointer-events:none;display:none}
+  #mpick{font-family:inherit;font-size:14px;font-weight:700;color:var(--ink);background:#fff;border:3px solid var(--ink);border-radius:9px;padding:9px 14px;cursor:pointer}
+  .fb{position:absolute;top:clamp(76px,12vh,120px);left:50%;transform:translateX(-50%);width:min(90vw,560px);text-align:center;
+    background:#fff;border:3px solid var(--ink);border-radius:13px;padding:12px 22px;font-size:clamp(15px,2.2vh,20px);font-weight:700;pointer-events:none;display:none}
   .fb.show{display:block}
-  .fb.ok{border-color:#8fd0a0;color:var(--green)}.fb.no{border-color:#eab0a4;color:var(--coral)}
+  .fb.ok{border-color:var(--green);background:var(--green-bg);color:var(--green)}.fb.no{border-color:var(--red);background:var(--red-bg);color:var(--red)}
   .tray{display:flex;flex-direction:column;gap:10px;pointer-events:auto;align-items:center}
-  .ings{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:16px;padding:10px 12px;box-shadow:0 10px 30px rgba(40,50,70,.12);backdrop-filter:blur(8px)}
-  .ing{font-family:inherit;font-size:14px;font-weight:700;padding:9px 13px;border-radius:11px;border:2px solid var(--line);background:#fff;cursor:pointer;display:flex;align-items:center;gap:7px}
+  .ings{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;background:#fff;border:3px solid var(--ink);border-radius:13px;padding:10px 12px}
+  .ing{font-family:inherit;font-size:14px;font-weight:700;padding:9px 13px;border-radius:9px;border:2px solid var(--rule);background:var(--soft);color:#39414d;cursor:pointer;display:flex;align-items:center;gap:7px}
   .ing .sw{width:15px;height:15px;border-radius:4px}
-  .ing:hover{border-color:var(--blue)}
+  .ing:hover{border-color:var(--ink);background:#fff}
   .acts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-  .btn{font-family:inherit;font-size:15px;font-weight:700;padding:10px 20px;border-radius:12px;border:0;cursor:pointer;color:#fff;display:inline-flex;align-items:center;gap:8px}
-  .btn.run{background:linear-gradient(135deg,var(--green),#2e9e4a)}
-  .btn.step{background:linear-gradient(135deg,#7c5cff,#5b3fd6)}
-  .btn.ghost{background:#eef1f6;color:#48505c;border:1px solid var(--line)}
-  .loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:14px;padding:14px 24px;font-weight:700;color:var(--muted);pointer-events:none}
+  .btn{font-family:inherit;font-size:15px;font-weight:700;padding:10px 20px;border-radius:9px;border:0;cursor:pointer;color:#fff;display:inline-flex;align-items:center;gap:8px;background:var(--ink)}
+  .btn.run{background:var(--ink)}
+  .btn.step{background:var(--accent)}
+  .btn.ghost{background:var(--soft);color:#39414d;border:2px solid var(--rule)}
+  .loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border:3px solid var(--ink);border-radius:13px;padding:14px 24px;font-weight:700;color:var(--muted);pointer-events:none}
   @media(max-width:820px){.top .tag{display:none}h1{font-size:16px}.prog{width:min(60vw,260px);max-height:34vh}}
 </style>
 </head>
@@ -57,7 +58,7 @@
   <div class="hud">
     <div class="top">
       <img src="srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
-      <h1>หุ่นยนต์ทำแซนด์วิช 3D</h1>
+      <h1><i data-lucide="bot"></i> หุ่นยนต์ทำแซนด์วิช 3D</h1>
       <span class="tag">โปรแกรม = “ลำดับคำสั่ง” — เรียงคำสั่งให้หุ่น กดรัน หุ่นทำตามทีละขั้นเป๊ะ (สลับลำดับ ผลก็ต่าง!) · ลากหมุน · สกอลล์/นิ้วซูม</span>
     </div>
     <div class="panel prog" id="prog">

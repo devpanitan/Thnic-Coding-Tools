@@ -3,163 +3,295 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SRRU | เกมหา error — เติม ; ให้ถูก</title>
+<title>เกมหา error — พื้นฐาน Syntax C++</title>
 <link rel="icon" type="image/png" href="srru-logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
-  :root{--blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--ink:#16224a;--muted:#5d6b8a;--line:#dbe6f7;}
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);height:100vh;overflow:hidden;
-    background:radial-gradient(900px 500px at 10% -10%,#d4e6ff 0,transparent 60%),radial-gradient(800px 500px at 100% 0,#ffe6f7 0,transparent 55%),linear-gradient(160deg,#eef4ff,#fdf3fb);
-    display:flex;flex-direction:column;gap:clamp(10px,2vh,16px);padding:clamp(12px,2.5vh,24px) clamp(14px,4vw,40px)}
-  svg.lucide{width:1em;height:1em;vertical-align:-.15em}
-  .head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-  .head img{height:clamp(34px,5vh,48px)}
-  h1{font-size:clamp(20px,3vh,28px);font-weight:700}
-  .head .tag{color:var(--muted);font-size:clamp(13px,1.7vh,16px);flex:1;min-width:200px}
-  .score{font-weight:700;font-size:clamp(15px,2.2vh,19px);background:#fff;border:2px solid var(--line);border-radius:12px;padding:7px 16px}
-  .main{flex:1;min-height:0;display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(14px,2.5vw,26px)}
-  .panel{background:#fff;border:2px solid var(--line);border-radius:18px;box-shadow:0 10px 26px rgba(31,43,72,.08);padding:clamp(14px,2.4vh,22px);display:flex;flex-direction:column;min-height:0}
-  .qno{color:var(--purple);font-weight:700;font-size:clamp(14px,1.9vh,17px);margin-bottom:8px}
-  .code{font-family:ui-monospace,monospace;font-size:clamp(15px,2.3vh,21px);line-height:1.85;background:#0f1b38;border-radius:12px;padding:14px 10px;flex:1;overflow:auto}
-  .cl{display:flex;gap:12px;padding:2px 12px;border-radius:7px;color:#e8eefc;white-space:pre;cursor:pointer;transition:.12s}
-  .cl:hover{background:#22325c}
-  .cl .n{color:#6f80ad;width:1.4em;text-align:right;flex:none;user-select:none}
-  .cl.bad{background:rgba(255,96,88,.22);outline:2px solid #ff6058}
-  .ask{font-size:clamp(16px,2.4vh,20px);font-weight:700;margin-bottom:12px}
-  .opts{display:flex;flex-wrap:wrap;gap:10px}
-  .opt{font-family:inherit;font-size:clamp(15px,2.2vh,19px);font-weight:700;padding:11px 20px;border-radius:12px;border:2px solid var(--line);background:#f7faff;color:var(--ink);cursor:pointer;transition:.12s}
-  .opt:hover{border-color:var(--coral)}
-  .opt:disabled{cursor:default;opacity:.95}
-  .opt.correct{background:#e7faf1;border-color:var(--green);color:#0c6b46}
-  .opt.wrong{background:#ffece6;border-color:var(--coral);color:#b03b1d}
-  .fb{margin-top:14px;font-size:clamp(14px,2vh,18px);font-weight:600;color:var(--muted);min-height:3.2em}
-  .fb b{color:var(--ink)}
-  .rules{margin-top:12px;background:#f2f6ff;border:1.5px solid #d6e2fb;border-radius:13px;padding:12px 16px;font-size:clamp(13px,1.85vh,16px)}
-  .rules .rt{font-weight:800;color:#3b57d6;display:flex;align-items:center;gap:8px;margin-bottom:7px}
-  .rules .rt i{width:17px;height:17px}
-  .rules ul{margin:0;padding-left:20px;line-height:1.85}
-  .rules code{font-family:ui-monospace,monospace;background:#e2ebfb;border-radius:5px;padding:1px 6px;color:#16336b;font-weight:700}
-  .nav{margin-top:auto;display:flex;gap:12px;padding-top:14px}
-  .btn{font-family:inherit;font-size:clamp(15px,2.2vh,18px);font-weight:700;padding:12px 22px;border:0;border-radius:12px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
-  .btn.go{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff}
-  .btn.ghost{background:#eef4ff;color:#2f4a7d;border:2px solid var(--line)}
-  .btn:disabled{opacity:.4;cursor:default}
-  .confetti{position:fixed;top:-10px;width:10px;height:16px;z-index:50;border-radius:2px;pointer-events:none}
-  .mascot{position:fixed;right:clamp(8px,2vw,30px);bottom:clamp(6px,2vh,20px);width:clamp(96px,13vh,140px);height:auto;z-index:4;transform-origin:center bottom;animation:dance 1.4s ease-in-out infinite}
-  @keyframes dance{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-11px) rotate(5deg)}}
-  .mascot .armL,.mascot .armR{transform-box:fill-box;transform-origin:center top}
-  .mascot .armL{animation:dL .62s ease-in-out infinite}.mascot .armR{animation:dR .62s ease-in-out infinite}
-  @keyframes dL{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(24deg)}}
-  @keyframes dR{0%,100%{transform:rotate(30deg)}50%{transform:rotate(-24deg)}}
-  .mascot.cheer{animation:mcheer .8s ease}
-  @keyframes mcheer{0%{transform:translateY(0)}30%{transform:translateY(-34px) scale(1.1)}60%{transform:translateY(0)}80%{transform:translateY(-14px)}100%{transform:translateY(0)}}
+:root{
+  --ink:#12151a;
+  --paper:#ffffff;
+  --rule:#c9d0d9;
+  --soft:#f0f3f7;
+  --accent:#2f2a9e;
+  --amber:#a35405;
+  --amber-bg:#fef1d6;
+  --green:#0f7a4a;
+  --green-bg:#e2f5ea;
+  --red:#b0191b;
+  --red-bg:#fde2e2;
+  --hl:#ffee9c;
+  --font:'LINE Seed Sans TH','LINESeedSansTH',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:var(--font)}
+body{background:var(--paper);color:var(--ink);font-size:19px;line-height:1.5}
+.ic{width:1em;height:1em;flex:0 0 auto;vertical-align:-.12em;stroke-width:2.2}
+
+/* ---------- หัว ---------- */
+header{
+  border-bottom:4px solid var(--ink);
+  padding:13px 26px;
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+}
+h1{font-size:25px;font-weight:800;letter-spacing:-.01em;
+   display:flex;align-items:center;gap:9px}
+h1 .ic{font-size:26px;color:var(--red);stroke-width:2.4}
+h1 small{font-size:16px;font-weight:400;color:#59626f}
+.spacer{flex:1}
+.scorebox{
+  display:flex;align-items:center;gap:10px;
+  border:3px solid var(--ink);border-radius:11px;
+  padding:6px 14px;font-weight:700;font-size:17px;
+}
+.scorebox .ic{font-size:20px;color:var(--amber)}
+.scorebox b{font-size:24px;font-weight:800;letter-spacing:.02em}
+
+/* ---------- เนื้อ ---------- */
+main{padding:20px 26px 96px;max-width:1520px;margin:0 auto}
+.task__do{font-size:20px;color:#39414d;margin-bottom:18px}
+.task__do b{background:var(--hl);padding:0 4px;color:var(--ink);font-weight:700}
+
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:start}
+@media (max-width:1100px){.grid{grid-template-columns:1fr}}
+
+.panel{border:3px solid var(--ink);border-radius:13px;overflow:hidden;background:#fff}
+.panel + .panel{margin-top:16px}
+.panel__h{
+  background:var(--ink);color:#fff;
+  font-size:16px;font-weight:700;letter-spacing:.02em;
+  padding:8px 15px;display:flex;align-items:center;gap:8px;
+}
+.panel__h .ic{font-size:18px}
+.panel__h .r{margin-left:auto;font-weight:400;opacity:.75;font-size:13.5px}
+.panel__b{padding:14px 16px}
+
+/* ---------- โค้ด ---------- */
+.code{font-family:ui-monospace,Consolas,monospace;font-size:21px;line-height:1.95;
+      font-variant-ligatures:none}
+.cl{display:flex;gap:14px;border-radius:7px;margin:0 -6px;padding:1px 8px;white-space:pre;
+    cursor:pointer;transition:.12s}
+.cl:hover{background:var(--soft)}
+.cl .n{color:#9aa3ae;width:1.4em;text-align:right;flex:none;user-select:none;font-weight:700}
+.cl.locked{cursor:default}
+.cl.locked:hover{background:none}
+.cl.bad{background:var(--red-bg);box-shadow:inset 5px 0 0 var(--red)}
+.cl.bad .n{color:var(--red)}
+
+/* ---------- ตัวเลือก ---------- */
+.ask{font-size:21px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ask .ic{font-size:21px;color:var(--accent)}
+.opts{display:flex;flex-wrap:wrap;gap:10px}
+.opt{
+  font:inherit;font-size:17px;font-weight:700;
+  background:var(--soft);color:#39414d;
+  border:2.5px solid transparent;border-radius:9px;
+  padding:9px 18px;cursor:pointer;transition:.12s;
+}
+.opt:hover{border-color:var(--ink)}
+.opt:disabled{cursor:default}
+.opt:disabled:hover{border-color:transparent}
+.opt.correct{background:var(--green);border-color:var(--green);color:#fff}
+.opt.wrong{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+.opt:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---------- ผลตอบ ---------- */
+.fb{display:none;gap:9px;align-items:flex-start;
+    padding:12px 15px;font-size:18px;margin-top:14px;border-radius:0 9px 9px 0;line-height:1.55}
+.fb.show{display:flex}
+.fb.ok{background:var(--green-bg);border-left:6px solid var(--green)}
+.fb.ok .ic,.fb.ok b{color:var(--green)}
+.fb.no{background:var(--red-bg);border-left:6px solid var(--red)}
+.fb.no .ic,.fb.no b{color:var(--red)}
+.fb .ic{font-size:20px;margin-top:.18em}
+.fb code{font-family:ui-monospace,Consolas,monospace;background:var(--hl);padding:0 5px;border-radius:4px;font-weight:700}
+
+/* ---------- กฎ ---------- */
+ul.hint{list-style:none}
+ul.hint li{display:flex;gap:8px;margin-bottom:9px;font-size:17.5px}
+ul.hint li:last-child{margin-bottom:2px}
+ul.hint li .ic{font-size:18px;color:var(--accent);margin-top:.25em}
+ul.hint code{font-family:ui-monospace,Consolas,monospace;background:var(--hl);padding:0 5px;border-radius:4px;font-weight:700}
+
+/* ---------- จบเกม ---------- */
+.final{grid-column:1/-1;text-align:center;padding:44px 20px 40px}
+.final .big{font-size:46px;font-weight:800;margin:10px 0 4px}
+.final .big b{color:var(--green)}
+.final .msg{font-size:20px;color:#39414d;margin-bottom:24px}
+.final .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.final button{
+  font:inherit;font-size:18px;font-weight:700;border-radius:9px;padding:10px 22px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:7px;
+}
+.final .again{background:var(--ink);color:#fff;border:3px solid var(--ink)}
+.final .back{background:#fff;color:var(--ink);border:3px solid var(--ink)}
+.final .back:hover{background:var(--soft)}
+.medal{font-size:52px;display:flex;justify-content:center}
+.medal .ic{color:var(--amber);fill:var(--hl)}
+
+/* ---------- แถบล่าง ---------- */
+.foot{
+  position:fixed;left:0;right:0;bottom:0;z-index:10;
+  background:var(--ink);color:#fff;padding:10px 26px;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;font-size:16px;
+}
+.foot .rules{flex:1;min-width:250px;color:#bcc5d1;display:flex;align-items:center;gap:8px}
+.foot .rules .ic{font-size:18px;color:#ffd977}
+.foot .rules b{color:#ffd977;font-weight:700}
+.nav{display:flex;align-items:center;gap:10px}
+.nav button{
+  font:inherit;font-size:17px;font-weight:700;
+  background:#fff;color:var(--ink);border:0;border-radius:9px;
+  padding:8px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+}
+.nav button:disabled{opacity:.32;cursor:default}
+.nav button:focus-visible{outline:3px solid #7cc4ff;outline-offset:2px}
+.nav .pos{min-width:70px;text-align:center;font-weight:800}
+
+.confetti{position:fixed;top:-10px;width:10px;height:16px;z-index:50;border-radius:2px;pointer-events:none}
 </style>
 </head>
 <body>
-  <div class="head">
-    <img src="srru-logo.png" alt="SRRU" onerror="this.style.display='none'">
-    <h1>หา error ในโค้ด C++</h1>
-    <span class="tag">เลือก “บรรทัดที่ผิด” — ส่วนใหญ่คือลืม ; หรือลืมเครื่องหมายคำพูด</span>
-    <span class="score" id="score">คะแนน 0</span>
-  </div>
 
-  <div class="main">
-    <div class="panel">
-      <div class="qno" id="qno">ข้อ 1</div>
-      <div class="code" id="code"></div>
+<header>
+  <h1><i class="ic" data-lucide="bug"></i> เกมหา error <small>— พื้นฐาน Syntax C++</small></h1>
+  <span class="spacer"></span>
+  <div class="scorebox"><i class="ic" data-lucide="star"></i> คะแนน <b id="score">0</b></div>
+</header>
+
+<main>
+  <p class="task__do">อ่านโค้ดทีละบรรทัด แล้วหา <b>บรรทัดที่ผิด</b> — ส่วนใหญ่คือ <b>ลืม ;</b> หรือ <b>ลืมเครื่องหมายคำพูด " "</b> คลิกที่บรรทัดโค้ด หรือกดปุ่มเลขบรรทัดก็ได้</p>
+
+  <div class="grid" id="grid">
+    <section class="panel">
+      <div class="panel__h"><i class="ic" data-lucide="code"></i> <span id="qno">ข้อ 1</span> <span class="r">คลิกบรรทัดที่คิดว่าผิด</span></div>
+      <div class="panel__b"><div class="code" id="code"></div></div>
+    </section>
+
+    <div>
+      <section class="panel">
+        <div class="panel__h"><i class="ic" data-lucide="circle-help"></i> คำถาม</div>
+        <div class="panel__b">
+          <div class="ask"><i class="ic" data-lucide="search"></i> บรรทัดไหนมีข้อผิดพลาด?</div>
+          <div class="opts" id="opts"></div>
+          <div class="fb" id="fb"></div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel__h"><i class="ic" data-lucide="list-checks"></i> กฎ Syntax ที่ต้องจำ</div>
+        <div class="panel__b">
+          <ul class="hint">
+            <li><i class="ic" data-lucide="check"></i><span>ทุกคำสั่งจบด้วย <code>;</code> (เซมิโคลอน)</span></li>
+            <li><i class="ic" data-lucide="check"></i><span>ข้อความต้องอยู่ในเครื่องหมายคำพูด <code>"…"</code> เช่น <code>"Hello"</code></span></li>
+            <li><i class="ic" data-lucide="check"></i><span>ปีกกา <code>{ }</code> ต้องเปิด-ปิดครบคู่</span></li>
+            <li><i class="ic" data-lucide="check"></i><span>แสดงผลใช้ <code>cout &lt;&lt;</code> · รับค่าใช้ <code>cin &gt;&gt;</code></span></li>
+          </ul>
+        </div>
+      </section>
     </div>
-    <div class="panel">
-      <div class="ask">บรรทัดไหนมีข้อผิดพลาด?</div>
-      <div class="opts" id="opts"></div>
-      <div class="fb" id="fb"></div>
-      <div class="rules">
-        <div class="rt"><i data-lucide="list-checks"></i> กฎ Syntax ที่ต้องจำ</div>
-        <ul>
-          <li>ทุกคำสั่งจบด้วย <code>;</code> (เซมิโคลอน)</li>
-          <li>ข้อความต้องอยู่ในเครื่องหมายคำพูด <code>"…"</code> เช่น <code>"Hello"</code></li>
-          <li>ปีกกา <code>{ }</code> ต้องเปิด-ปิดครบคู่</li>
-          <li>แสดงผลใช้ <code>cout &lt;&lt;</code> · รับค่าใช้ <code>cin &gt;&gt;</code></li>
-        </ul>
-      </div>
-      <div class="nav">
-        <button class="btn ghost" id="prev"><i data-lucide="arrow-left"></i> ย้อนกลับ</button>
-        <button class="btn go" id="next" disabled>ข้อถัดไป <i data-lucide="arrow-right"></i></button>
-      </div>
-    </div>
   </div>
+</main>
 
-  <svg class="mascot" id="mascot" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
-    <line x1="110" y1="20" x2="110" y2="42" stroke="#7a5cff" stroke-width="5"/><circle cx="110" cy="15" r="9" fill="#ffd24d" stroke="#7a5cff" stroke-width="3"/>
-    <g class="armL"><rect x="24" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="34" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
-    <g class="armR"><rect x="176" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="186" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
-    <rect x="48" y="42" width="124" height="96" rx="28" fill="#eef2ff" stroke="#7a5cff" stroke-width="5"/>
-    <ellipse cx="74" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/><ellipse cx="146" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
-    <circle cx="88" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="88" cy="84" r="7" fill="#2f7bf6"/>
-    <circle cx="132" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="132" cy="84" r="7" fill="#2f7bf6"/>
-    <rect x="88" y="110" width="44" height="16" rx="8" fill="#19b877"/>
-    <rect x="64" y="148" width="92" height="58" rx="16" fill="#fff" stroke="#7a5cff" stroke-width="4"/><rect x="80" y="164" width="60" height="28" rx="8" fill="#e6f0ff"/><path d="M80 178 H140 M98 168 V188" stroke="#2f7bf6" stroke-width="3"/>
-  </svg>
+<div class="foot">
+  <div class="rules"><i class="ic" data-lucide="lightbulb"></i> <span>ตอบผิดไม่หักคะแนน — อ่าน <b>เฉลย</b> แล้วจำไว้ใช้ตอนเขียนจริง</span></div>
+  <div class="nav">
+    <button id="prev"><i class="ic" data-lucide="chevron-left"></i> ก่อนหน้า</button>
+    <span class="pos" id="pos">1 / 15</span>
+    <button id="next" disabled>ถัดไป <i class="ic" data-lucide="chevron-right"></i></button>
+  </div>
+</div>
 
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
 const Q=[
- {code:['#include <iostream>','using namespace std;','int main(){','    cout << "Hello"','    return 0;','}'],bad:3,fix:'บรรทัด 4 ลืมเครื่องหมาย ; ท้ายคำสั่ง → แก้เป็น cout << "Hello";'},
- {code:['int main(){','    int x = 5','    cout << x;','    return 0;','}'],bad:1,fix:'บรรทัด 2 ลืม ; หลังประกาศตัวแปร → แก้เป็น int x = 5;'},
- {code:['int main(){','    cout << Hello;','    return 0;','}'],bad:1,fix:'บรรทัด 2 ลืมเครื่องหมายคำพูด “ ” ครอบข้อความ → แก้เป็น cout << "Hello";'},
- {code:['#include <iostream>','int main(){','    cout << "A";','    cout << "B"','    return 0;','}'],bad:3,fix:'บรรทัด 4 ลืม ; ท้าย cout << "B" → แก้เป็น cout << "B";'},
- {code:['int main(){','    cout << "Hi";','    return 0','}'],bad:2,fix:'บรรทัด 3 ลืม ; หลัง return 0 → แก้เป็น return 0;'},
- {code:['#include <iostream>','using namespace std;','int main(){','    int a = 3, b = 4;','    cout << a + b','    return 0;','}'],bad:4,fix:'บรรทัด 5 ลืม ; ท้าย cout << a + b → แก้เป็น cout << a + b;'},
+ {code:['#include <iostream>','using namespace std;','int main(){','    cout << "Hello"','    return 0;','}'],bad:3,fix:'บรรทัด 4 ลืมเครื่องหมาย <code>;</code> ท้ายคำสั่ง → แก้เป็น <code>cout << "Hello";</code>'},
+ {code:['int main(){','    int x = 5','    cout << x;','    return 0;','}'],bad:1,fix:'บรรทัด 2 ลืม <code>;</code> หลังประกาศตัวแปร → แก้เป็น <code>int x = 5;</code>'},
+ {code:['int main(){','    cout << Hello;','    return 0;','}'],bad:1,fix:'บรรทัด 2 ลืมเครื่องหมายคำพูด <code>" "</code> ครอบข้อความ → แก้เป็น <code>cout << "Hello";</code>'},
+ {code:['int main(){','    cout << "Hi";','    return 0','}'],bad:2,fix:'บรรทัด 3 ลืม <code>;</code> หลัง return 0 → แก้เป็น <code>return 0;</code>'},
+ {code:['#include <iostream>','using namespace std;','int main(){','    int a = 3, b = 4;','    cout << a + b','    return 0;','}'],bad:4,fix:'บรรทัด 5 ลืม <code>;</code> ท้าย <code>cout << a + b</code> → แก้เป็น <code>cout << a + b;</code>'},
+ {code:['#include <iostream>','using namespace std;','int main(){','    Cout << "Hi";','    return 0;','}'],bad:3,fix:'บรรทัด 4 ใช้ <code>Cout</code> ตัว C ใหญ่ — C++ แยกตัวพิมพ์เล็ก-ใหญ่ → ต้องเป็น <code>cout</code> ตัวเล็กทั้งหมด'},
+ {code:['int main(){','    cout >> "Hello";','    return 0;','}'],bad:1,fix:'บรรทัด 2 ใช้ลูกศรผิดทาง — แสดงผลต้องใช้ <code>cout <<</code> (ลูกศรชี้ออกจากตัวแปรไปหา cout) → <code>cout << "Hello";</code>'},
+ {code:['int main(){','    int age;','    cin << age;','    cout << age;','    return 0;','}'],bad:2,fix:'บรรทัด 3 รับค่าต้องใช้ <code>cin >></code> (ลูกศรชี้เข้าตัวแปร) → แก้เป็น <code>cin >> age;</code>'},
+ {code:['int main(){','    int 2score = 10;','    cout << 2score;','    return 0;','}'],bad:1,fix:'บรรทัด 2 ชื่อตัวแปร <b>ห้ามขึ้นต้นด้วยตัวเลข</b> → เปลี่ยนเป็น <code>int score2 = 10;</code>'},
+ {code:['using namespace std','int main(){','    cout << "Go";','    return 0;','}'],bad:0,fix:'บรรทัด 1 ลืม <code>;</code> ท้าย <code>using namespace std</code> → แก้เป็น <code>using namespace std;</code>'},
+ {code:['int main(){','    int score = 80;','    cout << Score;','    return 0;','}'],bad:2,fix:'บรรทัด 3 พิมพ์ <code>Score</code> ตัว S ใหญ่ แต่ประกาศไว้ชื่อ <code>score</code> — ชื่อตัวแปรต้องพิมพ์ให้ตรงทุกตัวอักษร'},
+ {code:['#include <iostream','using namespace std;','int main(){','    cout << "Hi";','    return 0;','}'],bad:0,fix:'บรรทัด 1 ลืมปิดวงเล็บแหลม <code>></code> → แก้เป็น <code>#include <iostream></code>'},
+ {code:['int main(){','    cout << "Score: << 99;','    return 0;','}'],bad:1,fix:'บรรทัด 2 ลืม <b>ปิดเครื่องหมายคำพูด</b> → แก้เป็น <code>cout << "Score: " << 99;</code>'},
+ {code:['#include <iostream>','using namespace std;','int main(){','    string name = แนน;','    cout << name;','    return 0;','}'],bad:3,fix:'บรรทัด 4 ข้อความต้องอยู่ในเครื่องหมายคำพูด → แก้เป็น <code>string name = "แนน";</code>'},
+ {code:['int main(){','    int x;','    cin >> x','    cout << x * 2;','    return 0;','}'],bad:2,fix:'บรรทัด 3 ลืม <code>;</code> ท้าย <code>cin >> x</code> → แก้เป็น <code>cin >> x;</code>'},
 ];
 let i=0,score=0;const answers={};
 const $=id=>document.getElementById(id);
 const icons=()=>{if(window.lucide)lucide.createIcons();};
-function cheer(){const m=$("mascot");if(m){m.classList.remove("cheer");void m.offsetWidth;m.classList.add("cheer");setTimeout(()=>m.classList.remove("cheer"),800);}}
+
 function render(){
   const q=Q[i],done=answers[i]!==undefined;
-  $("qno").textContent="ข้อ "+(i+1)+" / "+Q.length;
-  $("code").innerHTML=q.code.map((l,k)=>`<div class="cl" data-k="${k}"><span class="n">${k+1}</span><span>${l.replace(/</g,'&lt;')}</span></div>`).join("");
-  $("opts").innerHTML=q.code.map((l,k)=>`<button class="opt" data-k="${k}">บรรทัด ${k+1}</button>`).join("");
+  $('qno').textContent='ข้อ '+(i+1)+' / '+Q.length;
+  $('pos').textContent=(i+1)+' / '+Q.length;
+  $('code').innerHTML=q.code.map((l,k)=>
+    `<div class="cl${done?' locked':''}" data-k="${k}"><span class="n">${k+1}</span><span>${l.replace(/</g,'&lt;')}</span></div>`).join('');
+  $('opts').innerHTML=q.code.map((l,k)=>`<button class="opt" data-k="${k}">บรรทัด ${k+1}</button>`).join('');
+  const fb=$('fb');
   if(done){
     const ch=answers[i];
-    $("code").querySelectorAll(".cl")[q.bad].classList.add("bad");
-    $("opts").querySelectorAll(".opt").forEach(b=>{b.disabled=true;const kk=+b.dataset.k;if(kk===q.bad)b.classList.add("correct");else if(kk===ch)b.classList.add("wrong");});
-    $("fb").innerHTML=(ch===q.bad?'<b style="color:#19b877">ถูกต้อง! </b>':'<b style="color:#ff6a3d">ยังไม่ใช่ </b>')+q.fix;
+    $('code').querySelectorAll('.cl')[q.bad].classList.add('bad');
+    $('opts').querySelectorAll('.opt').forEach(b=>{
+      b.disabled=true;const kk=+b.dataset.k;
+      if(kk===q.bad)b.classList.add('correct');
+      else if(kk===ch)b.classList.add('wrong');
+    });
+    const ok=ch===q.bad;
+    fb.className='fb show '+(ok?'ok':'no');
+    fb.innerHTML='<i class="ic" data-lucide="'+(ok?'circle-check':'circle-x')+'"></i><span><b>'+(ok?'ถูกต้อง!':'ยังไม่ใช่')+'</b> '+q.fix+'</span>';
   }else{
-    $("fb").innerHTML="";
+    fb.className='fb';fb.innerHTML='';
     const pick=k=>choose(k);
-    $("opts").querySelectorAll(".opt").forEach(b=>b.onclick=()=>pick(+b.dataset.k));
-    $("code").querySelectorAll(".cl").forEach(b=>b.onclick=()=>pick(+b.dataset.k));
+    $('opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>pick(+b.dataset.k));
+    $('code').querySelectorAll('.cl').forEach(b=>b.onclick=()=>pick(+b.dataset.k));
   }
-  $("prev").disabled=i<=0;
-  $("next").disabled=!done;
-  $("next").innerHTML=(i<Q.length-1?'ข้อถัดไป <i data-lucide="arrow-right"></i>':'ดูผลคะแนน <i data-lucide="flag"></i>');
-  $("score").textContent="คะแนน "+score;icons();
+  $('prev').disabled=i<=0;
+  $('next').disabled=!done;
+  $('next').innerHTML=(i<Q.length-1?'ถัดไป <i class="ic" data-lucide="chevron-right"></i>':'ดูผลคะแนน <i class="ic" data-lucide="flag"></i>');
+  $('score').textContent=score;
+  icons();
 }
 function choose(k){
   if(answers[i]!==undefined)return;
   answers[i]=k;
-  if(k===Q[i].bad){score++;cheer();}
+  if(k===Q[i].bad)score++;
   render();
 }
-$("prev").onclick=()=>{if(i>0){i--;render();}};
-$("next").onclick=()=>{if(answers[i]===undefined)return;if(i<Q.length-1){i++;render();}else end();};
+$('prev').onclick=()=>{if(i>0){i--;render();}};
+$('next').onclick=()=>{if(answers[i]===undefined)return;if(i<Q.length-1){i++;render();}else end();};
+
 function end(){
-  $("qno").textContent="";
-  document.querySelector(".main").innerHTML=`<div class="panel" style="grid-column:1/-1;align-items:center;justify-content:center;text-align:center;gap:18px">
-    <div style="font-size:clamp(22px,4vh,34px);font-weight:700">ได้ ${score} / ${Q.length} คะแนน</div>
-    <div style="display:flex;gap:12px"><button class="btn ghost" id="back"><i data-lucide="arrow-left"></i> ย้อนดูข้อ</button>
-    <button class="btn go" id="again"><i data-lucide="rotate-ccw"></i> เล่นอีกครั้ง</button></div></div>`;
-  $("again").onclick=()=>location.reload();
-  $("back").onclick=()=>location.reload();
-  icons();burst();
+  $('qno').textContent='สรุปผล';
+  const perfect=score===Q.length;
+  $('grid').innerHTML=`<section class="panel final">
+    <div class="medal"><i class="ic" data-lucide="${perfect?'trophy':'medal'}"></i></div>
+    <div class="big">ได้ <b>${score}</b> / ${Q.length} คะแนน</div>
+    <div class="msg">${perfect?'เยี่ยมมาก! ตาไวเหมือนคอมไพเลอร์เลย':'เก่งแล้ว! ลองเล่นอีกรอบให้ครบทุกข้อ'}</div>
+    <div class="btns">
+      <button class="back" id="back"><i class="ic" data-lucide="arrow-left"></i> ย้อนดูข้อ</button>
+      <button class="again" id="again"><i class="ic" data-lucide="rotate-ccw"></i> เล่นอีกครั้ง</button>
+    </div>
+  </section>`;
+  $('again').onclick=()=>location.reload();
+  $('back').onclick=()=>location.reload();
+  $('next').disabled=true;$('prev').disabled=true;
+  icons();
+  if(score>0)burst();
 }
-function burst(){const cs=["#2f7bf6","#7a5cff","#19b877","#f2a900","#ff6a3d"];
-  for(let k=0;k<80;k++){const c=document.createElement("div");c.className="confetti";c.style.left=Math.random()*100+"vw";c.style.background=cs[k%cs.length];document.body.appendChild(c);
-    const d=1600+Math.random()*1400;c.animate([{transform:"translateY(0)",opacity:1},{transform:`translateY(105vh) rotate(${Math.random()*720}deg)`,opacity:.2}],{duration:d});setTimeout(()=>c.remove(),d);}}
-render();icons();
+function burst(){
+  const cs=['#2f2a9e','#0f7a4a','#a35405','#b0191b','#ffd977'];
+  for(let k=0;k<80;k++){
+    const c=document.createElement('div');c.className='confetti';
+    c.style.left=Math.random()*100+'vw';c.style.background=cs[k%cs.length];
+    document.body.appendChild(c);
+    const d=1600+Math.random()*1400;
+    c.animate([{transform:'translateY(0)',opacity:1},{transform:`translateY(105vh) rotate(${Math.random()*720}deg)`,opacity:.2}],{duration:d});
+    setTimeout(()=>c.remove(),d);
+  }
+}
+render();
 </script>
 </body>
 </html>

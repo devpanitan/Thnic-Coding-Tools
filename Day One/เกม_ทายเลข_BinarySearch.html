@@ -5,62 +5,79 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SRRU | เกมล่าเลขลับ — คิดแบบ Binary Search</title>
 <link rel="icon" type="image/png" href="srru-logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/LINESeedSansTH/LINESeedSansTH.css">
 <style>
-  :root{--blue:#2f7bf6;--purple:#7a5cff;--green:#19b877;--coral:#ff6a3d;--gold:#f2a900;--ink:#16224a;--muted:#5d6b8a;--line:#dbe6f7;}
-  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#12151a;        /* ดำหลัก */
+    --paper:#ffffff;
+    --rule:#c9d0d9;
+    --soft:#f0f3f7;
+    --muted:#59626f;
+    --accent:#2f2a9e;
+    --amber:#a35405; --amber-bg:#fef1d6;
+    --green:#0f7a4a; --green-bg:#e2f5ea;
+    --red:#b0191b;  --red-bg:#fde2e2;
+    --hl:#ffee9c;
+    --font:'LINE Seed Sans TH','LINESeedSansTH',sans-serif;
+    /* ชื่อเดิมที่ JS อ้างถึงผ่าน inline style — ชี้เข้าชุดสีธีม */
+    --blue:#2f2a9e;--purple:#2f2a9e;--coral:#b0191b;--gold:#a35405;--line:#c9d0d9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:var(--font)}
   html,body{height:100%}
-  body{font-family:"LINE Seed Sans TH","Sarabun","Tahoma",system-ui,sans-serif;color:var(--ink);height:100vh;overflow:hidden;
-    background:radial-gradient(1000px 600px at 8% -10%,#d4e6ff 0,transparent 60%),radial-gradient(900px 600px at 100% 0,#ffe6f7 0,transparent 55%),linear-gradient(160deg,#eef4ff,#fdf3fb);
-    display:flex;flex-direction:column;gap:clamp(8px,1.6vh,16px);padding:clamp(12px,2.2vh,22px) clamp(16px,4vw,48px)}
-  svg.lucide{width:1em;height:1em;vertical-align:-.15em}
-  .head{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  body{color:var(--ink);height:100vh;overflow:hidden;background:var(--paper);
+    display:flex;flex-direction:column;gap:clamp(8px,1.6vh,16px);padding:0 0 clamp(10px,1.8vh,18px)}
+  svg.lucide{width:1em;height:1em;vertical-align:-.15em;flex:0 0 auto;stroke-width:2.2}
+  .setup,.stage{margin:0 clamp(16px,3vw,40px)}
+  .head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    border-bottom:4px solid var(--ink);padding:11px clamp(16px,3vw,40px)}
   .head img{height:clamp(32px,4.6vh,48px)}
-  h1{font-size:clamp(20px,3vh,30px);font-weight:700;background:linear-gradient(90deg,var(--blue),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+  h1{font-size:clamp(20px,3vh,27px);font-weight:800;letter-spacing:-.01em;color:var(--ink);display:flex;align-items:center;gap:9px}
+  h1 svg.lucide{color:var(--accent);stroke-width:2.4}
   .head .tag{color:var(--muted);font-size:clamp(12px,1.6vh,15px);flex:1;min-width:200px}
-  .setup{display:flex;gap:12px;flex-wrap:wrap;align-items:center;background:#fff;border:2px solid var(--line);border-radius:16px;padding:11px 18px;box-shadow:0 8px 22px rgba(47,123,246,.08);font-size:15px}
+  .setup{display:flex;gap:12px;flex-wrap:wrap;align-items:center;background:#fff;border:3px solid var(--ink);border-radius:13px;padding:10px 16px;font-size:15px}
   .setup label{color:var(--muted);font-weight:700}
   .rgs{display:flex;gap:7px}
-  .rg{font-family:inherit;font-size:15px;font-weight:700;padding:9px 18px;border-radius:12px;border:2px solid var(--line);background:#f7faff;color:#2f4a7d;cursor:pointer}
-  .rg.on{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(122,92,255,.3)}
-  .btn{font-family:inherit;font-weight:700;border:0;border-radius:14px;cursor:pointer;color:#fff;display:inline-flex;align-items:center;gap:9px;transition:transform .1s}
+  .rg{font-family:var(--font);font-size:15px;font-weight:700;padding:9px 18px;border-radius:9px;border:2.5px solid transparent;background:var(--soft);color:var(--muted);cursor:pointer;transition:.12s}
+  .rg:hover{border-color:var(--ink)}
+  .rg.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn{font-family:var(--font);font-weight:700;border:0;border-radius:9px;cursor:pointer;color:#fff;display:inline-flex;align-items:center;gap:9px;transition:transform .1s}
   .btn:active{transform:scale(.96)}
   .btn.big{font-size:clamp(18px,2.6vh,24px);padding:clamp(12px,2vh,18px) clamp(22px,3vw,34px)}
-  .btn.b1{background:linear-gradient(135deg,var(--blue),var(--purple));box-shadow:0 8px 20px rgba(47,123,246,.32)}
-  .btn.go{background:linear-gradient(135deg,var(--green),#12a869);box-shadow:0 8px 20px rgba(25,184,119,.32)}
-  .btn.sm{font-size:15px;padding:9px 18px}
-  .btn.ghost{background:#f0f3fa;color:#2f4a7d;border:2px solid var(--line);box-shadow:none}
+  .btn.b1{background:var(--ink);border:3px solid var(--ink)}
+  .btn.go{background:var(--ink);border:3px solid var(--ink)}
+  .btn.sm{font-size:15px;padding:8px 16px}
+  .btn.ghost{background:var(--soft);color:var(--ink);border:2.5px solid var(--ink)}
 
   .stage{flex:1;min-height:0;display:flex;flex-direction:column;gap:clamp(10px,1.8vh,18px)}
 
   /* HERO number hunt */
-  .hunt{background:#fff;border:2px solid var(--line);border-radius:22px;box-shadow:0 14px 34px rgba(31,43,72,.1);padding:clamp(16px,2.6vh,28px) clamp(20px,3vw,40px)}
+  .hunt{background:#fff;border:3px solid var(--ink);border-radius:13px;padding:clamp(16px,2.6vh,28px) clamp(20px,3vw,40px)}
   .huntlabel{font-size:clamp(16px,2.2vh,20px);font-weight:700;color:var(--muted);display:flex;align-items:center;gap:9px;justify-content:center;margin-bottom:clamp(20px,3vh,34px)}
-  .track{position:relative;height:clamp(52px,7.5vh,74px);border-radius:16px;
-    background:repeating-linear-gradient(90deg,#eef2fb 0,#eef2fb 9.9%,#e2e8f6 10%,#e2e8f6 10.05%);
-    border:3px solid #dbe3f2}
-  .band{position:absolute;top:-3px;bottom:-3px;border-radius:14px;
-    background:linear-gradient(135deg,rgba(47,123,246,.28),rgba(122,92,255,.32));
-    border:3px solid var(--purple);box-shadow:0 0 0 4px rgba(122,92,255,.12),0 8px 20px rgba(122,92,255,.25);
+  .huntlabel svg.lucide{color:var(--accent)}
+  .track{position:relative;height:clamp(52px,7.5vh,74px);border-radius:11px;
+    background:repeating-linear-gradient(90deg,var(--soft) 0,var(--soft) 9.9%,var(--rule) 10%,var(--rule) 10.05%);
+    border:3px solid var(--ink)}
+  .band{position:absolute;top:-3px;bottom:-3px;border-radius:9px;
+    background:var(--hl);
+    border:3px solid var(--accent);box-shadow:inset 0 0 0 2px #fff;
     transition:left .45s cubic-bezier(.5,0,.2,1),width .45s cubic-bezier(.5,0,.2,1);display:flex;align-items:center;justify-content:center}
-  .band .bt{font-family:ui-monospace,monospace;font-size:clamp(15px,2.2vh,20px);font-weight:700;color:#3a2c7a;white-space:nowrap;text-shadow:0 1px 2px #fff}
-  .endlab{position:absolute;top:calc(100% + 6px);font-family:ui-monospace,monospace;font-size:clamp(13px,1.9vh,17px);font-weight:700;color:var(--muted)}
+  .band .bt{font-family:ui-monospace,Consolas,monospace;font-size:clamp(15px,2.2vh,20px);font-weight:700;color:var(--ink);white-space:nowrap}
+  .endlab{position:absolute;top:calc(100% + 6px);font-family:ui-monospace,Consolas,monospace;font-size:clamp(13px,1.9vh,17px);font-weight:700;color:var(--muted)}
   .pin{position:absolute;bottom:calc(100% + 4px);transform:translateX(-50%);text-align:center;transition:.3s}
-  .pin .v{font-family:ui-monospace,monospace;font-size:clamp(13px,1.9vh,17px);font-weight:700;padding:1px 7px;border-radius:8px;color:#fff;white-space:nowrap}
+  .pin .v{font-family:ui-monospace,Consolas,monospace;font-size:clamp(13px,1.9vh,17px);font-weight:700;padding:1px 7px;border-radius:7px;color:#fff;white-space:nowrap}
   .pin .stick{width:3px;height:14px;margin:1px auto 0;border-radius:2px}
-  .pin.lo .v{background:var(--blue)}.pin.lo .stick{background:var(--blue)}
-  .pin.hi .v{background:var(--coral)}.pin.hi .stick{background:var(--coral)}
+  .pin.lo .v{background:var(--accent)}.pin.lo .stick{background:var(--accent)}
+  .pin.hi .v{background:var(--red)}.pin.hi .stick{background:var(--red)}
   .pin.win .v{background:var(--green);font-size:clamp(16px,2.4vh,22px)}.pin.win .stick{background:var(--green);height:18px}
   .remain{text-align:center;font-size:clamp(16px,2.3vh,22px);font-weight:700;margin-top:clamp(16px,2.4vh,28px)}
-  .remain b{color:var(--purple);font-size:1.25em}
+  .remain b{color:var(--accent);background:var(--hl);padding:0 6px;font-size:1.25em}
 
   /* Big feedback */
-  .fb{border-radius:18px;padding:clamp(12px,2vh,20px);text-align:center;font-size:clamp(20px,3.2vh,34px);font-weight:700;display:flex;align-items:center;justify-content:center;gap:12px;min-height:clamp(56px,8vh,84px);transition:.2s;background:#fff;border:2px dashed var(--line);color:var(--muted)}
+  .fb{border-radius:13px;padding:clamp(12px,2vh,20px);text-align:center;font-size:clamp(20px,3.2vh,34px);font-weight:700;display:flex;align-items:center;justify-content:center;gap:12px;min-height:clamp(56px,8vh,84px);transition:.2s;background:#fff;border:3px dashed var(--rule);color:var(--muted)}
   .fb svg{width:1.1em;height:1.1em}
-  .fb.lo{background:#eaf2ff;border:2px solid #bcd6ff;border-style:solid;color:var(--blue)}
-  .fb.hi{background:#fff0ea;border:2px solid #ffcbb8;border-style:solid;color:var(--coral)}
-  .fb.win{background:linear-gradient(135deg,#e7faf1,#d9f7e8);border:2px solid #9fe3c5;border-style:solid;color:var(--green);animation:pop .5s}
+  .fb.lo{background:var(--soft);border:0;border-left:6px solid var(--accent);border-radius:0 13px 13px 0;color:var(--accent)}
+  .fb.hi{background:var(--red-bg);border:0;border-left:6px solid var(--red);border-radius:0 13px 13px 0;color:var(--red)}
+  .fb.win{background:var(--green-bg);border:0;border-left:6px solid var(--green);border-radius:0 13px 13px 0;color:var(--green);animation:pop .5s}
   @keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
   .fb.hi svg{animation:bounceD .6s infinite}.fb.lo svg{animation:bounceU .6s infinite}
   @keyframes bounceU{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
@@ -68,24 +85,25 @@
 
   /* controls */
   .controls{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
-  #guess{font-family:ui-monospace,monospace;font-size:clamp(28px,4.4vh,46px);font-weight:700;padding:clamp(8px,1.4vh,14px) clamp(14px,2vw,22px);border-radius:16px;border:3px solid var(--line);background:#f7faff;color:var(--ink);outline:none;width:clamp(150px,20vw,220px);text-align:center}
-  #guess:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(47,123,246,.15)}
-  .hintbtn{font-size:clamp(14px,2vh,17px);color:var(--purple);background:#efe9ff;border:2px solid #d9ccff;border-radius:12px;padding:clamp(9px,1.6vh,14px) clamp(14px,2vw,20px);cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:7px}
+  #guess{font-family:ui-monospace,Consolas,monospace;font-size:clamp(28px,4.4vh,46px);font-weight:700;padding:clamp(8px,1.4vh,14px) clamp(14px,2vw,22px);border-radius:11px;border:3px solid var(--ink);background:#fff;color:var(--ink);outline:none;width:clamp(150px,20vw,220px);text-align:center}
+  #guess:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(47,42,158,.18)}
+  .hintbtn{font-family:var(--font);font-size:clamp(14px,2vh,17px);color:var(--amber);background:var(--amber-bg);border:2.5px solid var(--amber);border-radius:9px;padding:clamp(9px,1.6vh,14px) clamp(14px,2vw,20px);cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:7px}
 
   /* stats + teams */
   .bottom{display:flex;gap:14px;flex-wrap:wrap}
-  .cbox{flex:1;min-width:150px;background:#fff;border:2px solid var(--line);border-radius:16px;padding:clamp(8px,1.4vh,14px) clamp(12px,2vw,20px);text-align:center;box-shadow:0 6px 16px rgba(31,43,72,.06)}
+  .cbox{flex:1;min-width:150px;background:#fff;border:3px solid var(--ink);border-radius:13px;padding:clamp(8px,1.4vh,14px) clamp(12px,2vw,20px);text-align:center}
   .cbox .n{font-size:clamp(12px,1.6vh,15px);color:var(--muted);font-weight:700}
-  .cbox .v{font-size:clamp(26px,4vh,42px);font-weight:700;font-family:ui-monospace,monospace;color:var(--blue);line-height:1.05}
+  .cbox .v{font-size:clamp(26px,4vh,42px);font-weight:700;font-family:ui-monospace,Consolas,monospace;color:var(--accent);line-height:1.05}
   .cbox.opt .v{color:var(--green)}
-  .team{flex:1;min-width:130px;background:#fff;border:2px solid var(--line);border-radius:16px;padding:clamp(6px,1.2vh,12px) clamp(10px,1.6vw,16px);text-align:center}
+  .team{flex:1;min-width:130px;background:#fff;border:3px solid var(--ink);border-radius:13px;padding:clamp(6px,1.2vh,12px) clamp(10px,1.6vw,16px);text-align:center}
   .team .nm{font-weight:700;font-size:clamp(13px,1.8vh,16px);display:flex;align-items:center;gap:6px;justify-content:center}
-  .team .best{font-family:ui-monospace,monospace;font-size:clamp(24px,3.6vh,38px);font-weight:700;line-height:1.05}
+  .team .best{font-family:ui-monospace,Consolas,monospace;font-size:clamp(24px,3.6vh,38px);font-weight:700;line-height:1.05}
   .team .sub{font-size:11px;color:var(--muted)}
-  .team.A{border-color:#bcd3fb}.team.A .best{color:var(--blue)}
-  .team.B{border-color:#ffd9cc}.team.B .best{color:var(--coral)}
+  .team.A .best{color:var(--accent)}
+  .team.B .best{color:var(--red)}
   .team .sv{margin-top:3px}
-  .team .sv button{font-family:inherit;font-size:12px;font-weight:700;border:1.5px solid var(--line);background:#f7faff;color:#2f4a7d;border-radius:8px;padding:4px 10px;cursor:pointer}
+  .team .sv button{font-family:var(--font);font-size:12px;font-weight:700;border:2px solid var(--ink);background:var(--soft);color:var(--ink);border-radius:7px;padding:4px 10px;cursor:pointer}
+  .team .sv button:hover{background:var(--ink);color:#fff}
 
   .mascot{position:fixed;right:clamp(8px,1.6vw,22px);bottom:clamp(6px,1.2vh,12px);width:clamp(70px,10vh,108px);height:auto;z-index:6;transform-origin:center bottom;animation:dance 1.5s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.15))}
   @keyframes dance{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-9px) rotate(5deg)}}
@@ -118,7 +136,7 @@
 
   <div class="stage">
     <div class="hunt">
-      <div class="huntlabel"><i data-lucide="map"></i> เลขลับซ่อนอยู่ในช่วงสีม่วงนี้…</div>
+      <div class="huntlabel"><i data-lucide="map"></i> เลขลับซ่อนอยู่ในช่วงไฮไลต์สีเหลืองนี้…</div>
       <div class="track" id="track">
         <div class="band" id="band"><span class="bt" id="bandTxt"></span></div>
         <div class="endlab" id="labLo" style="left:0">1</div>
@@ -144,15 +162,15 @@
   </div>
 
   <svg class="mascot" id="mascot" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
-    <line x1="110" y1="20" x2="110" y2="42" stroke="#7a5cff" stroke-width="5"/><circle cx="110" cy="15" r="9" fill="#ffd24d" stroke="#7a5cff" stroke-width="3"/>
-    <g class="armL"><rect x="24" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="34" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
-    <g class="armR"><rect x="176" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#7a5cff" stroke-width="3"/><circle cx="186" cy="176" r="12" fill="#fff" stroke="#7a5cff" stroke-width="3"/></g>
-    <rect x="48" y="42" width="124" height="96" rx="28" fill="#eef2ff" stroke="#7a5cff" stroke-width="5"/>
+    <line x1="110" y1="20" x2="110" y2="42" stroke="#2f2a9e" stroke-width="5"/><circle cx="110" cy="15" r="9" fill="#ffd977" stroke="#2f2a9e" stroke-width="3"/>
+    <g class="armL"><rect x="24" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#2f2a9e" stroke-width="3"/><circle cx="34" cy="176" r="12" fill="#fff" stroke="#2f2a9e" stroke-width="3"/></g>
+    <g class="armR"><rect x="176" y="120" width="20" height="52" rx="10" fill="#cbd6f5" stroke="#2f2a9e" stroke-width="3"/><circle cx="186" cy="176" r="12" fill="#fff" stroke="#2f2a9e" stroke-width="3"/></g>
+    <rect x="48" y="42" width="124" height="96" rx="28" fill="#eef2ff" stroke="#2f2a9e" stroke-width="5"/>
     <ellipse cx="74" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/><ellipse cx="146" cy="104" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
-    <circle cx="88" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="88" cy="84" r="7" fill="#2f7bf6"/>
-    <circle cx="132" cy="84" r="15" fill="#fff" stroke="#7a5cff" stroke-width="3"/><circle cx="132" cy="84" r="7" fill="#2f7bf6"/>
-    <rect x="88" y="110" width="44" height="16" rx="8" fill="#19b877"/>
-    <rect x="64" y="148" width="92" height="58" rx="16" fill="#fff" stroke="#7a5cff" stroke-width="4"/><rect x="80" y="164" width="60" height="28" rx="8" fill="#e6f0ff"/><path d="M80 178 H140 M98 168 V188" stroke="#2f7bf6" stroke-width="3"/>
+    <circle cx="88" cy="84" r="15" fill="#fff" stroke="#2f2a9e" stroke-width="3"/><circle cx="88" cy="84" r="7" fill="#2f2a9e"/>
+    <circle cx="132" cy="84" r="15" fill="#fff" stroke="#2f2a9e" stroke-width="3"/><circle cx="132" cy="84" r="7" fill="#2f2a9e"/>
+    <rect x="88" y="110" width="44" height="16" rx="8" fill="#0f7a4a"/>
+    <rect x="64" y="148" width="92" height="58" rx="16" fill="#fff" stroke="#2f2a9e" stroke-width="4"/><rect x="80" y="164" width="60" height="28" rx="8" fill="#e6f0ff"/><path d="M80 178 H140 M98 168 V188" stroke="#2f2a9e" stroke-width="3"/>
   </svg>
 
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
